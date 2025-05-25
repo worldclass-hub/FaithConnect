@@ -1,0 +1,176 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block content %}
+  <!-- 🎉 Section Heading -->
+  <div style="text-align: center; margin: 40px 0 30px 0;">
+    <h2 style="font-size: 24px; font-weight: bold;">🎉 User BirthDay Profiles 🎉</h2>
+  </div>
+
+  <!-- 📦 Export & Search Section (Stacked Column Style) -->
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px;">
+    <!-- Export Buttons -->
+    <a href="{% url 'admin:export_profiles_csv' %}" class="button"
+       style="background: green; color: white; padding: 10px 20px; border-radius: 5px; transition: 0.3s ease;">
+      📁 Export to CSV
+    </a>
+    <a href="{% url 'admin:export_profiles_pdf' %}" class="button"
+       style="background: darkred; color: white; padding: 10px 20px; border-radius: 5px; transition: 0.3s ease;">
+      📄 Export to PDF
+    </a>
+
+    <!-- 🔍 Search Bar -->
+    <form id="changelist-search" method="get" style="position: relative; width: 100%; max-width: 320px;">
+      <input type="text" id="autocomplete" name="q" placeholder="Search by name, email, or phone..."
+             autocomplete="off"
+             style="padding: 8px 12px; width: 100%; border: 1px solid #ccc; border-radius: 4px; transition: 0.3s;">
+      <ul id="suggestions"
+          style="position: absolute; left: 0; right: 0; background: #fff; border: 1px solid #ccc; max-height: 200px;
+                 overflow-y: auto; border-radius: 4px; z-index: 10; display: none; list-style: none; padding: 0; margin-top: 5px;">
+      </ul>
+    </form>
+
+    <!-- 📆 Jump to Month -->
+    <select id="jumpToMonth"
+            style="padding: 8px 12px; border-radius: 4px; border: 1px solid #ccc; width: 100%; max-width: 320px;">
+      <option value="">-- Select Month --</option>
+      {% for month, _ in months.items %}
+        <option value="month-{{ month }}">{{ month }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- 📅 Month Sections -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+    {% for month, profiles in months.items %}
+      <div id="month-{{ month }}" style="background: #f9f9f9; padding: 20px; border-radius: 10px;
+           box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+        <h2 style="color: #333; border-bottom: 2px solid #ddd;">{{ month }}</h2>
+        {% if profiles %}
+          <ul style="list-style: none; padding: 0;">
+            {% for profile in profiles %}
+              <li id="profile-{{ profile.id }}" style="margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center;">
+                  {% if profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" width="50" height="50" style="border-radius: 50%; margin-right: 10px; object-fit: cover;" />
+                  {% endif %}
+                  <div>
+                    <strong style="font-size: 14px;">{{ profile.fullname }}</strong><br>
+                    {% if profile.phone %}
+                      <small style="color: gray; font-size: 12px;">📞 {{ profile.phone }}</small><br>
+                    {% endif %}
+                    <small style="color: gray; font-size: 12px;">{{ profile.dob|date:"jS F Y" }}</small>
+                  </div>
+                </div>
+                <a href="{% url 'admin:delete_profile' profile.id %}" class="button"
+                   style="background-color: #f44336; color: white; border-radius: 4px; padding: 2px 6px;
+                          font-size: 12px; text-decoration: none; display: inline-block; width: 60px;
+                          text-align: center; transition: 0.3s;">
+                  Delete
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p style="color: #999;">No profiles this month.</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- ✅ Toast Notification -->
+  <div id="toast"
+       style="position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white;
+              padding: 10px 20px; border-radius: 5px; display: none;">
+    Profile deleted successfully!
+  </div>
+
+  <!-- 🔼 Go to Top Button -->
+  <button onclick="topFunction()" id="goTopBtn" title="Go to top"
+          style="display: none; position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white;
+                 border: none; border-radius: 50%; padding: 8px 10px; font-size: 18px; cursor: pointer;
+                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: 0.3s;">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <!-- ✅ JavaScript -->
+  <script>
+    const input = document.getElementById("autocomplete");
+    const suggestions = document.getElementById("suggestions");
+
+    input.addEventListener("input", function () {
+      const query = this.value.trim();
+      if (query.length === 0) {
+        suggestions.innerHTML = "";
+        suggestions.style.display = "none";
+        return;
+      }
+
+      fetch(`/admin/files/userprofile/autocomplete/?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+          suggestions.innerHTML = "";
+          if (data.length === 0) {
+            suggestions.style.display = "none";
+            return;
+          }
+          data.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item.label;
+            li.style.padding = "10px";
+            li.style.cursor = "pointer";
+            li.addEventListener("click", () => {
+              const target = document.getElementById(`profile-${item.id}`);
+              if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+                target.style.backgroundColor = "#ffffcc";
+                setTimeout(() => {
+                  target.style.backgroundColor = "";
+                }, 2000);
+              }
+              suggestions.innerHTML = "";
+              suggestions.style.display = "none";
+              input.value = "";
+            });
+            suggestions.appendChild(li);
+          });
+          suggestions.style.display = "block";
+        });
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+        suggestions.innerHTML = "";
+        suggestions.style.display = "none";
+      }
+    });
+
+    document.getElementById("jumpToMonth").addEventListener("change", function () {
+      const selectedId = this.value;
+      if (selectedId) {
+        const target = document.getElementById(selectedId);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          target.style.backgroundColor = "#e0f7fa";
+          setTimeout(() => {
+            target.style.backgroundColor = "";
+          }, 2000);
+        }
+      }
+    });
+
+    var mybutton = document.getElementById("goTopBtn");
+    window.onscroll = function () {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    };
+
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+  </script>
+{% endblock %}

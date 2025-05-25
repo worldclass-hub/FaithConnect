@@ -1,0 +1,351 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title> Doxcela Excel Upload</title>
+    <link rel="icon" href="{% static 'login-form/images/doxcela2.png' %}" type="image/png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            background: url("{% static 'login-form/images/wallpaper2.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 15px;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            z-index: -1;
+        }
+
+        .upload-container {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .drop-area {
+            border: 2px dashed #6c5ce7;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .drop-area:hover {
+            background: #f1f1f1;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: #f1f1f1;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        /* Date & Time */
+        .date-time-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .input-container {
+            width: 48%;
+            text-align: left;
+        }
+
+        input[type="date"],
+        input[type="time"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        /* Company/Location */
+        .location-container {
+            text-align: left;
+            margin-top: 12px;
+        }
+
+        .location-container label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .location-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .send-btn {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .send-btn:hover {
+            background: #4b44c6;
+        }
+
+        /* Home Button */
+        .home-text {
+            display: inline-block;
+            background-color: #7bed9f; /* Light green color on hover */
+            color: black; /* Keep the text white */
+            padding: 12px 24px; /* Add padding for a button-like appearance */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none; /* Remove underline */
+            margin-top: 30px; /* Push it down */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover and active color transition */
+        }
+
+        .home-text:hover {
+            background-color: #6c5ce7; /* Cool purple background */
+            color: white; /* White text */
+        }
+
+        .home-text:active {
+            background-color: #2ed573; /* Darker green color on click */
+        }
+
+        .home-text a {
+            text-decoration: none; /* Remove the underline */
+            color: inherit; /* Ensure the text color is inherited from the parent */
+        }
+
+        /* 🔹 Responsive */
+        @media (max-width: 700px) {
+            .upload-container {
+                width: 100%;
+                max-width: 90%;
+                padding: 20px;
+            }
+
+            .date-time-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .input-container {
+                width: 100%;
+            }
+        }
+
+
+        /* --- Crazy Loader Overlay CSS --- */
+
+        #crazyLoaderOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.75);
+            display: none; /* hidden initially */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* very top */
+        }
+
+        .crazy-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .balls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .balls div {
+            width: 20px;
+            height: 20px;
+            background: #6c5ce7;
+            border-radius: 50%;
+            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+            animation-duration: 0.7s;
+            animation-iteration-count: infinite;
+        }
+
+        .balls div:nth-child(1) { animation-name: bounce1; animation-delay: 0s; }
+        .balls div:nth-child(2) { animation-name: bounce2; animation-delay: 0.15s; }
+        .balls div:nth-child(3) { animation-name: bounce3; animation-delay: 0.3s; }
+        .balls div:nth-child(4) { animation-name: bounce4; animation-delay: 0.45s; }
+
+        @keyframes bounce1 {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px) rotate(45deg); background: #ff4757;}
+        }
+        @keyframes bounce2 {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-40px) rotate(-45deg); background: #ffa502;}
+        }
+        @keyframes bounce3 {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-35px) rotate(90deg); background: #1e90ff;}
+        }
+        @keyframes bounce4 {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-25px) rotate(-90deg); background: #2ed573;}
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 5px solid #6c5ce7;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="upload-container">
+        <h3>Upload All Files</h3>
+
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+            {% csrf_token %}
+
+            <div class="drop-area" onclick="document.getElementById('fileInput').click()">
+                Drop files here <br /> Or <br />
+                <button type="button">Browse</button>
+            </div>
+
+            <input
+                type="file"
+                id="fileInput"
+                name="uploaded_file"
+                multiple
+                style="display: none;"
+                accept=".jpg,.jpeg,.png,.gif,.mp4,.webm,.ogg,.mp3,.wav,.aac,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip"
+                onchange="handleFiles(event)"
+            />
+
+            <div id="fileList"></div>
+
+            <!-- Date & Time -->
+            <div class="date-time-container">
+                <div class="input-container">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" required />
+                </div>
+
+                <div class="input-container">
+                    <label for="time">Time</label>
+                    <input type="time" id="time" name="time" required />
+                </div>
+            </div>
+
+            <!-- Company/Location Field -->
+            <div class="location-container">
+                <label for="company">Company / Location / Title</label>
+                <input
+                    type="text"
+                    id="company_location"
+                    name="company_location"
+                    placeholder="Enter company or location or title"
+                    required
+                />
+            </div>
+
+            <button type="submit" class="send-btn" id="submitBtn">Send File</button>
+        </form>
+    </div>
+
+    <!-- Crazy Loader Overlay outside form -->
+    <div id="crazyLoaderOverlay">
+        <div class="crazy-loader">
+            <div class="balls">
+                <div></div><div></div><div></div><div></div>
+            </div>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- Home Button Below the Card -->
+    <div class="home-text">
+        <a href="{% url 'excel_page' %}">Files Page</a>
+    </div>
+
+    <script>
+        function handleFiles(event) {
+            const fileList = document.getElementById("fileList");
+            fileList.innerHTML = "";
+
+            Array.from(event.target.files).forEach((file) => {
+                const fileItem = document.createElement("div");
+                fileItem.classList.add("file-item");
+
+                const fileName = document.createElement("span");
+                fileName.textContent = file.name;
+
+                const removeButton = document.createElement("span");
+                removeButton.textContent = "✕";
+                removeButton.style.cursor = "pointer";
+                removeButton.onclick = () => fileItem.remove();
+
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(removeButton);
+
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        // Show crazy loader overlay on form submit
+        document.getElementById("uploadForm").addEventListener("submit", function (e) {
+            document.getElementById("crazyLoaderOverlay").style.display = "flex";
+            document.getElementById("submitBtn").disabled = true;
+        });
+    </script>
+</body>
+</html>

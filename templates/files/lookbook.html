@@ -1,0 +1,83 @@
+{% extends "files/page.html" %}
+{% load static %}
+{% block content %}
+
+<!--Body Content-->
+<div id="page-content">
+    <!--Page Title-->
+    <div class="page section-header text-center">
+        <div class="page-title">
+            <div class="wrapper"><h1 class="page-width">Lookbook</h1></div>
+        </div>
+    </div>
+
+    <!-- Lookbook Start -->
+    <div class="lookbook-1">
+        <div class="lookbook grid grid-masonry">
+            <div class="grid-sizer"></div>
+
+            {% for image in page_obj %}
+                <div class="grid-lookbook grid-item blur-up lazyload">
+                    <!-- Display uploaded image -->
+                    <img src="{{ image.uploaded_file.url }}" alt="{{ image.title }}">
+                    <div class="caption">
+                        <!-- Display title of the image -->
+                        <h2>{{ image.title }}</h2>
+                        <!-- Download link -->
+                        <a class="btn" href="{{ image.uploaded_file.url }}" download>Download</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No images available.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Buttons -->
+        <div class="pagination-container">
+            <div class="pagination-buttons">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="btn">First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn">Previous</a>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="btn">Last</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Pagination Styling -->
+<style>
+    .pagination-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .pagination-buttons {
+        display: flex;
+        gap: 8px;  /* Reduced gap for smaller buttons */
+        flex-wrap: wrap;
+    }
+    
+    .pagination-buttons .btn {
+        padding: 6px 12px;  /* Smaller padding */
+        border-radius: 6px;
+        background-color: #222;
+        color: white;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        font-size: 14px;  /* Smaller font size */
+    }
+    
+    .pagination-buttons .btn:hover {
+        background-color: #555;
+    }
+    
+</style>
+
+{% endblock %}

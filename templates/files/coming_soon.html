@@ -1,0 +1,282 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doxcela</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'login-form/images/doxcela2.png' %}" type="image/png">
+    <link rel="stylesheet" href="{% static 'assets/css/plugins.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+        .password-table {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+        #background-image-cell {
+            flex: 0 0 50%;
+            background-repeat: no-repeat !important;
+            background-position: left center;
+            background-size: contain;
+            min-height: 100vh;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: slideInFromLeft 1.2s ease-in-out forwards;
+        }
+        .password-main__inner {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            color: #222;
+        }
+        .password-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+        .password-logo img {
+            height: 35px;
+        }
+        .password-logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+        .password__title {
+            font-size: 16px;
+            color: #111;
+            margin-bottom: 40px;
+        }
+        @keyframes slideInFromLeft {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0); }
+        }
+        .mobile-bg-image { display: none; }
+        @media (max-width: 1036px) {
+            #background-image-cell { display: none !important; }
+            .mobile-bg-image {
+                display: block;
+                width: 100%;
+                max-width: 600px;
+                height: auto;
+                margin: 0 auto 20px;
+                top: -20px;
+                animation: zoomIn 1.5s ease forwards;
+                border-radius: 12px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.9);
+            }
+        }
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #6c757d;
+            text-decoration: none !important;
+            transition: color 0.3s ease;
+        }
+        .home-link:hover { color: #5a6268; }
+
+        /* Newsletter Preloader */
+        #newsletterPreloader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 9998;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .text-loader {
+            font-weight: bold;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .text-loader .dot {
+            animation: blink 1.4s infinite;
+        }
+        .text-loader .dot:nth-child(2) { animation-delay: 0.2s; }
+        .text-loader .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .dots-loader {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        .dots-loader span {
+            width: 10px;
+            height: 10px;
+            background: #007bff;
+            border-radius: 50%;
+            animation: bounce 0.6s infinite alternate;
+        }
+        .dots-loader span:nth-child(2) { animation-delay: 0.2s; }
+        .dots-loader span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce {
+            to { transform: translateY(-10px); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="page-template template-password belle">
+    <div class="pageWrapper">
+        <div id="page-content" class="shopify-section">
+            <div class="password-table">
+                <div class="password-cell" id="background-image-cell"></div>
+                <div class="password-page password-cell text-center">
+                    <div class="password-main text-center" role="main">
+                        <div class="password-main__inner">
+                            {% if page.background_image %}
+                                <img src="{{ page.background_image.url }}" alt="Background image" class="mobile-bg-image">
+                            {% else %}
+                                <img src="{% static 'images/default-background.jpg' %}" alt="Default Background" class="mobile-bg-image">
+                            {% endif %}
+                            <a href="{% url 'excel_page' %}" class="password-logo">
+                                <img src="{% static 'login-form/images/doxcela2.png' %}" alt="app">
+                                <span>Doxcela</span>
+                            </a>
+                            <h3 class="password__title"><b>{{page.note}}</b></h3>
+                            <form method="post" action="#" id="contact_form" accept-charset="UTF-8" class="contact-form">
+                                {% csrf_token %}
+                                <p class="password__form-heading h4">Follow us for updates now!</p>
+                                <div class="input-group password__input-group">
+                                    <input type="email" name="email" class="input-group__field" placeholder="Email address">
+                                    <span class="input-group__btn">
+                                        <button type="submit" class="btn"><span>Notify me</span></button>
+                                    </span>
+                                </div>
+                            </form>
+                            <div class="password-social-sharing">
+                                <ul class="list--inline site-footer__social-icons social-icons">
+                                    <li><a href="#"><i class="icon icon-facebook"></i></a></li>
+                                    <li><a href="#"><i class="icon icon-twitter"></i></a></li>
+                                    <li><a href="#"><i class="icon icon-pinterest"></i></a></li>
+                                    <li><a href="#"><i class="icon icon-instagram"></i></a></li>
+                                    <li><a href="#"><i class="icon icon-tumblr-alt"></i></a></li>
+                                    <li><a href="#"><i class="icon icon-youtube"></i></a></li>
+                                    <li><a href="#"><i class="icon icon-vimeo-alt"></i></a></li>
+                                </ul>
+                                <a href="{% url 'excel_page' %}" class="home-link">Home</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="newsletterPreloader">
+        <p class="text-loader">Submitting<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
+        <div class="dots-loader" style="margin-top: 15px;">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="subscribeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; z-index: 9999;">
+      <div class="modal-contenting" style="background: white; padding: 30px; border-radius: 8px; text-align: center; max-width: 500px; width: 90%;">
+        <img src="{% static 'assets/images/Animation5.gif' %}" alt="Success" style="width: 120px; margin: 0 auto 15px auto; display: block;">
+        <h2 style="margin-bottom: 10px;">Subscription Successful!</h2>
+        <p style="margin-bottom: 20px;">Thank you for subscribing to our newsletter.</p>
+        <button type="button" class="close-btn">Close</button>
+      </div>
+    </div>
+
+    <!-- Already Subscribed Modal -->
+    <div id="alreadySubscribedModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; z-index: 9999;">
+      <div class="modal-contenting" style="background: white; padding: 30px; border-radius: 8px; text-align: center; max-width: 500px; width: 90%;">
+        <img src="{% static 'login-form/images/Animation - error1.gif' %}" alt="Already Subscribed" style="width: 100px; margin: 0 auto 15px auto; display: block;">
+        <h2 style="margin-bottom: 10px;">Already Subscribed!</h2>
+        <p style="margin-bottom: 20px;">This email is already on our list. Thank you!</p>
+        <button type="button" class="close-already-btn">Close</button>
+      </div>
+    </div>
+
+    <script src="{% static 'assets/js/vendor/jquery-3.3.1.min.js' %}"></script>
+    <script>
+    document.getElementById('contact_form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const emailInput = document.querySelector('input[type="email"]');
+        const email = emailInput.value.trim();
+        if (!email) return;
+
+        const preloader = document.getElementById('newsletterPreloader');
+        preloader.style.display = 'flex';
+
+        fetch("{% url 'coming_soon' %}", {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: new URLSearchParams({ email: email })
+        })
+        .then(res => res.json())
+        .then(data => {
+            preloader.style.display = 'none';
+            if (data.status === 'success') {
+                document.getElementById('subscribeModal').style.display = 'flex';
+                emailInput.value = "";
+            } else if (data.status === 'error' && data.message.includes('already')) {
+                document.getElementById('alreadySubscribedModal').style.display = 'flex';
+            } else {
+                alert(data.message || "Subscription failed.");
+            }
+        })
+        .catch(() => {
+            preloader.style.display = 'none';
+            alert("Something went wrong.");
+        });
+    });
+
+    document.querySelector('.close-btn').addEventListener('click', function () {
+        document.getElementById('subscribeModal').style.display = 'none';
+    });
+    document.querySelector('.close-already-btn').addEventListener('click', function () {
+        document.getElementById('alreadySubscribedModal').style.display = 'none';
+    });
+    </script>
+
+    <!-- Background Image Script -->
+    <script type="text/javascript">
+        {% if page.background_image %}
+            document.getElementById('background-image-cell').style.backgroundImage = "url('{{ page.background_image.url }}')";
+        {% else %}
+            document.getElementById('background-image-cell').style.backgroundImage = "url('{% static 'images/default-background.jpg' %}')";
+        {% endif %}
+    </script>
+      <script src="{% static 'assets/js/vendor/jquery-3.3.1.min.js' %}"></script>
+     <script src="{% static 'assets/js/vendor/modernizr-3.6.0.min.js' %}"></script>
+     <script src="{% static 'assets/js/vendor/jquery.cookie.js' %}"></script>
+     <script src="{% static 'assets/js/vendor/wow.min.js' %}"></script>
+     <!-- Including Javascript -->
+     <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+     <script src="{% static 'assets/js/plugins.js' %}"></script>
+     <script src="{% static 'assets/js/popper.min.js' %}"></script>
+     <script src="{% static 'assets/js/lazysizes.js' %}"></script>
+     <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+</html>

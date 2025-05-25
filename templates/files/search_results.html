@@ -1,0 +1,1260 @@
+{% extends "files/base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Improved CSS -->
+<style>
+      /* === CALENDAR BASE STYLING === */
+.calendar {
+    width: 100%;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 20px;
+    background: linear-gradient(145deg,rgb(164, 239, 225),rgb(36, 131, 118));
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* === HEADER SELECT STYLING === */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.calendar-select {
+    flex: 1;
+    min-width: 45%;
+    padding: 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.calendar-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* === WEEKDAYS === */
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+    color:rgb(0, 5, 5);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.weekdays span {
+    font-size: 14px;
+}
+
+/* === DAYS === */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-days div {
+    padding: 14px 0;
+    background: #fff;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 0 rgba(0,0,0,0);
+    border: 1px solid transparent;
+}
+
+.calendar-days div:hover {
+    background: #e9f2ff;
+    border-color: #007bff;
+    transform: scale(1.05);
+}
+
+/* === TODAY STYLING === */
+.today {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+/* === SELECTED DATE STYLING === */
+.selected {
+    background-color: #28a745 !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+/* === Responsive tweaks === */
+@media (max-width: 1030px) {
+    .calendar {
+        padding: 15px;
+    }
+
+    .calendar-select {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .calendar-days div {
+        padding: 12px 0;
+        font-size: 12px;
+    }
+
+    .weekdays span {
+        font-size: 12px;
+    }
+}
+
+/* === HIDE CALENDAR ON SMALL SCREENS (<=1023px width) === */
+@media screen and (max-width: 1023px) {
+    .calendar-wrapper {
+        display: none;
+    }
+}
+
+
+
+
+
+
+
+    .sidebar_widget {
+        position: relative;
+        overflow: hidden;
+        /* Prevents the blur effect from spilling over the edges */
+    }
+
+    .banner-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        height: 300px;
+        /* Set the banner height */
+    }
+
+    .banner-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* Ensures the image covers the space without distorting it */
+        filter: blur(1px);
+        /* Apply the blur effect directly to the image */
+        z-index: 1;
+        /* Ensure that the blur image stays below the text */
+    }
+
+    .sidebar_widget .banner-container .banner-image {
+        position: relative;
+        /* Allow for stacking of content inside banner-container */
+    }
+
+    .banner-content {
+        position: absolute;
+        top: 87%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        /* White text for contrast */
+        z-index: 2;
+        /* Ensure text is on top of the blurred background */
+    }
+
+    .banner-text {
+        font-size: 12px;
+        /* Adjust the font size */
+        font-weight: bold;
+        text-align: center;
+        color: black;
+        /* Ensuring the text color is white */
+    }
+
+    .file-name {
+        font-size: 14px;
+        color: #333;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+
+    /* Ensure image does not disappear */
+    .file-icon {
+        width: 100%;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    /* File container styling */
+    .file-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Download icon styling */
+    .download-icon {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.9);
+        padding: 5px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease-in-out;
+    }
+
+
+    /* Hover effect for the download icon */
+    .download-icon:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Align company name to the left */
+    .company-name {
+        text-align: left;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .date-time {
+        text-align: left;
+        font-size: 10px;
+    }
+
+    .loadMore.disabled {
+        background: grey;
+        cursor: not-allowed;
+    }
+
+    .audio-wrapper {
+        position: relative;
+        width: 100%;
+        /* Make it responsive */
+        max-width: 500px;
+        /* Keep a good width */
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        background-color: #f5f5f5;
+        /* Light background for blending */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    .audio-image {
+        width: 100%;
+        height: 250px;
+        /* Keep images same height */
+        object-fit: cover;
+        border-radius: 10px 10px 0 0;
+        /* Curve only top */
+    }
+
+
+    .audio-play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .audio-player {
+        width: 100%;
+        height: 50px;
+        /* Keep all players same height */
+        background: #fff;
+        /* Make it stand out */
+        border-radius: 0 0 10px 10px;
+        /* Curve bottom */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .file-icon {
+        width: 100%;
+        max-width: 500px;
+        height: 250px;
+        /* Same height as image */
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    #loadMoreBtn.disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .highlight {
+        border: 3px #90ee90;
+        /* Light Green Solid Border */
+        background-color: rgba(144, 238, 144, 0.3);
+        /* Light Green Background */
+        box-shadow: 0 0 10px 10px rgba(144, 238, 144, 0.5);
+        /* Larger spread for more glow */
+        transition: background-color 0.9s ease-in-out, border 0.9s ease-in-out, box-shadow 0.9s ease-in-out;
+    }
+
+
+
+    .selected {
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        font-weight: bold;
+    }
+
+
+
+    .blur-up.lazyload {
+        position: relative;
+        filter: blur(10px);
+        transition: filter 0.3s ease;
+    }
+
+    .blur-up.lazyload::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        /* Dark overlay */
+        z-index: 1;
+    }
+
+
+
+
+    .custom-image-size {
+        height: 120px;
+        /* Adjust this height as needed */
+        width: 120px !important;
+        /* Force the width to be 100% of the parent container */
+        max-width: 400px;
+        /* Limit the width to a maximum of 400px */
+        object-fit: cover;
+        /* Ensure the image covers the area while preserving aspect ratio */
+        display: block;
+        /* Ensure the image is treated as a block-level element */
+    }
+
+    @media (max-width: 768px) {
+
+        /* Target screens with width of 768px or less */
+        .list-view-item {
+            display: flex;
+            align-items: center;
+            /* Align items vertically to the center */
+        }
+
+        .list-view-item__image-column {
+            margin-right: 60px;
+            /* Adjust the space between the image and the text */
+        }
+
+        .list-view-item__title-column {
+            text-align: left;
+            /* Align the text to the left */
+            max-width: 60%;
+            /* Restrict the width of the text column to balance with the image */
+        }
+    }
+</style>
+
+
+
+<!--Body Content-->
+<div id="page-content">
+    <!--Collection Banner-->
+    <div class="collection-header">
+        <div class="collection-hero">
+            <div class="collection-hero__image"><img class=" lazyload"
+                    data-src="{% static 'login-form/images/wallpaperflare.com_wallpaper.jpg' %}"
+                    src="{% static 'login-form/images/wallpaperflare.com_wallpaper.jpg' %}" alt="Women" title="Women" />
+            </div>
+            <div class="collection-hero__title-wrapper">
+                <h1 class="collection-hero__title page-width">Search Page </h1>
+            </div>
+        </div>
+    </div>
+    <!--End Collection Banner-->
+
+    <div class="container">
+        <div class="row">
+            <!--Sidebar-->
+            <div class="col-12 col-sm-12 col-md-3 col-lg-3 sidebar filterbar">
+                <div class="closeFilter d-block d-md-none d-lg-none"><i class="icon icon anm anm-times-l"></i></div>
+                <div class="sidebar_tags">
+
+                    <!-- Calendar -->
+<div class="calendar-wrapper">
+                    <h2>Browse Files by Date</h2>
+
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <select id="month" class="calendar-select">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                            <input type="number" id="year" class="calendar-select" placeholder="Enter Year" />
+                        </div>
+
+                        <div class="calendar-body">
+                            <div class="weekdays">
+                                <span>Mon</span>
+                                <span>Tue</span>
+                                <span>Wed</span>
+                                <span>Thu</span>
+                                <span>Fri</span>
+                                <span>Sat</span>
+                                <span>Sun</span>
+                            </div>
+
+                            <div class="calendar-days">
+                                <!-- Days of the month will go here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                    <!-- Recently Added Files & PDFs -->
+                    <div class="sidebar_widget">
+                        <div class="widget-title">
+                            <br>
+                            <br>
+                            <h2>Recently Added Files</h2>
+                        </div>
+                        <div class="widget-content">
+                            <div class="list list-sidebar-products">
+                                <div class="grid">
+                                    <!-- Loop through recent uploaded files -->
+                                    {% for file in recent_files %}
+                                    <div class="grid__item">
+                                        <div class="mini-list-item">
+                                            <div class="mini-view_image blur-up lazyload">
+                                                <a class="grid-view-item__link" href="{{ file.uploaded_file.url }}"
+                                                    target="_blank">
+                                                    {% if file.file_extension in '.jpg .jpeg .png .gif' %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{{ file.uploaded_file.url }}" alt="Image File" />
+
+                                                    {% elif file.file_extension in '.mp4 .webm .ogg' %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{% static 'login-form/images/VIDEO.jpeg' %}"
+                                                        alt="Video File" />
+
+                                                    {% elif file.file_extension in '.mp3 .wav .aac' %}
+                                                    <div class="audio-wrapper">
+                                                        <img src="{% static 'login-form/images/audowhite.jpeg' %}"
+                                                            alt="Audio Thumbnail" class="grid-view-item__image">
+                                                        <button class="audio-play-button" onclick="toggleAudio(this)">
+                                                            <i class="fas fa-play"></i>
+                                                        </button>
+                                                        <audio class="audio-player">
+                                                            <source src="{{ file.uploaded_file.url }}"
+                                                                type="audio/{{ file.file_extension|slice:'1:' }}">
+                                                            Your browser does not support the audio tag.
+                                                        </audio>
+                                                    </div>
+
+                                                    {% elif file.file_extension == '.pdf' %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{% static 'login-form/images/PDF_image.jpeg' %}"
+                                                        alt="PDF File" />
+
+                                                    {% elif file.file_extension in '.doc .docx' %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{% static 'login-form/images/Word_image.jpeg' %}"
+                                                        alt="Word Document" />
+
+                                                    {% elif file.file_extension in '.ppt .pptx' %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{% static 'login-form/images/PPT.jpeg' %}"
+                                                        alt="PowerPoint File" />
+
+                                                    {% elif file.file_extension in '.xls .xlsx' %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{% static 'login-form/images/Excel_image.jpeg' %}"
+                                                        alt="Excel File" />
+
+                                                    {% elif file.file_extension in '.zip .rar' %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{% static 'login-form/images/ZIP.jpeg' %}"
+                                                        alt="ZIP File" />
+
+                                                    {% else %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{% static 'login-form/images/default-file.png' %}"
+                                                        alt="Generic File" />
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+
+                                            <div class="details">
+                                                <a class="grid-view-item__title" href="{{ file.uploaded_file.url }}"
+                                                    target="_blank">
+                                                    {{ file.company_location }}
+                                                </a>
+                                                <div class="grid-view-item__meta">
+                                                    <span class="product-price__price">
+                                                        <span class="money" style="color: grey">{{ file.date }}</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p style="margin-left: 35px;">No PDFs uploaded yet.</p>
+                                    {% endfor %}
+
+                                    <!-- Loop through recent PDFs -->
+                                    {% for pdf in recent_pdfs %}
+                                    <div class="grid__item">
+                                        <div class="mini-list-item">
+                                            <div class="mini-view_image blur-up lazyload">
+                                                <a class="grid-view-item__link" href="{{ pdf.pdf_file.url }}"
+                                                    target="_blank">
+                                                    {% if pdf.image %}
+                                                    <img class="grid-view-item__image" src="{{ pdf.image.url }}"
+                                                        alt="PDF" />
+                                                    {% else %}
+                                                    <img class="grid-view-item__image"
+                                                        src="{% static 'login-form/images/PDF_image.jpeg' %}"
+                                                        alt="PDF" />
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+
+                                            <div class="details">
+                                                <a class="grid-view-item__title" href="{{ pdf.pdf_file.url }}"
+                                                    target="_blank">
+                                                    {{ pdf.company_location }}
+                                                </a>
+                                                <div class="grid-view-item__meta">
+                                                    <span class="product-price__price">
+                                                        <span class="money" style="font-size:10px;">{{ pdf.date }} -
+                                                            {{ pdf.time }}</span>
+                                                    </span>
+                                                </div>
+                                                <p style="font-size:9px;">Filename: {{ pdf.pdf_file.name|cut:"pdfs/" }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p>No recent PDFs available.</p>
+                                    {% endfor %}
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Recently Added Files & PDFs -->
+
+
+                    <!--Banner-->
+                    <div class="sidebar_widget static-banner">
+                        <div class="banner-container">
+                            <img src="{% static 'login-form/images/doxcela1.jpeg' %}" alt="" class="banner-image" />
+                            <div class="banner-content">
+                                <p class="banner-text">Secure Your Files Here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Banner-->
+
+
+                    <!-- Information -->
+                    <div class="sidebar_widget">
+                        <div class="widget-title">
+                            <h2>Information</h2>
+                        </div>
+                        <div class="widget-content">
+                            <p>Store and access all types of files—media, documents, and more—with ease and security.
+                                Quick uploads and downloads, with top-notch support.</p>
+                        </div>
+                    </div>
+                    <!-- End Information -->
+
+
+
+                </div>
+            </div>
+            <!--End Sidebar-->
+            <!--Main Content-->
+            <div class="col-12 col-sm-12 col-md-9 col-lg-9 main-col shop-grid-5">
+                <div class="productList">
+                    <div class="category-description">
+                        <h3>Files Description</h3>
+                        <p>Doxcela allows you to securely store and manage Excel, Word, and PDF files in one place.
+                            Easily upload, access, and retrieve important documents while keeping them well-organized
+                            and intact.</p>
+                    </div>
+                    <hr>
+                    <!--Toolbar-->
+
+
+                        <div class="result-container">
+                            <!-- Files will be shown here -->
+                        </div>
+                    <br>
+
+                    <div id="searchResults" class="search-container">
+                            {% load static %}
+                            {% if pdf_results or file_results or hymn_results or french_hymn_results or yoruba_hymn_results or igbo_hymn_results or hausa_hymn_results %}
+                            <div class="grid-products grid--view-items all-files-container" id="itemsContainer">
+                                <h2>Search Results for "{{ query }}"</h2>
+                                <div class="row">
+                                    <!-- PDF Results -->
+                                    {% for pdf in pdf_results %}
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 item blur-up lazyload" id="file-{{ pdf.id }}">
+                                        <div class="product-image position-relative file-container">
+                                            <a href="{{ pdf.pdf_file.url }}" target="_blank">
+                                                <img src="{{ pdf.image }}" alt="PDF" width="100%" class="file-icon">
+                                                View PDF
+                                            </a>
+                                            <br>
+                                            <a href="{{ pdf.pdf_file.url }}" class="download-icon" download>
+                                                <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
+
+                                            </a>
+                                            <p class="company-name"><strong>{{ pdf.company_location }}</strong></p>
+                                            <p class="text-muted date-time">
+                                                <i class="fas fa-calendar-alt"></i> {{ pdf.date }} -
+                                                <i class="fas fa-clock"></i> {{ pdf.time }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+                                    <!-- File Results -->
+                                    {% for file in file_results %}
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 item blur-up lazyload" id="file-{{ file.id }}">
+                                        <div class="product-image position-relative file-container">
+                                            {% if file.file_extension == '.jpg' or file.file_extension == '.jpeg' or file.file_extension == '.png' or file.file_extension == '.gif' %}
+                                            <img src="{{ file.uploaded_file.url }}" alt="Image" class="file-icon">
+                                            <br>
+                                            {% elif file.file_extension == '.mp4' or file.file_extension == '.webm' or file.file_extension == '.ogg' %}
+                                            <video width="100%" height="240" controls class="file-icon">
+                                                <source src="{{ file.uploaded_file.url }}"
+                                                    type="video/{{ file.file_extension|slice:'1:' }}">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                            {% elif file.file_extension == '.mp3' or file.file_extension == '.wav' or file.file_extension == '.aac' %}
+                                            <div class="audio-wrapper">
+                                                <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail"
+                                                    class="audio-image">
+                                                <button class="audio-play-button" onclick="toggleAudio(this)">
+                                                    <i class="fas fa-play"></i>
+                                                </button>
+                                                <audio class="audio-player">
+                                                    <source src="{{ file.uploaded_file.url }}"
+                                                        type="audio/{{ file.file_extension|slice:'1:' }}">
+                                                    Your browser does not support the audio tag.
+                                                </audio>
+                                            </div>
+                                            {% elif file.file_extension == '.pdf' %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF"
+                                                    width="100%" class="file-icon">
+                                                View PDF
+                                            </a>
+                                            <p class="file-name">{{ file.uploaded_file.name }}</p>
+                                            {% elif file.file_extension == '.doc' or file.file_extension == '.docx' %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document"
+                                                    width="100%" class="file-icon">
+                                                View Document
+                                            </a>
+                                            {% elif file.file_extension == '.ppt' or file.file_extension == '.pptx' %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint"
+                                                    width="100%" class="file-icon">
+                                                View Presentation
+                                            </a>
+                                            {% elif file.file_extension == '.xls' or file.file_extension == '.xlsx' %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel"
+                                                    width="100%" class="file-icon">
+                                                View Spreadsheet
+                                            </a>
+                                            {% elif file.file_extension == '.zip' or file.file_extension == '.rar' %}
+                                            <a href="{{ file.uploaded_file.url }}" download>
+                                                <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%"
+                                                    class="file-icon">
+                                                Download File
+                                            </a>
+                                            {% else %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{{ file.uploaded_file.url }}" alt="Uploaded File" width="100%"
+                                                    class="file-icon">
+                                                View File
+                                            </a>
+                                            {% endif %}
+                                            <a href="{{ file.uploaded_file.url }}" class="download-icon" download>
+                                                 <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
+
+                                            </a>
+                                            <br>
+                                            <p class="company-name"><strong>{{ file.company_location }}</strong></p>
+                                            <p class="text-muted date-time">
+                                                <i class="fas fa-calendar-alt"></i> {{ file.date }} -
+                                                <i class="fas fa-clock"></i> {{ file.time }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Hymn Results -->
+
+
+                            <!-- Hymn Results -->
+                            {% if hymn_results %}
+                            {% for hymn in hymn_results %}
+                            <div class="list-product list-view-item" id="hymn-{{ hymn.id }}">
+                                <div class="list-view-item__image-column">
+                                    <div class="list-view-item__image-wrapper">
+                                        <a href="#hymn-{{ hymn.id }}">
+                                            <img class="list-view-item__image blur-up lazyload custom-image-size"
+                                                data-src="{{ hymn.image.url }}" src="{{ hymn.image.url }}"
+                                                alt="{{ hymn.title }}" title="{{ hymn.title }}">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="list-view-item__title-column">
+                                    <div class="h4 grid-view-item__title" style="margin-top: 20px;">
+                                        <a href="#hymn-{{ hymn.id }}"><strong>{{ hymn.title }}</strong></a>
+                                    </div>
+                                    
+                                    <p style="color: #808080; font-weight: bold; margin-top: 10px">{{ hymn.get_hymn_type_display }}</p>
+                                    <p>{{ hymn.description|truncatewords:20 }}</p>
+                                    <form class="variants" action="{% url 'hymn_detail' hymn.id %}">
+                                        <button class="btn btn--small" type="submit">View Hymn</button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+
+                            {% if french_hymn_results %}
+                            {% for hymn in french_hymn_results %}
+                            <div class="list-product list-view-item" id="french-hymn-{{ hymn.id }}">
+                                <div class="list-view-item__image-column">
+                                    <div class="list-view-item__image-wrapper">
+                                        <a href="#french-hymn-{{ hymn.id }}">
+                                            <img class="list-view-item__image blur-up lazyload custom-image-size"
+                                                data-src="{{ hymn.image.url }}" src="{{ hymn.image.url }}"
+                                                alt="{{ hymn.title }}" title="{{ hymn.title }}">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="list-view-item__title-column">
+                                    <div class="h4 grid-view-item__title" style="margin-top: 20px;">
+                                        <a href="#french-hymn-{{ hymn.id }}"><strong>{{ hymn.title }}</strong></a>
+                                    </div>
+                                    
+                                    <p style="color: #808080; font-weight: bold; margin-top: 10px">{{ hymn.get_hymn_type_display }}</p>
+                                    <p>{{ hymn.description|truncatewords:20 }}</p>
+                                    <form class="variants" action="{% url 'french_hymn_detail' hymn.id %}">
+                                        <button class="btn btn--small" type="submit">View Hymn</button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+
+
+                            {% if yoruba_hymn_results %}
+                            {% for hymn in yoruba_hymn_results %}
+                            <div class="list-product list-view-item yoruba-hymn" data-id="{{ hymn.id }}"
+                                id="yoruba-hymn-{{ hymn.id }}">
+                                <div class="list-view-item__image-column">
+                                    <div class="list-view-item__image-wrapper">
+                                        <a href="#yoruba-hymn-{{ hymn.id }}">
+                                            <img class="list-view-item__image blur-up lazyload custom-image-size"
+                                                data-src="{{ hymn.image.url }}" src="{{ hymn.image.url }}"
+                                                alt="{{ hymn.title }}" title="{{ hymn.title }}">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="list-view-item__title-column">
+                                    <div class="h4 grid-view-item__title" style="margin-top: 20px;">
+                                        <a href="#yoruba-hymn-{{ hymn.id }}"><strong>{{ hymn.title }}</strong></a>
+                                    </div>
+                                    
+                                    <p style="color: #808080; font-weight: bold; margin-top: 10px">{{ hymn.get_hymn_type_display }}</p>
+                                    <p>{{ hymn.description|truncatewords:20 }}</p>
+                                    <form class="variants" action="{% url 'yoruba_hymn_detail' hymn.id %}">
+                                        <button class="btn btn--small" type="submit">View Hymn</button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if igbo_hymn_results %}
+                            {% for hymn in igbo_hymn_results %}
+                            <div class="list-product list-view-item" id="igbo-hymn-{{ hymn.id }}">
+                                <div class="list-view-item__image-column">
+                                    <div class="list-view-item__image-wrapper">
+                                        <a href="#igbo-hymn-{{ hymn.id }}">
+                                            <img class="list-view-item__image blur-up lazyload custom-image-size"
+                                                data-src="{{ hymn.image.url }}" src="{{ hymn.image.url }}"
+                                                alt="{{ hymn.title }}" title="{{ hymn.title }}">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="list-view-item__title-column">
+                                    <div class="h4 grid-view-item__title" style="margin-top: 20px;">
+                                        <a href="#igbo-hymn-{{ hymn.id }}"><strong>{{ hymn.title }}</strong></a>
+                                    </div>
+                                    
+                                    <p style="color: #808080; font-weight: bold; margin-top: 10px">{{ hymn.get_hymn_type_display }}</p>
+                                    <p>{{ hymn.description|truncatewords:20 }}</p>
+                                    <form class="variants" action="{% url 'igbo_hymn_detail' hymn.id %}">
+                                        <button class="btn btn--small" type="submit">View Hymn</button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if hausa_hymn_results %}
+                            {% for hymn in hausa_hymn_results %}
+                            <div class="list-product list-view-item" id="hausa-hymn-{{ hymn.id }}">
+                                <div class="list-view-item__image-column">
+                                    <div class="list-view-item__image-wrapper">
+                                        <a href="#hausa-hymn-{{ hymn.id }}">
+                                            <img class="list-view-item__image blur-up lazyload custom-image-size"
+                                                data-src="{{ hymn.image.url }}" src="{{ hymn.image.url }}"
+                                                alt="{{ hymn.title }}" title="{{ hymn.title }}">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="list-view-item__title-column">
+                                    <div class="h4 grid-view-item__title" style="margin-top: 20px;">
+                                        <a href="#hausa-hymn-{{ hymn.id }}"><strong>{{ hymn.title }}</strong></a>
+                                    </div>
+                                    
+                                    <p style="color: #808080; font-weight: bold; margin-top: 10px">{{ hymn.get_hymn_type_display }}</p>
+                                    <p>{{ hymn.description|truncatewords:20 }}</p>
+                                    <form class="variants" action="{% url 'hausa_hymn_detail' hymn.id %}">
+                                        <button class="btn btn--small" type="submit">View Hymn</button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+
+                            {% else %}
+                            <div class="no-results">
+                                <h3>No results found for "{{ query }}"</h3>
+                            </div>
+                            {% endif %}
+                    </div>
+
+
+
+                    <!-- Button (Initially hidden) -->
+                    <div id="show-all-uploads-container" style="display: none;">
+                        <div class="infinitpagin">
+                            <a href="{% url 'excel_page' %}" class="btn">
+                                Show All Uploads
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--End Main Content-->
+        </div>
+    </div>
+</div>
+<!--End Body Content-->
+
+<script>
+    function toggleAudio(button) {
+        let audio = button.nextElementSibling;
+        if (audio.paused) {
+            audio.play();
+            button.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+            audio.pause();
+            button.innerHTML = '<i class="fas fa-play"></i>';
+        }
+    }
+
+
+
+
+
+
+    // Script Code for the Calendar
+
+    function loadCalendar() {
+        const monthSelect = document.getElementById('month');
+        const yearInput = document.getElementById('year');
+
+        const month = parseInt(monthSelect.value, 10) - 1;
+        const year = parseInt(yearInput.value, 10);
+
+        const daysContainer = document.querySelector('.calendar-days');
+        daysContainer.innerHTML = '';
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const totalDays = lastDay.getDate();
+        const startDay = firstDay.getDay();
+        const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
+
+        for (let i = 0; i < adjustedStartDay; i++) {
+            const blankDay = document.createElement('div');
+            blankDay.classList.add('blank-day');
+            daysContainer.appendChild(blankDay);
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.textContent = day;
+            dayElement.classList.add('day');
+
+            const today = new Date();
+            if (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year) {
+                dayElement.classList.add('today');
+            }
+
+            dayElement.addEventListener('click', function () {
+                // Remove 'selected' class from all days before selecting a new one
+                const allDays = document.querySelectorAll('.calendar-days .day');
+                allDays.forEach(day => day.classList.remove('selected'));
+
+                // Add 'selected' class to the clicked day
+                dayElement.classList.add('selected');
+
+                const selectedDate =
+                    `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                fetch(`/get_file_for_date/${year}/${month + 1}/${day}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const resultContainer = document.querySelector('.result-container');
+                        resultContainer.innerHTML = '';
+
+                        const allFilesContainer = document.querySelector('.all-files-container');
+                        if (allFilesContainer) {
+                            allFilesContainer.style.display = 'none';
+                        }
+
+                        const loadMoreButtonContainer = document.querySelector('.infinitpaginOuter');
+                        if (loadMoreButtonContainer) {
+                            loadMoreButtonContainer.style.display = 'none';
+                        }
+
+                        const divider = document.getElementById('divider');
+                        if (divider) {
+                            divider.style.display = 'none';
+                        }
+
+                        const showAllUploadsContainer = document.getElementById(
+                            'show-all-uploads-container');
+                        if (showAllUploadsContainer) {
+                            showAllUploadsContainer.style.display = 'block';
+                        }
+
+                        if (data.files && data.files.length > 0) {
+                            let fileContent = `
+                                <div class="grid-products grid--view-items" id="itemsContainer">
+                                    <div class="row">
+                            `;
+
+                            data.files.forEach(file => {
+                                let fileHTML = `
+                                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 item">
+                                        <div class="product-image position-relative file-container">
+                                `;
+
+                                if (['jpg', 'jpeg', 'png', 'gif'].includes(file.file_extension)) {
+                                    fileHTML +=
+                                        `<img src="${file.uploaded_file_url}" alt="Image" class="file-icon blur-up lazyload"><br>`;
+                                } else if (['mp4', 'webm', 'ogg'].includes(file.file_extension)) {
+                                    fileHTML += `
+                                        <div class="video-container">
+                                            <video width="100%" height="240" controls class="file-icon blur-up lazyload">
+                                                <source src="${file.uploaded_file_url}" type="video/${file.file_extension}">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </div>
+                                    `;
+                                } else if (['mp3', 'wav', 'aac'].includes(file.file_extension)) {
+                                    fileHTML += `
+                                        <div class="audio-wrapper blur-up lazyload">
+                                            <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="audio-image">
+                                            <button class="audio-play-button" onclick="toggleAudio(this)">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                            <audio class="audio-player">
+                                                <source src="${file.uploaded_file_url}" type="audio/${file.file_extension}">
+                                                Your browser does not support the audio tag.
+                                            </audio>
+                                        </div>
+                                    `;
+                                } else if (file.file_extension === 'pdf') {
+                                    // Modified PDF file handling section with your provided structure
+                                    fileHTML += `
+                                        <a href="${file.uploaded_file_url}" target="_blank">
+                                            <img class="list-view-item__image blur-up lazyload image-height" 
+                                                 data-src="${file.image_url || '{% static 'login-form/images/pdf_pics.png' %}'}" 
+                                                 src="${file.image_url || '{% static 'login-form/images/pdf_pics.png' %}'}" 
+                                                 alt="PDF" title="PDF">
+                                        </a>
+                                    `;
+                                } else if (['doc', 'docx'].includes(file.file_extension)) {
+                                    fileHTML += `
+                                        <a href="${file.uploaded_file_url}" target="_blank">
+                                            <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" width="100%" class="file-icon blur-up lazyload">
+                                            View Document
+                                        </a>
+                                    `;
+                                } else if (['ppt', 'pptx'].includes(file.file_extension)) {
+                                    fileHTML += `
+                                        <a href="${file.uploaded_file_url}" target="_blank">
+                                            <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint" width="100%" class="file-icon blur-up lazyload">
+                                            View Presentation
+                                        </a>
+                                    `;
+                                } else if (['xls', 'xlsx'].includes(file.file_extension)) {
+                                    fileHTML += `
+                                        <a href="${file.uploaded_file_url}" target="_blank">
+                                            <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel" width="100%" class="file-icon blur-up lazyload">
+                                            View Excel File
+                                        </a>
+                                    `;
+                                } else if (file.file_extension === 'zip') {
+                                    fileHTML += `
+                                        <a href="${file.uploaded_file_url}" target="_blank">
+                                            <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%" class="file-icon blur-up lazyload">
+                                            Download ZIP File
+                                        </a>
+                                    `;
+                                } else {
+                                    fileHTML += `<p>Unknown file type: ${file.file_extension}</p>`;
+                                }
+
+                                fileHTML += `
+                                    <a href="${file.uploaded_file_url}" class="download-icon" download>
+                                        <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
+                                    </a>
+                                    <br>
+                                    <p class="company-name"><strong>${file.company_location}</strong></p>
+                                    <p class="text-muted date-time">
+                                        <i class="fas fa-calendar-alt"></i> ${file.date} -  
+                                        <i class="fas fa-clock"></i> ${file.time}
+                                    </p>
+                                    </div>
+                                </div>
+                                `;
+
+                                fileContent += fileHTML;
+                            });
+
+                            fileContent += `</div></div>`;
+                            resultContainer.innerHTML = fileContent;
+
+                            if (divider) {
+                                divider.style.display = 'block';
+                            }
+                        } else {
+                            resultContainer.innerHTML = `<p>${data.message}</p>`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching file:', error);
+                    });
+            });
+
+            daysContainer.appendChild(dayElement);
+        }
+    }
+
+
+    // Initialize calendar
+    function initializeCalendar() {
+        const today = new Date();
+        const currentMonth = today.getMonth() + 1;
+        const currentYear = today.getFullYear();
+
+        document.getElementById('month').value = currentMonth;
+        document.getElementById('year').value = currentYear;
+
+        loadCalendar();
+    }
+
+    document.getElementById('month').addEventListener('change', loadCalendar);
+    document.getElementById('year').addEventListener('change', loadCalendar);
+    initializeCalendar();
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the query parameters from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const highlightId = urlParams.get('id'); // Get the hymn ID from URL
+        const highlightLanguage = urlParams.get('language'); // Get the language from URL
+
+        // Check if the highlightId is available
+        if (highlightId) {
+            let hymnElement;
+
+            if (highlightLanguage) {
+                // Construct the correct selector based on the language and hymn ID
+                hymnElement = document.querySelector(`#${highlightLanguage}-hymn-${highlightId}`);
+            } else {
+                // Fallback to using the default format without language
+                hymnElement = document.querySelector(`#hymn-${highlightId}`);
+            }
+
+            if (hymnElement) {
+                // Scroll to the hymn element
+                hymnElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+                // Add the highlight class to the hymn element
+                hymnElement.classList.add('highlight');
+
+                // Remove the highlight class after 2 seconds (to reset the styles)
+                setTimeout(function () {
+                    hymnElement.classList.remove('highlight');
+                }, 2000);
+            } else {
+                console.log('Hymn element not found:', highlightId); // For debugging purposes
+            }
+        } else {
+            console.log('No hymn ID provided in the URL');
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+
+    function highlightFile() {
+        setTimeout(() => { // Delay ensures DOM is fully loaded
+            let hash = window.location.hash; // Get the hash from the URL (e.g., #hymn-123)
+            if (hash) {
+                let selectedFile = document.querySelector(hash); // Find the element using the hash
+
+                if (selectedFile) {
+                    // Remove previous highlights
+                    document.querySelectorAll(".highlight").forEach(el => el.classList.remove("highlight"));
+
+                    // Add highlight class
+                    selectedFile.classList.add("highlight");
+
+                    // Scroll smoothly to the file
+                    selectedFile.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+                    console.log("Scrolled to:", hash); // Debugging log
+
+                    // Remove highlight after 5 seconds
+                    setTimeout(() => {
+                        selectedFile.classList.remove("highlight");
+                        console.log("Highlight removed after 5 seconds.");
+                    }, 5000); // 5000 milliseconds = 5 seconds
+                } else {
+                    console.log("Item not found:", hash);
+                }
+            }
+        }, 500); // Small delay ensures the page loads completely
+    }
+
+    // Run highlight function on page load
+    highlightFile();
+
+    // Listen for hash changes when clicking a search result or internal link
+    window.addEventListener("hashchange", highlightFile);
+
+    // End of the Highlight Code
+</script>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const calendarResults = document.getElementById("calendarResults");
+        const searchResults = document.getElementById("searchResults");
+
+        const calendarHasResults = calendarResults && calendarResults.innerText.trim() !== "";
+        const searchHasResults = searchResults && searchResults.innerText.trim() !== "";
+
+        if (calendarHasResults && !searchHasResults) {
+            searchResults.style.display = "none";
+            calendarResults.style.display = "block";
+        } else if (searchHasResults && !calendarHasResults) {
+            calendarResults.style.display = "none";
+            searchResults.style.display = "block";
+        } else if (!searchHasResults && !calendarHasResults) {
+            calendarResults.style.display = "none";
+            searchResults.style.display = "none";
+        }
+    });
+</script>
+
+
+{% endblock %}

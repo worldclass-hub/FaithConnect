@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Newsletter</title>
+    <script src="//cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
+    
+    <!-- Font Awesome for the Home Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .full-width-input {
+            width: 100%;
+            min-width: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        body.noscroll {
+            overflow: hidden;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: url("{% static 'login-form/images/wall7.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            min-height: 400px;
+            height: auto;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: move;
+            z-index: 100;
+            overflow-y: auto;
+            max-height: 80%;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 98%;
+                padding: 20px;
+            }
+        }
+
+        .subscribers-box {
+            background: #f1f1f1;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 6px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        textarea {
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        #preloader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            text-align: center;
+        }
+
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header-with-icon {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-with-icon a {
+            color: #333;
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        .header-with-icon a:hover {
+            color: #4CAF50;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="header-with-icon">
+            Send Newsletter
+            <a href="{% url 'excel_page' %}" title="Go to Excel Page">
+                <i class="fas fa-home"></i>
+            </a>
+        </h2>
+        <form method="post" action="{% url 'send_newsletter' %}" onsubmit="showPreloader()">
+            {% csrf_token %}
+            <label for="subject">Subject:</label><br>
+            <input type="text" name="subject" id="subject" class="full-width-input" required><br><br>
+
+            <label>Message:</label><br>
+            <textarea name="body" rows="10" required></textarea><br><br>
+
+            <button type="submit">Send Newsletter</button>
+        </form>
+<h3 style="display: flex; align-items: center; gap: 10px;">
+    <i class="fas fa-users" style="color: rgb(4, 46, 78);"></i>
+    <span style="font-weight: bold; color: rgb(4, 46, 78);">Subscribers Preview</span>
+    <span style="background-color: rgb(4, 46, 78); color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px;">
+        {{ subscribers|length }}
+    </span>
+</h3>
+
+        <div class="subscribers-box">
+            {% for subscriber in subscribers %}
+                {{ subscriber.email }}<br>
+            {% empty %}
+                <p>No subscribers yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div style="position:relative; top:40%; font-size:20px;">
+            <span>Sending Newsletter...</span>
+            <br><br>
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; text-align:center;">
+        <div style="background:white; padding:30px; border-radius:10px; max-width:400px; margin:15% auto; font-size:18px;">
+            <p>Newsletter sent successfully!</p>
+            <button onclick="closeModal()" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px;">OK</button>
+        </div>
+    </div>
+
+    <script>
+        CKEDITOR.replace('body', {
+            filebrowserImageUploadUrl: '/ckeditor/upload/',
+            filebrowserUploadUrl: '/ckeditor/upload/',
+            height: 300,
+            toolbar: [
+                { name: 'document', items: ['Source', '-', 'Preview', 'Print'] },
+                { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo'] },
+                { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
+                { name: 'colors', items: ['TextColor', 'BGColor'] },
+                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
+                { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'] },
+                { name: 'align', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+                { name: 'links', items: ['Link', 'Unlink'] },
+                { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] }
+            ],
+            extraPlugins: 'uploadimage',
+        });
+
+        function showPreloader() {
+            document.getElementById('preloader').style.display = 'block';
+            document.body.classList.add('noscroll');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+            document.body.classList.remove('noscroll');
+
+            const url = new URL(window.location.href);
+            url.searchParams.delete('sent');
+            window.history.replaceState({}, document.title, url.pathname + url.search);
+        }
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('sent') === 'true') {
+                document.getElementById('successModal').style.display = 'block';
+            }
+        };
+
+        // Make the form draggable
+        var form = document.querySelector('.container');
+        var isDragging = false;
+        var offsetX, offsetY;
+
+        form.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            offsetX = e.clientX - form.getBoundingClientRect().left;
+            offsetY = e.clientY - form.getBoundingClientRect().top;
+            document.body.style.cursor = 'move';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                form.style.left = e.clientX - offsetX + 'px';
+                form.style.top = e.clientY - offsetY + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            document.body.style.cursor = 'default';
+        });
+    </script>
+</body>
+</html>

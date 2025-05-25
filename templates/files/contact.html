@@ -1,0 +1,306 @@
+{% extends "files/page.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+.image-container input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #f9f9f9;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    text-align: center;
+    color: #666;
+    cursor: pointer;
+    width: 100%;
+    max-width: 800px;
+    transition: background 0.3s ease;
+    box-sizing: border-box;
+}
+
+.custom-file-upload:hover {
+    background-color: #f0f0f0;
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+.file-label-text {
+    display: block;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ensure no scrolling on body when modal is up */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* Preloader styles */
+.text-loader {
+    font-weight: bold;
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+.text-loader .dot {
+    animation: blink 1.4s infinite;
+}
+.text-loader .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.text-loader .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.dots-loader {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+.dots-loader span {
+    width: 10px;
+    height: 10px;
+    background: #007bff;
+    border-radius: 50%;
+    animation: bounce 0.6s infinite alternate;
+}
+.dots-loader span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.dots-loader span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+@keyframes bounce {
+    to { transform: translateY(-10px); opacity: 0.5; }
+}
+</style>
+
+<!-- Body Content -->
+<div id="page-content">
+    <!-- Page Title -->
+    <div class="page section-header text-center">
+        <div class="page-title">
+            <div class="wrapper"><h1 class="page-width">Contact Us</h1></div>
+        </div>
+    </div>
+    <!-- End Page Title -->
+
+    <div class="map-section map">
+        <iframe src="https://www.google.com/maps/embed?pb=" height="350" allowfullscreen></iframe>
+        <div class="container">
+            <div class="row">
+                <div class="map-section__overlay-wrapper">
+                    <div class="map-section__overlay">
+                        <h3 class="h4">Our Service</h3>
+                        <div class="rte-setting">
+                            <p>123 Victoria St.<br>Lagos, Nigeria</p>
+                            <p>Mon - Fri, 10am - 9pm<br>Saturday, 11am - 9pm<br>Sunday, 11am - 5pm</p>
+                        </div>
+                        <p><a href="https://maps.google.com/?daddr=Victoria%20Island,%20Lagos,%20Nigeria" class="btn btn--secondary btn--small" target="_blank">Get directions</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bredcrumbWrap">
+        <div class="container breadcrumbs">
+            <a href="{% url 'excel_page' %}" title="Back to the home page">Home</a><span aria-hidden="true">›</span><span>Contact Us</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Contact Form -->
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8 mb-4">
+                <h2>Drop Us A Line</h2>
+                <p>If you have any questions or need assistance, feel free to contact the admin. We're here to help with anything you need!</p>
+
+                <div class="formFeilds contact-form form-vertical">
+                    <form id="contact_form" class="contact-form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <input type="text" id="ContactFormName" name="name" placeholder="Name" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <input type="email" id="ContactFormEmail" name="email" placeholder="Email" required>
+                                </div>
+                            </div>
+                        </div>
+                      
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <input type="tel" id="ContactFormPhone" name="phone" pattern="[0-9\-]*" placeholder="Phone Number" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <input type="text" id="ContactSubject" name="subject" placeholder="Subject" required>
+                                </div>
+                            </div>
+                        </div>
+                      
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <textarea rows="10" id="ContactFormMessage" name="message" placeholder="Your Message" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- File Upload -->
+                        <label class="custom-file-upload" id="file-label">
+                            <span class="file-label-text" id="file-text">Upload your image</span>
+                            <input type="file" name="image" accept="image/*" required onchange="updateFileName(this)">
+                        </label>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="submit" class="btn" value="Send Message">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="open-hours">
+                    <strong>Service Hours</strong><br>
+                    Mon - Sat : 9am - 11pm<br>
+                    Sunday: 11am - 5pm
+                </div>
+                <hr />
+                <ul class="addressFooter">
+                    <li><i class="icon anm anm-map-marker-al"></i><p>55 Gallaxy steet, Lagos, Nigeria</p></li>
+                    <li><i class="icon anm anm-phone-s"></i> <p><a href="tel:+2349057147497"> (234) 90 571 474 97 </a></p></li>
+                    <li><i class="icon anm anm-envelope-l"></i> <p><a href="mailto:samuelemenike4321@gmail.com">samuelemenike4321@gmail.com</a></p></li>
+                </ul>
+                <hr />
+                <ul class="list--inline site-footer__social-icons social-icons">
+                    <li><a href="#" class="social-icons__link"><i class="icon icon-facebook"></i></a></li>
+                    <li><a href="#" class="social-icons__link"><i class="icon icon-twitter"></i></a></li>
+                    <li><a href="#" class="social-icons__link"><i class="icon icon-pinterest"></i></a></li>
+                    <li><a href="#" class="social-icons__link"><i class="icon icon-instagram"></i></a></li>
+                    <li><a href="#" class="social-icons__link"><i class="icon icon-tumblr-alt"></i></a></li>
+                    <li><a href="#" class="social-icons__link"><i class="icon icon-youtube"></i></a></li>
+                    <li><a href="#" class="social-icons__link"><i class="icon icon-vimeo-alt"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Preloader -->
+<div id="contactPreloader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+background-color: rgba(255, 255, 255, 0.9); z-index: 9998; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+    <p class="text-loader">Submitting<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
+    <div class="dots-loader" style="margin-top: 15px;">
+        <span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:white; padding:20px; border-radius:10px; text-align:center; max-width:400px;">
+        <img src="{% static 'login-form/images/AnimationMail.gif' %}" alt="Success" style="width:100%; max-height:250px; object-fit:contain;" />
+        <h4 style="margin-top:15px;">Message Sent Successfully!</h4>
+        <button onclick="closeModal()" class="btn" style="margin-top:15px;">Close</button>
+    </div>
+</div>
+
+<!-- JavaScript Section -->
+<script>
+    // Ensure preloader is hidden initially
+    document.getElementById('contactPreloader').style.display = 'none';
+
+    // Update file label when file selected
+    function updateFileName(input) {
+        const fileText = document.getElementById('file-text');
+        if (input.files.length > 0) {
+            fileText.textContent = input.files[0].name;
+        } else {
+            fileText.textContent = 'Upload your image';
+        }
+    }
+
+    // Submit form via AJAX
+    document.getElementById('contact_form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const preloader = document.getElementById('contactPreloader');  // Preloader reference
+
+        preloader.style.display = 'flex';  // Show preloader
+
+        fetch("{% url 'submit_contact' %}", {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            preloader.style.display = 'none';  // Hide preloader
+
+            if (data.status === 'success') {
+                document.getElementById('successModal').style.display = 'flex';
+                // Disable background scrolling when the modal is open
+                document.body.classList.add('no-scroll');
+                document.documentElement.classList.add('no-scroll');
+            } else {
+                alert('There was an error submitting the form. Please try again.');
+            }
+        })
+        .catch(error => {
+            preloader.style.display = 'none';  // Hide preloader
+            console.error('Error:', error);
+            alert('There was an error. Please try again.');
+        });
+    });
+
+    // Close modal and reset form and file label
+    function closeModal() {
+        document.getElementById('successModal').style.display = 'none';
+        
+        // Enable background scrolling when the modal is closed
+        document.body.classList.remove('no-scroll');
+        document.documentElement.classList.remove('no-scroll');
+
+        // Reset form
+        const form = document.getElementById('contact_form');
+        form.reset();
+
+        // Reset file label
+        document.getElementById('file-text').textContent = 'Upload your image';
+    }
+</script>
+
+{% endblock %}

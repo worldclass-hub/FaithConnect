@@ -1,0 +1,92 @@
+{% extends "files/page.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+.about_image {
+height: 300px;
+}
+</style>
+
+    <!--Body Content-->
+    <div id="page-content">
+        <!--Page Title-->
+        <div class="page section-header text-center">
+            <div class="page-title">
+                <div class="wrapper"><h1 class="page-width">About Us</h1></div>
+            </div>
+        </div>
+        <!--End Page Title-->
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
+                    <div class="text-center mb-4">
+                        <h2 class="h2">{{ about.title }}</h2>
+
+                        <div class="rte-setting">
+                            <br><br>
+                            <p><strong>History</strong></p>
+                            <p>{{ about.history|safe }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-4 "><img class="blur-up lazyload about_image" data-src="{{ about.image1.url }}" src="{{ about.image1.url }}" alt="About Us" /></div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-4 "><img class="blur-up lazyload about_image" data-src="{{ about.image2.url }}" src="{{ about.image2.url }}" alt="About Us" /></div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-4 "><img class="blur-up lazyload about_image" data-src="{{ about.image3.url }}" src="{{ about.image3.url }}" alt="About Us" /></div>
+            </div>
+            <p>{{ about.more_history|safe }}</p>
+<br><br>
+           
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
+                    <h2 class="h2"> <strong>The Man Behind Doxcela</strong></h2>
+                    <div class="rte-setting"><p>{{ about.the_man|safe }}</p></div>
+                </div>
+                
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
+                    <h2 class="h2"><strong>MISSION STATEMENT</strong></h2>
+                    <div class="rte-setting"><p>{{ about.mission_statement|safe }}</p></div>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
+                    <h2 class="h2"><strong>VISION</strong></h2>
+                    <div class="rte-setting"><p>{{ about.vision|safe }}</p></div>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
+                    <h2 class="h2"><strong>VALUE</strong></h2>
+                    <div class="rte-setting"><p>{{ about.value|safe }}</p></div>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
+                    <h2 class="h2"><strong>OUR SIX-FOLD MANDATE</strong></h2>
+                    <div class="rte-setting"><p>{{ about.mandate|safe}}</p></div>
+                </div>
+                
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                    <h2 class="h2"><strong>CONTACT US</strong></h2>
+                    <ul class="addressFooter">
+                        <li><i class="icon anm anm-map-marker-al"></i><p>{{ about.contact_address|safe }}</p></li>
+                        <li class="phone"><i class="icon anm anm-phone-s"></i><p>{{ about.phone|safe }}</p></li>
+                        <li class="email"><i class="icon anm anm-envelope-l"></i><p>{{ about.email|safe }}</p></li>
+                    </ul>
+                    <hr />
+                    <ul class="list--inline site-footer__social-icons social-icons">
+                        <li><a class="social-icons__link" href="{{ about.facebook_url }}" target="_blank"><i class="icon icon-facebook"></i> Facebook</a></li>
+                        <li><a class="social-icons__link" href="{{ about.twitter_url }}" target="_blank"><i class="icon icon-twitter"></i> Twitter</a></li>
+                        <li><a class="social-icons__link" href="{{ about.pinterest_url }}" target="_blank"><i class="icon icon-pinterest"></i> Pinterest</a></li>
+                        <li><a class="social-icons__link" href="{{ about.instagram_url }}" target="_blank"><i class="icon icon-instagram"></i> Instagram</a></li>
+                        <li><a class="social-icons__link" href="{{ about.tumblr_url }}" target="_blank"><i class="icon icon-tumblr-alt"></i> Tumblr</a></li>
+                        <li><a class="social-icons__link" href="{{ about.youtube_url }}" target="_blank"><i class="icon icon-youtube"></i> YouTube</a></li>
+                        <li><a class="social-icons__link" href="{{ about.vimeo_url }}" target="_blank"><i class="icon icon-vimeo-alt"></i> Vimeo</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Body Content-->
+    
+{% endblock %}

@@ -1,0 +1,282 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+   <title> Doxcela</title>
+    <link rel="icon" href="{% static 'login-form/images/doxcela2.png' %}" type="image/png">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- ✅ Font Awesome for eye icon -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" />
+
+  <style>
+   body {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background-image: url("{% static 'login-form/images/kym-mackinnon1.jpg' %}");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+}
+
+
+    .form-container {
+      width: 350px;
+      background-color: white;
+      padding: 3rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+    }
+
+    .carousel .inner {
+      overflow: hidden;
+    }
+
+    .carousel .inner .sub-forms {
+      display: flex;
+      --transX: 0px;
+      transform: translateX(var(--transX));
+      transition: all .5s ease;
+    }
+
+    .carousel .inner .sub-forms .sub-form {
+      padding: .5rem;
+      flex-basis: 100%;
+      flex-shrink: 0;
+    }
+
+    .form-actions {
+      width: fit-content;
+    }
+
+    .form-step-indicators {
+      display: flex;
+      justify-content: center;
+      column-gap: .7rem;
+    }
+
+    .form-step-indicators button.step-indicator {
+      outline: none;
+      border: none;
+      height: 5px;
+      width: 25px;
+      background-color: rgb(214, 214, 214);
+      border-radius: 8px;
+      transition: all .3s ease;
+    }
+
+    .form-step-indicators button.step-indicator.active {
+      background-color: rgb(0, 94, 235);
+    }
+
+    .form-step-indicators button.step-indicator.visited:not(.active) {
+      background-color: rgb(112, 169, 255);
+    }
+
+    .form-finish-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 300px;
+      position: relative;
+    }
+
+    .form-finish-box .party-confetti-toggler-btns {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      visibility: hidden;
+    }
+
+    .is-invalid {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <form method="post" action="{% url 'signup' %}" class="form">
+    {% csrf_token %}
+    <h2 class="form-title mb-4">Signup</h2>
+
+    {% if messages %}
+      <div class="alert alert-warning">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="carousel">
+      <div class="inner">
+        <div class="sub-forms">
+          <!-- Step 1 -->
+          <div class="sub-form" data-index="0">
+            <div class="form-floating mb-3">
+              <input class="form-control" type="text" name="first_name" id="firstName" placeholder="First name" required>
+              <label for="firstName">First name</label>
+            </div>
+            <div class="form-floating mb-2">
+              <input class="form-control" type="text" name="last_name" id="lastName" placeholder="Last name" required>
+              <label for="lastName">Last name</label>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="sub-form" data-index="1">
+            <div class="form-floating mb-3">
+              <input class="form-control" type="email" name="email" id="email" placeholder="Email" required>
+              <label for="email">Email</label>
+            </div>
+            <div class="form-floating mb-2">
+              <input class="form-control" type="text" name="username" id="userName" placeholder="Username" required>
+              <label for="userName">Username</label>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="sub-form" data-index="2">
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group">
+                <input class="form-control" type="password" name="password" id="password" placeholder="Password" required>
+                <span class="input-group-text toggle-password"><i class="fa-solid fa-eye"></i></span>
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <div class="input-group">
+                <input class="form-control" type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm Password" required>
+                <span class="input-group-text toggle-password"><i class="fa-solid fa-eye"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions ms-auto mt-2">
+      <button id="prev" class="btn btn-secondary d-none">Previous</button>
+      <button id="next" class="btn btn-primary">Next</button>
+    </div>
+
+    <div class="form-step-indicators mt-5">
+      <button class="step-indicator active"></button>
+      <button class="step-indicator"></button>
+      <button class="step-indicator"></button>
+    </div>
+  </form>
+
+  <div class="text-center mt-3">
+    <a href="{% url 'login' %}" style="text-decoration: none;">Already have an account? Login</a>
+  </div>
+
+  <div class="form-finish-box d-none">
+    <h3 class="greeting-phrase"></h3>
+    <div class="party-confetti-toggler-btns">
+      <button class="party-toggler btn"></button>
+      <button class="party-toggler btn"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ JavaScript -->
+<script>
+  // ✅ Toggle password visibility
+  document.querySelectorAll('.toggle-password').forEach(span => {
+    span.addEventListener('click', function () {
+      const input = this.previousElementSibling;
+      const icon = this.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+  });
+
+  const parentForm = document.querySelector("form.form");
+  const subFormsWrapper = parentForm.querySelector(".carousel .sub-forms");
+  const subForms = subFormsWrapper.querySelectorAll(".sub-form");
+  const nextStepBtn = document.getElementById("next");
+  const prevStepBtn = document.getElementById("prev");
+  const stepsIndicators = Array.from(document.querySelectorAll(".form-step-indicators button.step-indicator"));
+  let activeStepIndex = 0;
+
+  stepsIndicators.forEach(e => {
+    e.addEventListener("click", e => { e.preventDefault(); });
+  });
+
+  nextStepBtn.addEventListener("click", e => {
+    e.preventDefault();
+    if (checkEmptysubForm()) {
+      if (nextStepBtn.innerText.toLowerCase() === "next") {
+        nextStep();
+      } else {
+        parentForm.submit();
+      }
+    }
+  });
+
+  prevStepBtn.addEventListener("click", e => {
+    e.preventDefault();
+    prevStep();
+  });
+
+  function nextStep() {
+    prevStepBtn.classList.remove("d-none");
+    let transBy = subForms[activeStepIndex].clientWidth * ++activeStepIndex * -1;
+    if (activeStepIndex >= subForms.length - 1) nextStepBtn.innerText = "Finish";
+    slide(transBy);
+  }
+
+  function prevStep() {
+    nextStepBtn.innerText = "Next";
+    let transBy = subForms[activeStepIndex].clientWidth * --activeStepIndex * -1;
+    if (activeStepIndex < 1) prevStepBtn.classList.add("d-none");
+    slide(transBy);
+  }
+
+  function slide(slideBy) {
+    subFormsWrapper.style.setProperty("--transX", `${slideBy}px`);
+    updateIndicators();
+  }
+
+  function updateIndicators() {
+    stepsIndicators.forEach(indic => indic.classList.remove("active"));
+    stepsIndicators[activeStepIndex].classList.add("active");
+  }
+
+  function checkEmptysubForm() {
+    const subFormIndex = activeStepIndex;
+    const subFormInputs = Array.from(subForms[subFormIndex].querySelectorAll("input"));
+    let valid = true;
+    subFormInputs.forEach(inpt => {
+      if (!inpt.value.trim()) {
+        inpt.classList.add("is-invalid");
+        valid = false;
+      } else {
+        inpt.classList.remove("is-invalid");
+      }
+    });
+    return valid;
+  }
+</script>
+
+</body>
+</html>

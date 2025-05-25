@@ -1,0 +1,111 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+   <title> Doxcela</title>
+   <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{% static 'login-form/images/doxcela2.png' %}" type="image/png">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="{% static 'login-form/css/style.css' %}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        
+        body {
+            background-image: url("{% static 'login-form/images/wallpaper2.jpg' %}");
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Content wrapper to center everything */
+        .content-wrapper {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Password wrapper for eye icon functionality */
+        .password-wrapper {
+            position: relative;
+        }
+        
+        .password-wrapper .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+        }
+        
+        /* Center the form */
+        .my-form {
+            position: fixed;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        
+        /* Adjustments for mobile view */
+        @media (max-width: 600px) {
+            .my-form {
+                position: static;
+                transform: none;
+                top: auto;
+                left: auto;
+                width:  350px; /* Make the form a bit wider on small screens */
+                max-width: 350px; /* Max width for the form */
+                margin-top: -50px; /* Some space at the top */
+            }
+        }
+        
+        </style>
+    
+	</head>
+	<body>
+
+    {% block content %}
+
+
+    {% endblock %}
+
+	<script src="{% static 'login-form/js/jquery.min.js' %}"></script>
+   <script src="{% static 'login-form/js/popper.js' %}"></script>
+   <script src="{% static 'login-form/js/bootstrap.min.js' %}"></script>
+   <script src="{% static 'login-form/js/main.js' %}"></script>
+ 
+       <!-- Password Toggle Script -->
+       <script>
+         document.getElementById("togglePassword").addEventListener("click", function() {
+             var passwordField = document.getElementById("password");
+             var icon = this;
+             if (passwordField.type === "password") {
+                 passwordField.type = "text";
+                 icon.classList.remove("fa-eye");
+                 icon.classList.add("fa-eye-slash");
+             } else {
+                 passwordField.type = "password";
+                 icon.classList.remove("fa-eye-slash");
+                 icon.classList.add("fa-eye");
+             }
+         });
+     </script>
+ 
+   </body>
+</html>

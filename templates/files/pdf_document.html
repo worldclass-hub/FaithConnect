@@ -1,0 +1,858 @@
+{% extends "files/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+   
+
+        /* === CALENDAR BASE STYLING === */
+.calendar {
+    width: 100%;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 20px;
+    background: linear-gradient(145deg,rgb(164, 239, 225),rgb(36, 131, 118));
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* === HEADER SELECT STYLING === */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.calendar-select {
+    flex: 1;
+    min-width: 45%;
+    padding: 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.calendar-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* === WEEKDAYS === */
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+    color:rgb(0, 5, 5);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.weekdays span {
+    font-size: 14px;
+}
+
+/* === DAYS === */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-days div {
+    padding: 14px 0;
+    background: #fff;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 0 rgba(0,0,0,0);
+    border: 1px solid transparent;
+}
+
+.calendar-days div:hover {
+    background: #e9f2ff;
+    border-color: #007bff;
+    transform: scale(1.05);
+}
+
+/* === TODAY STYLING === */
+.today {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+/* === SELECTED DATE STYLING === */
+.selected {
+    background-color: #28a745 !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+/* === Responsive tweaks === */
+@media (max-width: 1030px) {
+    .calendar {
+        padding: 15px;
+    }
+
+    .calendar-select {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .calendar-days div {
+        padding: 12px 0;
+        font-size: 12px;
+    }
+
+    .weekdays span {
+        font-size: 12px;
+    }
+}
+
+/* === HIDE CALENDAR ON SMALL SCREENS (<=1023px width) === */
+@media screen and (max-width: 1023px) {
+    .calendar-wrapper {
+        display: none;
+    }
+}
+
+
+
+
+
+    .sidebar_widget {
+        position: relative;
+        overflow: hidden;
+        /* Prevents the blur effect from spilling over the edges */
+    }
+
+    .banner-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        height: 300px;
+        /* Set the banner height */
+    }
+
+    .banner-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* Ensures the image covers the space without distorting it */
+        filter: blur(1px);
+        /* Apply the blur effect directly to the image */
+        z-index: 1;
+        /* Ensure that the blur image stays below the text */
+    }
+
+    .sidebar_widget .banner-container .banner-image {
+        position: relative;
+        /* Allow for stacking of content inside banner-container */
+    }
+
+    .banner-content {
+        position: absolute;
+        top: 87%;
+        /* Adjust this value to move the text lower (e.g., 60% from the top) */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        /* White text for contrast */
+        z-index: 2;
+        /* Ensure text is on top of the blurred background */
+    }
+
+    .banner-text {
+        font-size: 12px;
+        /* Adjust the font size */
+        font-weight: bold;
+        text-align: center;
+        color: black;
+        /* Ensuring the text color is white */
+    }
+
+
+
+
+
+    /* Ensure image does not disappear */
+    .file-icon {
+        width: 100%;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    /* File container styling */
+    .file-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Download icon styling */
+    .download-icon {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.9);
+        padding: 5px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease-in-out;
+    }
+
+    /* Download icon image */
+    .download-img {
+        width: 20px;
+        height: 20px;
+        filter: invert(1);
+        /* Makes icon white */
+    }
+
+    /* Hover effect for the download icon */
+    .download-icon:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Align company name to the left */
+    .company-name {
+        text-align: left;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .date-time {
+        text-align: left;
+        font-size: 10px;
+    }
+
+    .loadMore.disabled {
+        background: grey;
+        cursor: not-allowed;
+    }
+
+    .audio-wrapper {
+        position: relative;
+        width: 100%;
+        /* Make it responsive */
+        max-width: 500px;
+        /* Keep a good width */
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        background-color: #f5f5f5;
+        /* Light background for blending */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    .audio-image {
+        width: 100%;
+        height: 250px;
+        /* Keep images same height */
+        object-fit: cover;
+        border-radius: 10px 10px 0 0;
+        /* Curve only top */
+    }
+
+
+    .audio-play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .audio-player {
+        width: 100%;
+        height: 50px;
+        /* Keep all players same height */
+        background: #fff;
+        /* Make it stand out */
+        border-radius: 0 0 10px 10px;
+        /* Curve bottom */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .file-icon {
+        width: 100%;
+        max-width: 500px;
+        height: 250px;
+        /* Same height as image */
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    #loadMoreBtn.disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+
+
+    .selected {
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        font-weight: bold;
+    }
+
+
+    .image-height {
+        height: 150px;
+        width: 150px;
+        /* Maintains the aspect ratio */
+    }
+
+    .blur-up.lazyload {
+        position: relative;
+        filter: blur(10px);
+        transition: filter 0.3s ease;
+    }
+    
+    .blur-up.lazyload::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9); /* Dark overlay */
+        z-index: 1;
+    }
+    
+</style>
+
+<!--Body Content-->
+<div id="page-content">
+    <!--Collection Banner-->
+    <div class="collection-header">
+        <div class="collection-hero">
+            <div class="collection-hero__image"><img
+                    data-src="{% static 'login-form/images/wallpaperflare.com_wallpaper.jpg' %}"
+                    src="{% static 'login-form/images/wallpaperflare.com_wallpaper.jpg' %}" alt="Women" title="Women" />
+            </div>
+            <div class="collection-hero__title-wrapper">
+                <h1 class="collection-hero__title page-width">PDF File Page</h1>
+            </div>
+        </div>
+    </div>
+    <!--End Collection Banner-->
+
+    <div class="container">
+        <div class="row">
+            <!--Sidebar-->
+            <div class="col-12 col-sm-12 col-md-3 col-lg-3 sidebar filterbar">
+                <div class="closeFilter d-block d-md-none d-lg-none"><i class="icon icon anm anm-times-l"></i></div>
+                <div class="sidebar_tags">
+
+
+                    <div class="calendar-wrapper">
+                    <!-- Calendar -->
+                    <h2>Browse Files by Date</h2>
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <select id="month" class="calendar-select">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                            <input type="number" id="year" class="calendar-select" placeholder="Enter Year" />
+                        </div>
+
+                        <div class="calendar-body">
+                            <div class="weekdays">
+                                <span>Mon</span>
+                                <span>Tue</span>
+                                <span>Wed</span>
+                                <span>Thu</span>
+                                <span>Fri</span>
+                                <span>Sat</span>
+                                <span>Sun</span>
+                            </div>
+
+                            <div class="calendar-days">
+                                <!-- Days of the month will go here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                    <!--Recently PDF_Files-->
+                    <div class="sidebar_widget">
+                        <div class="widget-title">
+                            <br>
+                            <br>
+                            <h2>Recent PDF Files</h2>
+                        </div>
+                        <div class="widget-content">
+                            <div class="list list-sidebar-products">
+                                <div class="grid">
+                                    {% for pdf in recent_pdfs %}
+                                    <div class="grid__item">
+                                        <div class="mini-list-item">
+                                            <div class="mini-view_image">
+                                                <a class="grid-view-item__link" href="{{ pdf.pdf_file.url }}"
+                                                    target="_blank">
+                                                    <img class="grid-view-item__image blur-up lazyload"
+                                                        src="{% if pdf.image %}{{ pdf.image.url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
+                                                        alt="PDF" />
+                                                </a>
+                                            </div>
+                                            <div class="details">
+                                                <a class="grid-view-item__title" href="{{ pdf.pdf_file.url }}"
+                                                    target="_blank" style="color:grey;">
+                                                    {{ pdf.date }} - {{ pdf.time }}
+                                                </a>
+
+                                                <div class="grid-view-item__meta">
+                                                    <span class="product-price__price" style="font-size: 11px">
+                                                        <span class="money">
+                                                            <strong style="color:darkgreen;">Company/Location:</strong>
+                                                            {{ pdf.company_location }}
+                                                        </span>
+                                                    </span>
+                                                    <p><strong style="color:red;">ID:</strong>
+                                                        {{ pdf.info_id|default:"No Info ID" }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p style="margin-left: 35px;">No PDFs uploaded yet.</p>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Of Recentfile-->
+
+                    <!--Banner-->
+                    <div class="sidebar_widget static-banner">
+                        <div class="banner-container">
+                            <img src="{% static 'login-form/images/doxcela1.jpeg' %}" alt="" class="banner-image" />
+                            <div class="banner-content">
+                                <p class="banner-text">Secure Your Files Here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Banner-->
+
+                    <!-- Information -->
+                    <div class="sidebar_widget">
+                        <div class="widget-title">
+                            <h2>Information</h2>
+                        </div>
+                        <div class="widget-content">
+                            <p>Store and access all types of files—media, documents, and more—with ease and security.
+                                Quick uploads and downloads, with top-notch support.</p>
+                        </div>
+                    </div>
+                    <!-- End Information -->
+
+                </div>
+            </div>
+            <!--End Sidebar-->
+            <!--Main Content-->
+            <div class="col-12 col-sm-12 col-md-9 col-lg-9 main-col">
+                <div class="category-description">
+                    <h4>PDF Description</h4>
+                    <p>PDF files serve as a reliable way to store and share documents without losing their original
+                        layout. Whether it's official reports, receipts, scanned documents, or other important files,
+                        PDFs help preserve content exactly as it was created. On this page, you can easily access, view,
+                        and download all uploaded PDF files, organized with useful information for your convenience.</p>
+
+                </div>
+                <hr>
+                <div class="productList">
+
+
+                    <div class="result-container">
+                        <!-- Files will be shown here -->
+                    </div>
+
+                    <!-- List View Items (PDFs) -->
+                    <div class="list-view-items grid--view-items all-files-container" id="itemsContainer">
+                        {% for pdf in page_obj %}
+                        <div class="list-product list-view-item">
+                            <div class="list-view-item__image-column">
+                                <div class="list-view-item__image-wrapper">
+                                    <a href="{{ pdf.pdf_file.url }}" target="_blank">
+                                        <img class="list-view-item__image blur-up lazyload image-height"
+                                            data-src="{% if pdf.image %}{{ pdf.image.url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
+                                            src="{% if pdf.image %}{{ pdf.image.url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
+                                            alt="PDF" title="PDF">
+
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="list-view-item__title-column">
+                                <div class="h4 grid-view-item__title">
+                                    <a href="{{ pdf.pdf_file.url }}" target="_blank">{{ pdf.date }} - {{ pdf.time }}</a>
+                                </div>
+                                <p>{{ pdf.company_location|slice:":24" }}</p>
+                                <p class="product-price grid-view-item__meta">
+                                    <span class="product-price__price product-price__sale">
+                                        <span class="money">{{ pdf.info_id|default:"No Info ID" }}</span>
+                                    </span>
+                                </p>
+                                <!-- PDF Original Filename -->
+                                <p>Filename: {{ pdf.pdf_file.name|cut:"pdfs/"|slice:":19" }}</p>
+
+                                <form class="variants" action="#">
+                                    <a href="{{ pdf.pdf_file.url }}" download>
+                                        <button class="btn btn--small" type="button">Download</button>
+                                    </a>
+                                </form>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p>No PDFs uploaded yet.</p>
+                        {% endfor %}
+                    </div>
+
+
+
+
+                </div>
+
+                <!-- Load More Button -->
+                <div class="infinitpaginOuter" {% if page_obj.has_next %} {% else %} style="display:none;" {% endif %}>
+                    <div class="infinitpagin">
+                        <button id="loadMoreBtn" class="btn">Load More</button>
+                    </div>
+                </div>
+
+
+                <!-- Button (Initially hidden) -->
+                <div id="show-all-uploads-container" style="display: none;">
+                    <div class="infinitpagin">
+                        <a href="{% url 'pdf_document' %}" class="btn">
+                            Show All Uploads
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+            <!--End Main Content-->
+        </div>
+    </div>
+
+</div>
+<!--End Body Content-->
+<script>
+    // The Code for the Load more for the PDF Page
+    document.addEventListener("DOMContentLoaded", function () {
+        let loadMoreBtn = document.getElementById("loadMoreBtn");
+        let currentPage = 1; // Start at page 1
+        const itemsPerClick = 6; // Number of items to show at a time
+
+        loadMoreBtn.addEventListener("click", function () {
+            currentPage += 1;
+            let url = "{% url 'pdf_document' %}?page=" + currentPage; // The URL with page number
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    let newItems = new DOMParser().parseFromString(data, "text/html")
+                        .querySelectorAll("#itemsContainer .list-product");
+                    let container = document.getElementById("itemsContainer");
+
+                    newItems.forEach(item => {
+                        container.appendChild(
+                        item); // Append the new items to the container
+                    });
+
+                    // Check if there are more items to load
+                    if (newItems.length < itemsPerClick) {
+                        loadMoreBtn.textContent = "No more files"; // Change button text
+                        loadMoreBtn.disabled = true; // Disable button
+                        loadMoreBtn.classList.add("disabled"); // Optional: Add a disabled style
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
+    // End of the Load More of the PDF Page 
+
+
+
+
+
+    function loadCalendar() {
+        const monthSelect = document.getElementById('month');
+        const yearInput = document.getElementById('year');
+
+        const month = parseInt(monthSelect.value, 10) - 1;
+        const year = parseInt(yearInput.value, 10);
+
+        const daysContainer = document.querySelector('.calendar-days');
+        daysContainer.innerHTML = '';
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const totalDays = lastDay.getDate();
+        const startDay = firstDay.getDay();
+        const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
+
+        for (let i = 0; i < adjustedStartDay; i++) {
+            const blankDay = document.createElement('div');
+            blankDay.classList.add('blank-day');
+            daysContainer.appendChild(blankDay);
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.textContent = day;
+            dayElement.classList.add('day');
+
+            const today = new Date();
+            if (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year) {
+                dayElement.classList.add('today');
+            }
+
+            dayElement.addEventListener('click', function () {
+                const allDays = document.querySelectorAll('.calendar-days .day');
+                allDays.forEach(day => day.classList.remove('selected'));
+
+                dayElement.classList.add('selected');
+
+                const selectedDate =
+                    `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                fetch(`/get_file_for_date/${year}/${month + 1}/${day}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const resultContainer = document.querySelector('.result-container');
+                        resultContainer.innerHTML = '';
+
+                        const allFilesContainer = document.querySelector('.all-files-container');
+                        if (allFilesContainer) {
+                            allFilesContainer.style.display = 'none';
+                        }
+
+                        const loadMoreButtonContainer = document.querySelector('.infinitpaginOuter');
+                        if (loadMoreButtonContainer) {
+                            loadMoreButtonContainer.style.display = 'none';
+                        }
+
+                        const divider = document.getElementById('divider');
+                        if (divider) {
+                            divider.style.display = 'none';
+                        }
+
+                        const showAllUploadsContainer = document.getElementById(
+                            'show-all-uploads-container');
+                        if (showAllUploadsContainer) {
+                            showAllUploadsContainer.style.display = 'block';
+                        }
+
+                        if (data.files && data.files.length > 0) {
+                            let fileContent = `
+                            <div class="list-view-items grid--view-items all-files-container" id="itemsContainer">
+                        `;
+
+                            let hasPdf = false; // Track if there is a PDF
+
+                            data.files.forEach(file => {
+                                if (file.file_extension === 'pdf') {
+                                    hasPdf = true; // Mark that a PDF file exists
+                                    fileContent += `
+                                    <div class="list-product list-view-item">
+                                        <div class="list-view-item__image-column">
+                                            <div class="list-view-item__image-wrapper">
+                                                <a href="${file.uploaded_file_url}" target="_blank">
+                                                    <img class="list-view-item__image blur-up lazyload image-height" 
+                                                         data-src="${file.image_url || '{% static 'login-form/images/pdf_pics.png' %}'}" 
+                                                         src="${file.image_url || '{% static 'login-form/images/pdf_pics.png' %}'}" 
+                                                         alt="PDF" title="PDF">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="list-view-item__title-column">
+                                            <div class="h4 grid-view-item__title">
+                                                <a href="${file.uploaded_file_url}" target="_blank">${file.date} - ${file.time}</a>
+                                            </div>
+                                            <p>${file.company_location.slice(0, 24)}</p> <!-- Slice company_location -->
+                                            <p class="product-price grid-view-item__meta">
+                                                <span class="product-price__price product-price__sale">
+                                                    <span class="money">${file.info_id || "No Info ID"}</span>
+                                                </span>
+                                            </p>
+                                            <p>Filename: ${file.uploaded_file_url.split('/').pop().slice(0, 24)}</p> <!-- Slice filename -->
+
+                                            <form class="variants" action="#">
+                                                <a href="${file.uploaded_file_url}" download>
+                                                    <button class="btn btn--small" type="button">Download</button>
+                                                </a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                `;
+                                }
+                            });
+
+                            fileContent += `</div>`;
+                            resultContainer.innerHTML = fileContent;
+
+                            if (!hasPdf) {
+                                // If no PDF file is found, display the message
+                                resultContainer.innerHTML = `<p>No file on this selected day</p>`;
+                            }
+
+                            if (divider) {
+                                divider.style.display = 'block';
+                            }
+                        } else {
+                            resultContainer.innerHTML = `<p>No file on this selected day</p>`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching file:', error);
+                    });
+            });
+
+            daysContainer.appendChild(dayElement);
+        }
+    }
+
+    // Initialize calendar
+    function initializeCalendar() {
+        const today = new Date();
+        const currentMonth = today.getMonth() + 1;
+        const currentYear = today.getFullYear();
+
+        document.getElementById('month').value = currentMonth;
+        document.getElementById('year').value = currentYear;
+
+        loadCalendar();
+    }
+
+    document.getElementById('month').addEventListener('change', loadCalendar);
+    document.getElementById('year').addEventListener('change', loadCalendar);
+    initializeCalendar();
+</script>
+
+
+<script>
+    jQuery(document).ready(function () {
+        const userHasProfile = {{ user_has_profile|yesno:"true,false" }};
+        const profileCompleted = localStorage.getItem("profileCompleted");
+
+        // Only show the modal if the user hasn't submitted a profile
+        if (!userHasProfile && !profileCompleted) {
+            var pageHeight = jQuery(document).height();
+            jQuery('<div id="modalOverly"></div>').insertBefore('body');
+            jQuery('#modalOverly').css({
+                "height": pageHeight,
+                "position": "fixed",
+                "top": 0,
+                "left": 0,
+                "width": "100%",
+                "background": "rgba(0,0,0,0.6)",
+                "z-index": "9998"
+            });
+
+            jQuery('#popup-container').css({
+                "position": "fixed",
+                "z-index": "9999"
+            }).show();
+
+            jQuery('html, body').css('overflow', 'hidden');
+        }
+
+        // Handle form submission
+        jQuery('#profileForm').on('submit', function (e) {
+            e.preventDefault();  // Prevent traditional submit
+            const formData = new FormData(this);
+
+            jQuery.ajax({
+                url: "{% url 'excel_page' %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (res) {
+                    if (res.status === 'success') {
+                        // Hide profile form and overlay
+                        jQuery('#popup-container').fadeOut();
+                        jQuery('#modalOverly').fadeOut();
+
+                        // Prevent it from popping again
+                        localStorage.setItem("profileCompleted", "true");
+
+                        // Block scroll while showing success modal
+                        jQuery('html, body').css('overflow', 'hidden');
+                        jQuery('#successOverlay').fadeIn();
+                        jQuery('#successModal').fadeIn();
+                    }
+                },
+                error: function (err) {
+                    alert("Error: You may already have submitted a profile or you're not logged in.");
+                }
+            });
+        });
+
+        // Close profile form manually
+        jQuery('.closepopup').on('click', function () {
+            jQuery('#popup-container').fadeOut();
+            jQuery('#modalOverly').fadeOut();
+            jQuery('html, body').css('overflow', 'auto');
+        });
+
+        // Handle closing the success modal
+        jQuery('#closeSuccessModal').on('click', function () {
+            jQuery('#successModal').fadeOut();
+            jQuery('#successOverlay').fadeOut();
+            jQuery('html, body').css('overflow', 'auto');
+        });
+    });
+</script>
+
+{% endblock %}

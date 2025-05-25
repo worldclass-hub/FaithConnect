@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Make a Donation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #d9e6f2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1d3557;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus {
+            border-color: #4c9aff;
+            outline: none;
+        }
+
+        .btn-submit {
+            background: #1d3557;
+            color: white;
+            border: none;
+            padding: 14px 0;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: #16324f;
+        }
+
+        .error {
+            background: #ffe0e0;
+            color: #a70000;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Make a Donation</h1>
+        {% if message %}
+            <div class="error">{{ message }}</div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'initiate_donation' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" placeholder="e.g. Samuel Emenike" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" placeholder="e.g. you@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number (Optional):</label>
+                <input type="text" id="phone" name="phone" placeholder="e.g. 08012345678">
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Amount (NGN):</label>
+                <input type="number" id="amount" name="amount" min="100" step="100" placeholder="Minimum ₦100" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Proceed to Paystack</button>
+        </form>
+    </div>
+</body>
+</html>
