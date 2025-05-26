@@ -14,6 +14,8 @@ from pathlib import Path
 
 import os
 
+from decouple import config
+
 from .jazzmin import JAZZMIN_SETTINGS
 
 
@@ -30,9 +32,10 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = 'django-insecure-5=1$-+et+w#wdt(typ6vi+&kn0vdeqofkrr38tx8%@zhxtkube'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'cc53-197-211-59-66.ngrok-free.app']
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'cc53-197-211-59-66.ngrok-free.app']
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
 
 CSRF_TRUSTED_ORIGINS = [
@@ -267,16 +270,18 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ADMIN_EMAIL = 'doxcela@gmail.com'              # Can be same or different from sender
 
 
-# settings.py
-
-PAYSTACK_SECRET_KEY = "sk_test_5af0e5231f8c370ccd523013bb2706b8960039fb"
-PAYSTACK_PUBLIC_KEY = "pk_test_7cd1d0f6c1a9b89eca49d5d06091b61060f6a674"
-PAYSTACK_CALLBACK_URL = "https://cc53-197-211-59-66.ngrok-free.app"
 
 
+SECRET_KEY = config('SECRET_KEY', default='unsafe-secret-key-for-dev')
 
-# NGROK for local testing (run `ngrok http 8000`)
-NGROK_URL = 'https://cc53-197-211-59-66.ngrok-free.app'  # Replace with your ngrok URL
+
+PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='http://127.0.0.1:8000/payment/callback/')
+
+
+# # NGROK for local testing (run `ngrok http 8000`)
+# NGROK_URL = 'https://cc53-197-211-59-66.ngrok-free.app'  # Replace with your ngrok URL
 
 
 
