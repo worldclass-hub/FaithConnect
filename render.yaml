@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: faithconnect
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn doxcela.wsgi
+    envVars:
+      - key: SECRET_KEY
+        fromDatabase: true
+      - key: PAYSTACK_SECRET_KEY
+        fromDatabase: true
+      - key: PAYSTACK_PUBLIC_KEY
+        fromDatabase: true
+      - key: PAYSTACK_CALLBACK_URL
+        fromDatabase: true
