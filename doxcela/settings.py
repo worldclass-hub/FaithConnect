@@ -278,7 +278,7 @@ SECRET_KEY = config('SECRET_KEY', default='unsafe-secret-key-for-dev')
 
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
-PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='https://faithconnect-1-9j7g.onrender.com/payment/callback/')
+PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='https://faithconnect-1-9j7g.onrender.com')
 
 
 # # NGROK for local testing (run `ngrok http 8000`)
