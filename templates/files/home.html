@@ -75,18 +75,16 @@
             justify-content: space-between;
             gap: 12px;
             margin-top: 12px;
-            flex-wrap: wrap; /* allow wrapping on small screens */
         }
 
         .input-container {
-            flex: 1 1 48%;  /* Grow and shrink, base 48% width */
-            min-width: 200px; /* Minimum width to prevent too narrow */
+            width: 48%;
             text-align: left;
         }
 
         input[type="date"],
         input[type="time"] {
-            width: 100%; /* full width of container */
+            width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -134,7 +132,7 @@
         .home-text {
             display: inline-block;
             background-color: #7bed9f; /* Light green color on hover */
-            color: black; /* Keep the text black */
+            color: black; /* Keep the text white */
             padding: 12px 24px; /* Add padding for a button-like appearance */
             border-radius: 5px; /* Rounded corners */
             font-size: 18px;
@@ -166,18 +164,17 @@
                 max-width: 90%;
                 padding: 20px;
             }
-        }
 
-        @media (max-width: 600px) {
             .date-time-container {
                 flex-direction: column;
                 gap: 8px;
             }
+
             .input-container {
-                width: 100%; /* full width stacked */
-                min-width: auto;
+                width: 100%;
             }
         }
+
 
         /* --- Crazy Loader Overlay CSS --- */
 
@@ -305,49 +302,50 @@
         </form>
     </div>
 
-    <!-- Crazy Loader Overlay outside the form -->
+    <!-- Crazy Loader Overlay outside form -->
     <div id="crazyLoaderOverlay">
         <div class="crazy-loader">
             <div class="balls">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+                <div></div><div></div><div></div><div></div>
             </div>
             <div class="spinner"></div>
         </div>
     </div>
 
-    <!-- HOME BUTTON -->
-    <p class="home-text"><a href="{% url 'home' %}">HOME</a></p>
+    <!-- Home Button Below the Card -->
+    <div class="home-text">
+        <a href="{% url 'excel_page' %}">Files Page</a>
+    </div>
 
     <script>
-        const fileInput = document.getElementById('fileInput');
-        const fileList = document.getElementById('fileList');
-        const uploadForm = document.getElementById('uploadForm');
-        const crazyLoaderOverlay = document.getElementById('crazyLoaderOverlay');
-
         function handleFiles(event) {
-            const files = event.target.files;
+            const fileList = document.getElementById("fileList");
             fileList.innerHTML = "";
-            for (let i = 0; i < files.length; i++) {
-                const div = document.createElement("div");
-                div.classList.add("file-item");
-                div.textContent = files[i].name;
-                fileList.appendChild(div);
-            }
+
+            Array.from(event.target.files).forEach((file) => {
+                const fileItem = document.createElement("div");
+                fileItem.classList.add("file-item");
+
+                const fileName = document.createElement("span");
+                fileName.textContent = file.name;
+
+                const removeButton = document.createElement("span");
+                removeButton.textContent = "✕";
+                removeButton.style.cursor = "pointer";
+                removeButton.onclick = () => fileItem.remove();
+
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(removeButton);
+
+                fileList.appendChild(fileItem);
+            });
         }
 
-        uploadForm.addEventListener('submit', function(event) {
-            if (!fileInput.files.length) {
-                alert("Please select at least one file.");
-                event.preventDefault();
-                return;
-            }
-
-            crazyLoaderOverlay.style.display = 'flex';
+        // Show crazy loader overlay on form submit
+        document.getElementById("uploadForm").addEventListener("submit", function (e) {
+            document.getElementById("crazyLoaderOverlay").style.display = "flex";
+            document.getElementById("submitBtn").disabled = true;
         });
     </script>
-
 </body>
 </html>
