@@ -922,8 +922,7 @@ background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justif
      </script>
 
      <!-- Including Jquery -->
-     
-<script>
+ <script>
     document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.getElementById("searchInput");
         const searchResults = document.getElementById("searchResults");
@@ -968,6 +967,15 @@ background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justif
                                     <a href="/search-results/?q=${query}&id=${result.id}&language=${result.language.toLowerCase()}#hymn-${result.id}" class="search-result-item">
                                         <strong>${result.title || 'Untitled Hymn'}</strong><br>
                                         <small>${result.description}</small>
+                                    </a>
+                                `;
+                            }
+                            // ✅ Check if it's a YouTube video
+                            else if (result.youtube_url) {
+                                li.innerHTML = `
+                                    <a href="/search-results/?q=${query}#file-${result.id}" class="search-result-item">
+                                        <strong>🎥 YouTube Video</strong><br>
+                                        <small>${result.name || 'YouTube Video'}</small>
                                     </a>
                                 `;
                             }

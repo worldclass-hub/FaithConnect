@@ -251,7 +251,7 @@
 <body>
 
     <div class="upload-container">
-        <h3>Upload All Files</h3>
+        <h3>Upload Files or Submit YouTube Link</h3>
 
         <form method="POST" enctype="multipart/form-data" id="uploadForm">
             {% csrf_token %}
@@ -272,6 +272,19 @@
             />
 
             <div id="fileList"></div>
+
+            <!-- New YouTube Link Input -->
+            <div class="location-container" style="margin-top: 20px;">
+                <label for="youtube_link">Or enter YouTube video link</label>
+                <input
+                    type="url"
+                    id="youtube_url"
+                    name="youtube_url"  
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    pattern="https?://.*"
+                    title="Enter a valid URL"
+                />
+            </div>
 
             <!-- Date & Time -->
             <div class="date-time-container">
@@ -298,7 +311,7 @@
                 />
             </div>
 
-            <button type="submit" class="send-btn" id="submitBtn">Send File</button>
+            <button type="submit" class="send-btn" id="submitBtn">Send File or Link</button>
         </form>
     </div>
 

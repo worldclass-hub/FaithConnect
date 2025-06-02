@@ -163,9 +163,18 @@ import os
 from .models import FileUpload, UserProfile, NewsletterSubscriber, NewUpdate
 
 def excel_page(request):
+    # Allowed file extensions lists
+    allowed_image_exts = ['.jpg', '.jpeg', '.png', '.gif']
+    allowed_video_exts = ['.mp4', '.webm', '.ogg']
+    allowed_audio_exts = ['.mp3', '.wav', '.aac']
+    allowed_doc_exts = ['.doc', '.docx']
+    allowed_ppt_exts = ['.ppt', '.pptx']
+    allowed_excel_exts = ['.xls', '.xlsx']
+    allowed_zip_exts = ['.zip', '.rar']
+
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        # --- Profile update ---
         if request.FILES.get('profile_image'):
-            # PROFILE FORM SUBMISSION
             fullname = request.POST.get('fullname')
             dob = request.POST.get('dob')
             gender = request.POST.get('gender')
@@ -189,11 +198,10 @@ def excel_page(request):
             else:
                 return JsonResponse({'status': 'error', 'message': 'User not logged in.'})
 
-        else:
-            # NEWSLETTER SUBSCRIPTION
-            email = request.POST.get('email')
+        # --- Newsletter subscription ---
+        email = request.POST.get('email')
+        if email:
             name = 'Subscriber'
-
             if request.user.is_authenticated:
                 profile = UserProfile.objects.filter(user=request.user).first()
                 if profile and profile.fullname:
@@ -203,63 +211,87 @@ def excel_page(request):
                 elif request.user.username:
                     name = request.user.username
 
-            if email:
-                if NewsletterSubscriber.objects.filter(email=email).exists():
-                    return JsonResponse({'status': 'error', 'message': 'Email already subscribed.', 'email': email})
+            if NewsletterSubscriber.objects.filter(email=email).exists():
+                return JsonResponse({'status': 'error', 'message': 'Email already subscribed.', 'email': email})
 
-                NewsletterSubscriber.objects.create(email=email)
+            NewsletterSubscriber.objects.create(email=email)
 
-                # Email content
-                reply_subject = "Thanks for subscribing to our newsletter!"
-                reply_body = (
-                    "Thanks for subscribing to our newsletter! "
-                    "You’re now part of our community and will be the first to receive the latest updates, exclusive content, and special offers.\n\n"
-                    "We’re excited to have you with us!"
-                )
-
-                reply_body_html = reply_body.replace('\n', '<br>')
-
-                reply_html = f"""
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 30px; border: 1px solid #eee;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <img src="https://i.imgur.com/yEFgd2V.png" alt="Admin Logo" style="height: 60px;">
-                    </div>
-                    <h2 style="color: #1d3557;">Hello {name},</h2>
-                    <p style="font-size: 16px; color: #333;">{reply_body_html}</p>
-                    <div style="text-align: center; margin: 30px 0;">
-                        <a href="https://your-domain.com" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
-                            Visit Our Website
+            reply_subject = "Thanks for subscribing to our newsletter!"
+            reply_body = (
+                "Thanks for subscribing to our newsletter! "
+                "You’re now part of our community and will be the first to receive the latest updates, exclusive content, and special offers.\n\n"
+                "We’re excited to have you with us!"
+            )
+            reply_body_html = reply_body.replace('\n', '<br>')
+            reply_html = f"""
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 30px; border: 1px solid #eee;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="https://i.imgur.com/yEFgd2V.png" alt="Admin Logo" style="height: 60px;">
+                </div>
+                <h2 style="color: #1d3557;">Hello {name},</h2>
+                <p style="font-size: 16px; color: #333;">{reply_body_html}</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="https://your-domain.com" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
+                        Visit Our Website
+                    </a>
+                </div>
+                <hr style="border: none; border-top: 1px solid #eee;">
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="color: #888; font-size: 14px;">Stay connected with us</p>
+                    <div>
+                        <a href="https://facebook.com/yourpage" style="margin: 0 5px;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" style="height: 24px;">
+                        </a>
+                        <a href="https://twitter.com/yourpage" style="margin: 0 5px;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" style="height: 24px;">
+                        </a>
+                        <a href="https://instagram.com/yourpage" style="margin: 0 5px;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" style="height: 24px;">
+                        </a>
+                        <a href="https://wa.me/2349057147497?text=Hi%2C%20I%20am%20contacting%20you%20from%20Doxcela" target="_blank" style="margin: 0 5px;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" style="height: 24px;">
                         </a>
                     </div>
-                    <hr style="border: none; border-top: 1px solid #eee;">
-                    <div style="text-align: center; margin-top: 20px;">
-                        <p style="color: #888; font-size: 14px;">Stay connected with us</p>
-                        <div>
-                            <a href="https://facebook.com/yourpage" style="margin: 0 5px;">
-                                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" style="height: 24px;">
-                            </a>
-                            <a href="https://twitter.com/yourpage" style="margin: 0 5px;">
-                                <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" style="height: 24px;">
-                            </a>
-                            <a href="https://instagram.com/yourpage" style="margin: 0 5px;">
-                                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" style="height: 24px;">
-                            </a>
-                            <a href="https://wa.me/2349057147497?text=Hi%2C%20I%20am%20contacting%20you%20from%20Doxcela" target="_blank" style="margin: 0 5px;">
-                                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" style="height: 24px;">
-                            </a>
-                        </div>
-                        <p style="color: #aaa; font-size: 12px; margin-top: 10px;">&copy; {datetime.now().year} Doxcela. All rights reserved.</p>
-                    </div>
+                    <p style="color: #aaa; font-size: 12px; margin-top: 10px;">&copy; {datetime.now().year} Doxcela. All rights reserved.</p>
                 </div>
-                """
+            </div>
+            """
+            reply_email = EmailMultiAlternatives(reply_subject, reply_body, 'doxcela@gmail.com', [email])
+            reply_email.attach_alternative(reply_html, "text/html")
+            reply_email.send()
+            return JsonResponse({'status': 'success', 'show_modal': True, 'email': email})
 
-                reply_email = EmailMultiAlternatives(reply_subject, reply_body, 'doxcela@gmail.com', [email])
-                reply_email.attach_alternative(reply_html, "text/html")
-                reply_email.send()
+        # --- File or YouTube upload ---
+        uploaded_file = request.FILES.get('uploaded_file')
+        youtube_url = request.POST.get('youtube_url', '').strip()
+        date = request.POST.get('date')
+        time = request.POST.get('time')
+        company_location = request.POST.get('company_location')
 
-                return JsonResponse({'status': 'success', 'show_modal': True, 'email': email})
+        # Validate inputs:
+        if not (date and time and company_location):
+            return JsonResponse({'status': 'error', 'message': 'Date, time, and company location are required.'})
 
-            return JsonResponse({'status': 'error', 'message': 'Email required.'})
+        # User must upload either a file OR a YouTube URL (not both empty)
+        if not uploaded_file and not youtube_url:
+            return JsonResponse({'status': 'error', 'message': 'Please upload a file or provide a YouTube video URL.'})
+
+        try:
+            parsed_date = datetime.strptime(date, '%Y-%m-%d').date()
+            parsed_time = datetime.strptime(time, '%H:%M').time()
+        except ValueError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid date or time format.'})
+
+        # Save FileUpload instance:
+        FileUpload.objects.create(
+            uploaded_file=uploaded_file if uploaded_file else None,
+            youtube_url=youtube_url if youtube_url else None,
+            date=parsed_date,
+            time=parsed_time,
+            company_location=company_location
+        )
+
+        return JsonResponse({'status': 'success', 'message': 'File or video uploaded successfully.'})
 
     # GET method
     files = FileUpload.objects.all().order_by('-date', '-time')
@@ -277,7 +309,14 @@ def excel_page(request):
     return render(request, 'files/excel_page.html', {
         'files': files,
         'user_has_profile': user_has_profile,
-        'updates': updates
+        'updates': updates,
+        'allowed_image_exts': allowed_image_exts,
+        'allowed_video_exts': allowed_video_exts,
+        'allowed_audio_exts': allowed_audio_exts,
+        'allowed_doc_exts': allowed_doc_exts,
+        'allowed_ppt_exts': allowed_ppt_exts,
+        'allowed_excel_exts': allowed_excel_exts,
+        'allowed_zip_exts': allowed_zip_exts,
     })
 
 
@@ -390,28 +429,73 @@ def user_logout(request):
 
 
 
+from django.http import JsonResponse
+from datetime import date
+from .models import FileUpload, PDFUpload
+
+from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs
+from datetime import date
+from django.http import JsonResponse
+from .models import FileUpload, PDFUpload
+
+def extract_youtube_id(url):
+    """
+    Extract the YouTube video ID from a URL, including shorts URLs.
+    """
+    try:
+        parsed_url = urlparse(url)
+        netloc = parsed_url.netloc.lower()
+
+        if 'youtube.com' in netloc:
+            # Handle normal and shorts URLs
+            if parsed_url.path.startswith('/shorts/'):
+                return parsed_url.path.split('/')[2]  # Shorts ID after /shorts/
+            else:
+                query = parse_qs(parsed_url.query)
+                return query.get('v', [None])[0]
+
+        elif 'youtu.be' in netloc:
+            return parsed_url.path.lstrip('/')
+
+    except Exception:
+        return None
+
+    return None
+
 
 def get_file_for_date(request, year, month, day):
     selected_date = date(year, month, day)
 
-    # Fetch files for the selected date, sorted by date in descending order
+    # Fetch files for the selected date
     files = FileUpload.objects.filter(date=selected_date).order_by('-date', '-time')
     pdf_files = PDFUpload.objects.filter(date=selected_date).order_by('-date', '-time')
 
-    # Combine both file lists
     all_files = list(files) + list(pdf_files)
 
     file_data = []
     for file in all_files:
-        # Determine which file field to use based on the type of file (FileUpload or PDFUpload)
-        file_url = getattr(file, 'uploaded_file', None).url if isinstance(file, FileUpload) else getattr(file, 'pdf_file', None).url
-        file_extension = file_url.split('.')[-1].lower()
-        image_url = getattr(file, 'image', None).url if getattr(file, 'image', None) else None
-        
-        # Add info_id field to the response (assuming your model has it)
-        info_id = getattr(file, 'info_id', None)  # Adjust this based on your model
+        file_url = ''
+        youtube_id = None
+        youtube_url = None
+        file_extension = ''
 
-        # Append the file data to the list
+        if isinstance(file, FileUpload):
+            if file.uploaded_file:
+                file_url = file.uploaded_file.url
+                # Get extension WITHOUT leading dot
+                file_extension = file_url.split('.')[-1].lower()
+            elif file.youtube_url:
+                youtube_url = file.youtube_url
+                youtube_id = extract_youtube_id(youtube_url)
+                file_extension = 'youtube'
+        else:  # PDFUpload
+            file_url = file.pdf_file.url if file.pdf_file else ''
+            file_extension = file_url.split('.')[-1].lower()
+
+        image_url = file.image.url if getattr(file, 'image', None) else None
+        info_id = getattr(file, 'info_id', None)
+
         file_data.append({
             "uploaded_file_url": file_url,
             "file_extension": file_extension,
@@ -419,11 +503,17 @@ def get_file_for_date(request, year, month, day):
             "date": file.date.strftime("%Y-%m-%d"),
             "time": file.time.strftime("%I:%M %p"),
             "image_url": image_url,
-            "info_id": info_id if info_id is not None else "No Info ID"  # Add info_id with default value if None
+            "info_id": info_id if info_id else "No Info ID",
+            "youtube_url": youtube_url,
+            "youtube_id": youtube_id
         })
 
-    # Return the files as JSON
-    return JsonResponse({"files": file_data}) if file_data else JsonResponse({"message": "No file on this selected day."})
+    if file_data:
+        return JsonResponse({"files": file_data})
+    else:
+        return JsonResponse({"message": "No file on this selected day."})
+
+
 
 
 
@@ -1009,12 +1099,18 @@ def search_api(request):
 
     # Search Logic
     if query:
-        pdf_results = PDFUpload.objects.filter(company_location__icontains=query) | \
-                      PDFUpload.objects.filter(info_id__icontains=query) | \
-                      PDFUpload.objects.filter(date__icontains=query)
+        pdf_results = PDFUpload.objects.filter(
+            Q(company_location__icontains=query) |
+            Q(info_id__icontains=query) |
+            Q(date__icontains=query)
+        )
 
-        file_results = FileUpload.objects.filter(company_location__icontains=query) | \
-                       FileUpload.objects.filter(date__icontains=query)
+        # Added youtube_url search here in FileUpload
+        file_results = FileUpload.objects.filter(
+            Q(company_location__icontains=query) |
+            Q(date__icontains=query) |
+            Q(youtube_url__icontains=query)
+        )
 
         hymn_models = [Hymn, HausaHymn, IgboHymn, YorubaHymn, FrenchHymn]
         for model in hymn_models:
@@ -1028,7 +1124,7 @@ def search_api(request):
                 results.append({
                     "id": hymn.id,
                     "title": hymn_title,
-                    "description": hymn.description[:100] + "...",
+                    "description": hymn.description[:100] + "..." if hymn.description else "",
                     "language": model.__name__.replace('Hymn', '') or 'English',
                     "url": f"/hymn/{hymn.id}/"
                 })
@@ -1042,12 +1138,23 @@ def search_api(request):
             })
 
         for file in file_results:
-            results.append({
-                "id": file.id,
-                "name": file.uploaded_file.name,
-                "company_location": file.company_location,
-                "url": f"/file-view/{file.id}/"
-            })
+            # Check if this file has a YouTube URL (video)
+            if file.youtube_url:
+                title = file.company_location or "YouTube Video"
+                results.append({
+                    "id": file.id,
+                    "name": title,
+                    "company_location": file.company_location,
+                    "youtube_url": file.youtube_url,
+                    "url": f"/file-view/{file.id}/"
+                })
+            else:
+                results.append({
+                    "id": file.id,
+                    "name": file.uploaded_file.name,
+                    "company_location": file.company_location,
+                    "url": f"/file-view/{file.id}/"
+                })
 
     user_has_profile = False
     if request.user.is_authenticated:
@@ -1060,6 +1167,7 @@ def search_api(request):
         "user_has_profile": user_has_profile,
         "updates": updates
     })
+
 
 def search_results(request):
     query = request.GET.get('q', '').strip()

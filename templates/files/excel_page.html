@@ -1,9 +1,18 @@
 {% extends "files/base.html" %}
 {% load static %}
+{% load my_filters %}
 
 {% block content %}
 <!-- Improved CSS -->
 <style>
+.rounded-video {
+  border-radius: 12px;
+  height: 250px;
+  width: 100%;
+  /* Optional: add a little shadow or border if you want */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
+  /* border: 1px solid #ccc; */
+}
 
 
     /* === CALENDAR BASE STYLING === */
@@ -384,92 +393,98 @@
   
   </div>
   
+
+
   
-                        
-                        <!--Popular Products-->
-						<div class="sidebar_widget">
-                        	<div class="widget-title">
-                                <br>
-                                <br>
-                                <h2>Recently Files</h2></div>
-							    <div class="widget-content">
-                                    <div class="list list-sidebar-products">
-                                        <div class="grid">
-                                        {% for file in files %}
-                                            <div class="grid__item item" {% if forloop.counter > 6 %}style="display: none;"{% endif %}>
-                                                <div class="mini-list-item">
-                                                    <div class="mini-view_image blur-up lazyload"> 
-                                                        <a class="grid-view-item__link" href="{{ file.uploaded_file.url }}" target="_blank">
-                                                                
-                                                                <!-- Display Image Files -->
-                                                                {% if file.file_extension in '.jpg .jpeg .png .gif' %}
-                                                                    <img class="grid-view-item__image" src="{{ file.uploaded_file.url }}" alt="Image File" />
-                                            
-                                                                <!-- Display Video Files -->
-                                                                {% elif file.file_extension in '.mp4 .webm .ogg' %}
-                                                                <img class="grid-view-item__image" src="{% static 'login-form/images/VIDEO.jpeg' %}" alt="Video File" />
-                                                                        
-                                                                <!-- Display Audio Files -->
-                                                                {% elif file.file_extension in '.mp3 .wav .aac' %}
-                                                                    <div class="audio-wrapper">
-                                                                        <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="grid-view-item__image">
-                                                                        <button class="audio-play-button" onclick="toggleAudio(this)">
-                                                                            <i class="fas fa-play"></i>
-                                                                        </button>
-                                                                        <audio class="audio-player">
-                                                                            <source src="{{ file.uploaded_file.url }}" type="audio/{{ file.file_extension|slice:'1:' }}">
-                                                                            Your browser does not support the audio tag.
-                                                                        </audio>
-                                                                    </div>
-                                            
-                                                                <!-- Display PDF Files -->
-                                                                {% elif file.file_extension == '.pdf' %}
-                                                                    <img class="grid-view-item__image" src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF File" />
-                                                                
-                                                                <!-- Display Word Documents -->
-                                                                {% elif file.file_extension in '.doc .docx' %}
-                                                                    <img class="grid-view-item__image" src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" />
-                                            
-                                                                <!-- Display PowerPoint Files -->
-                                                                {% elif file.file_extension in '.ppt .pptx' %}
-                                                                    <img class="grid-view-item__image" src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint File" />
-                                            
-                                                                <!-- Display Excel Files -->
-                                                                {% elif file.file_extension in '.xls .xlsx' %}
-                                                                    <img class="grid-view-item__image" src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel File" />
-                                            
-                                                                <!-- Display ZIP and RAR Files -->
-                                                                {% elif file.file_extension in '.zip .rar' %}
-                                                                    <img class="grid-view-item__image" src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP File" />
-                                            
-                                                                <!-- Default: Show as Generic File -->
-                                                                {% else %}
-                                                                    <img class="grid-view-item__image" src="{% static 'login-form/images/default-file.png' %}" alt="Generic File" />
-                                                                {% endif %}
-                                                    
-                                                </a> 
-                                            </div>
-                                            
-                                            <!-- File Details -->
-                                            <div class="details"> 
-                                                <a class="grid-view-item__title" href="{{ file.uploaded_file.url }}" target="_blank" style="color:Darker;">
-                                                    {{ file.company_location }}
-                                                </a>
-                                                <div class="grid-view-item__meta">
-                                                    <span class="product-price__price">
-                                                        <span class="money" style="color:grey;">{{ file.date }} - {{ file.time }}</span>
-                                                    </span>
-                                                </div>
-                                            </div>
+  <div class="sidebar_widget">
+    <div class="widget-title">
+        <br><br>
+      <h2>Recently Files</h2>
+</div>
+<div class="widget-content">
+    <div class="list list-sidebar-products">
+        <div class="grid">
+            {% for file in files %}
+                <div class="grid__item item" {% if forloop.counter > 6 %}style="display: none;"{% endif %}>
+                    <div class="mini-list-item">
+                        <div class="mini-view_image blur-up lazyload"> 
+                            {% if file.uploaded_file|has_file %}
+                                <a class="grid-view-item__link" href="{{ file.uploaded_file.url }}" target="_blank">
+                                    {% if file.file_extension|in_list:".jpg,.jpeg,.png,.gif" %}
+                                        <img class="grid-view-item__image" src="{{ file.uploaded_file.url }}" alt="Image File" />
+                                    
+                                    {% elif file.file_extension|in_list:".mp4,.webm,.ogg" %}
+                                        <img class="grid-view-item__image" src="{% static 'login-form/images/VIDEO.jpeg' %}" alt="Video File" />
+                                    
+                                    {% elif file.file_extension|in_list:".mp3,.wav,.aac" %}
+                                        <div class="audio-wrapper">
+                                            <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="grid-view-item__image">
+                                            <button class="audio-play-button" onclick="toggleAudio(this)">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                            <audio class="audio-player">
+                                                <source src="{{ file.uploaded_file.url }}" type="audio/{{ file.file_extension|slice:'1:' }}">
+                                                Your browser does not support the audio tag.
+                                            </audio>
                                         </div>
-                                    </div> 
-                                    {% endfor %}
-                                </div>
-                                </div>
-                          	</div>
-						</div>
-                        <!--End Popular Products-->
-                        
+
+                                    {% elif file.file_extension == '.pdf' %}
+                                        <img class="grid-view-item__image" src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF File" />
+
+                                    {% elif file.file_extension|in_list:".doc,.docx" %}
+                                        <img class="grid-view-item__image" src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" />
+
+                                    {% elif file.file_extension|in_list:".ppt,.pptx" %}
+                                        <img class="grid-view-item__image" src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint File" />
+
+                                    {% elif file.file_extension|in_list:".xls,.xlsx" %}
+                                        <img class="grid-view-item__image" src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel File" />
+
+                                    {% elif file.file_extension|in_list:".zip,.rar" %}
+                                        <img class="grid-view-item__image" src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP File" />
+
+                                    {% else %}
+                                        <img class="grid-view-item__image" src="{% static 'login-form/images/default-file.png' %}" alt="Generic File" />
+                                    {% endif %}
+                                </a>
+                            {% elif file.youtube_url %}
+                                <a class="grid-view-item__link" href="https://youtube.com/watch?v={{ file.youtube_url }}" target="_blank">
+                                    <img class="grid-view-item__image" src="https://img.youtube.com/vi/{{ file.youtube_url|youtube_id }}/mqdefault.jpg" alt="YouTube Video" />
+                                </a>
+                            {% else %}
+                                <img class="grid-view-item__image" src="{% static 'login-form/images/default-file.png' %}" alt="No File or URL" />
+                            {% endif %}
+                        </div>
+
+                        <div class="details"> 
+                            {% if file.uploaded_file|has_file %}
+                                <a class="grid-view-item__title" href="{{ file.uploaded_file.url }}" target="_blank" style="color:Darker;">
+                                    {{ file.company_location }}
+                                </a>
+                            {% elif file.youtube_url %}
+                                <a class="grid-view-item__title" href="https://youtube.com/watch?v={{ file.youtube_url }}" target="_blank" style="color:Darker;">
+                                    {{ file.company_location }}
+                                </a>
+                            {% else %}
+                                <span class="grid-view-item__title" style="color:Darker;">
+                                    {{ file.company_location }}
+                                </span>
+                            {% endif %}
+                            <div class="grid-view-item__meta">
+                                <span class="product-price__price">
+                                    <span class="money" style="color:grey;">{{ file.date }} - {{ file.time }}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+
+
                     <!--Banner-->
                         <div class="sidebar_widget static-banner">
                         <div class="banner-container">
@@ -514,100 +529,101 @@
                             <!-- Files will be shown here -->
                         </div>
                         
-                        
+                {% load static %}
+                {% load my_filters %}
 
-                    	{% load static %}
-                      <div class="grid-products grid--view-items all-files-container" id="itemsContainer">
-                      <h3>All Uploaded Files</h3>
-                      <br>
-                          <div class="row">
-                              {% for file in files %}
-                              <div class="col-6 col-sm-6 col-md-4 col-lg-2 item" {% if forloop.counter > 6 %} style="display:none;" {% endif %}>
-                                  <div class="product-image position-relative file-container blur-up lazyload">
-                                      <!-- File Image -->
-                                      {% if file.file_extension == '.jpg' or file.file_extension == '.jpeg' or file.file_extension == '.png' or file.file_extension == '.gif' %}
-                                      <img src="{{ file.uploaded_file.url }}" alt="Image" class="file-icon">
-                                                                                                      
-                                  {% elif file.file_extension == '.mp4' or file.file_extension == '.webm' or file.file_extension == '.ogg' %}
-                                      <video width="100%" height="240" controls class="file-icon">
-                                          <source src="{{ file.uploaded_file.url }}" type="video/{{ file.file_extension|slice:'1:' }}">
-                                          Your browser does not support the video tag.
-                                      </video>
-                                  
-                                      {% elif file.file_extension == '.mp3' or file.file_extension == '.wav' or file.file_extension == '.aac' %}
-                                      <div class="audio-wrapper">
-                                        <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="audio-image">
-                                        <button class="audio-play-button" onclick="toggleAudio(this)">
-                                            <i class="fas fa-play"></i>
-                                        </button>
-                                        <audio class="audio-player">
-                                            <source src="{{ file.uploaded_file.url }}" type="audio/{{ file.file_extension|slice:'1:' }}">
-                                            Your browser does not support the audio tag.
-                                        </audio>
-                                    </div>
-                                    
-                                                                                                                                        
-                                  {% elif file.file_extension == '.pdf' %}
-                                      <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                          <img src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF" width="100%" class="file-icon">
-                                          View PDF
-                                      </a>
-                                  
-                                  {% elif file.file_extension == '.doc' or file.file_extension == '.docx' %}
-                                      <a href="{{ file.file.url }}" target="_blank">
-                                          <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" width="100%" class="file-icon">
-                                          View Document
-                                      </a>
-                                  
-                                  {% elif file.file_extension == '.ppt' or file.file_extension == '.pptx' %}
-                                      <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                          <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint" width="100%" class="file-icon">
-                                          View Presentation
-                                      </a>
-                                  
-                                  {% elif file.file_extension == '.xls' or file.file_extension == '.xlsx' %}
-                                      <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                          <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel" width="100%" class="file-icon">
-                                          View Spreadsheet
-                                      </a>
-                                  
-                                  {% elif file.file_extension == '.zip' or file.file_extension == '.rar' %}
-                                      <a href="{{ file.uploaded_file.url }}" download>
-                                          <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%" class="file-icon">
-                                          Download File
-                                      </a>
-                                  
-                                  {% else %}
-                                  <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                    <img src="{{ file.uploaded_file.url }}" alt="Uploaded File" width="100%" class="file-icon">
-                                    View File
-                                </a>
-                                
-                                
-                                  {% endif %}
-                                  
+                <div class="grid-products grid--view-items all-files-container" id="itemsContainer">
+                    <h3>All Uploaded Files</h3>
+                    <br>
+                    <div class="row">
+                        {% for file in files %}
+                            <div class="col-6 col-sm-6 col-md-4 col-lg-2 item" {% if forloop.counter > 6 %} style="display:none;" {% endif %}>
+                                <div class="product-image position-relative file-container blur-up lazyload">
 
-                      
-                                      <!-- Download Icon at Top-Left -->
-                                  <!-- Download Icon (optional) -->
-                                <a href="{{ file.uploaded_file.url }}" class="download-icon" download>
-                                        <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
-                              </a>
-                                    
+                                    {% if file.uploaded_file %}
+                                        {% if file.file_extension|in_list:".jpg,.jpeg,.png,.gif" %}
+                                            <img src="{{ file.uploaded_file.url }}" alt="Image" class="file-icon">
+
+                                        {% elif file.file_extension|in_list:".mp4,.webm,.ogg" %}
+                                            <video width="100%" height="240" controls class="file-icon">
+                                                <source src="{{ file.uploaded_file.url }}" type="video/{{ file.file_extension|slice:'1:' }}">
+                                                Your browser does not support the video tag.
+                                            </video>
+
+                                        {% elif file.file_extension|in_list:".mp3,.wav,.aac" %}
+                                            <div class="audio-wrapper">
+                                                <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="audio-image">
+                                                <button class="audio-play-button" onclick="toggleAudio(this)">
+                                                    <i class="fas fa-play"></i>
+                                                </button>
+                                                <audio class="audio-player">
+                                                    <source src="{{ file.uploaded_file.url }}" type="audio/{{ file.file_extension|slice:'1:' }}">
+                                                    Your browser does not support the audio tag.
+                                                </audio>
+                                            </div>
+
+                                        {% elif file.file_extension == '.pdf' %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF" width="100%" class="file-icon">
+                                                View PDF
+                                            </a>
+
+                                        {% elif file.file_extension|in_list:".doc,.docx" %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" width="100%" class="file-icon">
+                                                View Document
+                                            </a>
+
+                                        {% elif file.file_extension|in_list:".ppt,.pptx" %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint" width="100%" class="file-icon">
+                                                View Presentation
+                                            </a>
+
+                                        {% elif file.file_extension|in_list:".xls,.xlsx" %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel" width="100%" class="file-icon">
+                                                View Spreadsheet
+                                            </a>
+
+                                        {% elif file.file_extension|in_list:".zip,.rar" %}
+                                            <a href="{{ file.uploaded_file.url }}" download>
+                                                <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%" class="file-icon">
+                                                Download File
+                                            </a>
+
+                                        {% else %}
+                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
+                                                <img src="{{ file.uploaded_file.url }}" alt="Uploaded File" width="100%" class="file-icon">
+                                                View File
+                                            </a>
+                                        {% endif %}
+
+                                        <a href="{{ file.uploaded_file.url }}" class="download-icon" download>
+                                            <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
+                                        </a>
+
+                                {% elif file.youtube_url %}
+                                    <iframe class="rounded-video" 
+                                            src="https://www.youtube.com/embed/{{ file.youtube_url|youtube_id }}" 
+                                            frameborder="0" allowfullscreen>
+                                    </iframe>
+
+                                    {% else %}
+                                        <p>No file or video uploaded.</p>
+                                    {% endif %}
+
                                 </div>
-                                    
-                                <!-- Company and Date/Time Info -->
+
                                 <p class="company-name"><strong>{{ file.company_location|slice:":5" }}</strong></p>
                                 <p class="text-muted date-time">
-                                    <i class="fas fa-calendar-alt"></i> {{ file.date }}  -  
+                                    <i class="fas fa-calendar-alt"></i> {{ file.date }} -
                                     <i class="fas fa-clock"></i> {{ file.time }}
                                 </p>
-                                    
-                                    </div>
-                              {% endfor %}
-                          </div>
-                      </div>
-                      
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
 
                         
@@ -681,192 +697,196 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
 
+    
+function loadCalendar() {
+    const monthSelect = document.getElementById('month');
+    const yearInput = document.getElementById('year');
 
+    const month = parseInt(monthSelect.value, 10) - 1;
+    const year = parseInt(yearInput.value, 10);
 
+    const daysContainer = document.querySelector('.calendar-days');
+    daysContainer.innerHTML = '';
 
-    function loadCalendar() {
-        const monthSelect = document.getElementById('month');
-        const yearInput = document.getElementById('year');
-    
-        const month = parseInt(monthSelect.value, 10) - 1;
-        const year = parseInt(yearInput.value, 10);
-    
-        const daysContainer = document.querySelector('.calendar-days');
-        daysContainer.innerHTML = '';
-    
-        const firstDay = new Date(year, month, 1);
-        const lastDay = new Date(year, month + 1, 0);
-        const totalDays = lastDay.getDate();
-        const startDay = firstDay.getDay();
-        const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
-    
-        for (let i = 0; i < adjustedStartDay; i++) {
-            const blankDay = document.createElement('div');
-            blankDay.classList.add('blank-day');
-            daysContainer.appendChild(blankDay);
-        }
-    
-        for (let day = 1; day <= totalDays; day++) {
-            const dayElement = document.createElement('div');
-            dayElement.textContent = day;
-            dayElement.classList.add('day');
-    
-            const today = new Date();
-            if (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year) {
-                dayElement.classList.add('today');
-            }
-    
-            dayElement.addEventListener('click', function () {
-                const allDays = document.querySelectorAll('.calendar-days .day');
-                allDays.forEach(day => day.classList.remove('selected'));
-    
-                dayElement.classList.add('selected');
-    
-                const selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    
-                fetch(`/get_file_for_date/${year}/${month + 1}/${day}/`)
-                .then(response => response.json())
-                .then(data => {
-                    const resultContainer = document.querySelector('.result-container');
-                    resultContainer.innerHTML = '';
-            
-                    const allFilesContainer = document.querySelector('.all-files-container');
-                    if (allFilesContainer) allFilesContainer.style.display = 'none';
-            
-                    const loadMoreButtonContainer = document.querySelector('.infinitpaginOuter');
-                    if (loadMoreButtonContainer) loadMoreButtonContainer.style.display = 'none';
-            
-                    const divider = document.getElementById('divider');
-                    if (divider) divider.style.display = 'none';
-            
-                    const showAllUploadsContainer = document.getElementById('show-all-uploads-container');
-                    if (showAllUploadsContainer) showAllUploadsContainer.style.display = 'block';
-            
-                    const filteredFiles = data.files.filter(file => file.file_extension !== 'pdf');
-            
-                    if (filteredFiles.length > 0) {
-                        let fileContent = `
-                            <div class="grid-products grid--view-items" id="itemsContainer">
-                                <div class="row">
-                        `;
-            
-                        filteredFiles.forEach(file => {
-                            let fileHTML = `
-                                <div class="col-6 col-sm-6 col-md-4 col-lg-2 item">
-                                    <div class="product-image position-relative file-container">
-                            `;
-            
-                            if (['jpg', 'jpeg', 'png', 'gif'].includes(file.file_extension)) {
-                                fileHTML += `<img src="${file.uploaded_file_url}" alt="Image" class="file-icon blur-up lazyload"><br>`;
-                            } else if (['mp4', 'webm', 'ogg'].includes(file.file_extension)) {
-                                fileHTML += `
-                                    <div class="video-container">
-                                        <video width="100%" height="240" controls class="file-icon blur-up lazyload">
-                                            <source src="${file.uploaded_file_url}" type="video/${file.file_extension}">
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </div>
-                                `;
-                            } else if (['mp3', 'wav', 'aac'].includes(file.file_extension)) {
-                                fileHTML += `
-                                    <div class="audio-wrapper">
-                                        <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="audio-image blur-up lazyload">
-                                        <button class="audio-play-button" onclick="toggleAudio(this)">
-                                            <i class="fas fa-play"></i>
-                                        </button>
-                                        <audio class="audio-player">
-                                            <source src="${file.uploaded_file_url}" type="audio/${file.file_extension}">
-                                            Your browser does not support the audio tag.
-                                        </audio>
-                                    </div>
-                                `;
-                            } else if (['doc', 'docx'].includes(file.file_extension)) {
-                                fileHTML += `
-                                    <a href="${file.uploaded_file_url}" target="_blank">
-                                        <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" width="100%" class="file-icon blur-up lazyload">
-                                        View Document
-                                    </a>
-                                `;
-                            } else if (['ppt', 'pptx'].includes(file.file_extension)) {
-                                fileHTML += `
-                                    <a href="${file.uploaded_file_url}" target="_blank">
-                                        <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint" width="100%" class="file-icon blur-up lazyload">
-                                        View Presentation
-                                    </a>
-                                `;
-                            } else if (['xls', 'xlsx'].includes(file.file_extension)) {
-                                fileHTML += `
-                                    <a href="${file.uploaded_file_url}" target="_blank">
-                                        <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel" width="100%" class="file-icon blur-up lazyload">
-                                        View Excel File
-                                    </a>
-                                `;
-                            } else if (file.file_extension === 'zip') {
-                                fileHTML += `
-                                    <a href="${file.uploaded_file_url}" target="_blank">
-                                        <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%" class="file-icon blur-up lazyload">
-                                        Download ZIP File
-                                    </a>
-                                `;
-                            } else {
-                                fileHTML += `<p>Unknown file type: ${file.file_extension}</p>`;
-                            }
-            
-                            fileHTML += `
-                                <a href="${file.uploaded_file_url}" class="download-icon" download>
-                                    <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
-                                </a>
-                                <br>
-                                <p class="company-name"><strong>${file.company_location}</strong></p>
-                                <p class="text-muted date-time">
-                                    <i class="fas fa-calendar-alt"></i> ${file.date} -  
-                                    <i class="fas fa-clock"></i> ${file.time}
-                                </p>
-                                </div>
-                            </div>
-                            `;
-            
-                            fileContent += fileHTML;
-                        });
-            
-                        fileContent += `</div></div>`;
-                        resultContainer.innerHTML = fileContent;
-            
-                        if (divider) divider.style.display = 'block';
-                    } else {
-                        resultContainer.innerHTML = `<p>No file on this selected day</p>`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching file:', error);
-                    const resultContainer = document.querySelector('.result-container');
-                    resultContainer.innerHTML = `<p>No file on this selected day</p>`; // Change the message here
-                });
-            
-            });
-    
-            daysContainer.appendChild(dayElement);
-        }
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const totalDays = lastDay.getDate();
+    const startDay = firstDay.getDay();
+    const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
+
+    for (let i = 0; i < adjustedStartDay; i++) {
+        const blankDay = document.createElement('div');
+        blankDay.classList.add('blank-day');
+        daysContainer.appendChild(blankDay);
     }
-    
-    // Initialize calendar with current month/year
-    function initializeCalendar() {
+
+    for (let day = 1; day <= totalDays; day++) {
+        const dayElement = document.createElement('div');
+        dayElement.textContent = day;
+        dayElement.classList.add('day');
+
         const today = new Date();
-        const currentMonth = today.getMonth() + 1;
-        const currentYear = today.getFullYear();
-    
-        document.getElementById('month').value = currentMonth;
-        document.getElementById('year').value = currentYear;
-    
-        loadCalendar();
+        if (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year) {
+            dayElement.classList.add('today');
+        }
+
+        dayElement.addEventListener('click', function () {
+            const allDays = document.querySelectorAll('.calendar-days .day');
+            allDays.forEach(day => day.classList.remove('selected'));
+
+            dayElement.classList.add('selected');
+
+            fetch(`/get_file_for_date/${year}/${month + 1}/${day}/`)
+            .then(response => response.json())
+            .then(data => {
+                const resultContainer = document.querySelector('.result-container');
+                resultContainer.innerHTML = '';
+
+                const allFilesContainer = document.querySelector('.all-files-container');
+                if (allFilesContainer) allFilesContainer.style.display = 'none';
+
+                const loadMoreButtonContainer = document.querySelector('.infinitpaginOuter');
+                if (loadMoreButtonContainer) loadMoreButtonContainer.style.display = 'none';
+
+                const divider = document.getElementById('divider');
+                if (divider) divider.style.display = 'none';
+
+                const showAllUploadsContainer = document.getElementById('show-all-uploads-container');
+                if (showAllUploadsContainer) showAllUploadsContainer.style.display = 'block';
+
+                const filteredFiles = data.files.filter(file => file.file_extension !== 'pdf');
+
+                if (filteredFiles.length > 0) {
+                    let fileContent = `
+                        <div class="grid-products grid--view-items" id="itemsContainer">
+                            <div class="row">
+                    `;
+
+                    filteredFiles.forEach(file => {
+                        let fileHTML = `
+                            <div class="col-6 col-sm-6 col-md-4 col-lg-2 item">
+                                <div class="product-image position-relative file-container">
+                        `;
+
+                        if (file.file_extension === 'youtube' && file.youtube_id) {
+                            fileHTML += `
+                                <div class="video-container">
+                                    <iframe class="rounded-video"
+                                            src="https://www.youtube.com/embed/${file.youtube_id}" 
+                                            frameborder="0" allowfullscreen>
+                                    </iframe>
+                                </div>
+                            `;
+                        } else if (['jpg', 'jpeg', 'png', 'gif'].includes(file.file_extension)) {
+                            fileHTML += `<img src="${file.uploaded_file_url}" alt="Image" class="file-icon blur-up lazyload"><br>`;
+                        } else if (['mp4', 'webm', 'ogg'].includes(file.file_extension)) {
+                            fileHTML += `
+                                <div class="video-container">
+                                    <video width="100%" height="240" controls class="file-icon blur-up lazyload">
+                                        <source src="${file.uploaded_file_url}" type="video/${file.file_extension}">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            `;
+                        } else if (['mp3', 'wav', 'aac'].includes(file.file_extension)) {
+                            fileHTML += `
+                                <div class="audio-wrapper">
+                                    <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="audio-image blur-up lazyload">
+                                    <button class="audio-play-button" onclick="toggleAudio(this)">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <audio class="audio-player">
+                                        <source src="${file.uploaded_file_url}" type="audio/${file.file_extension}">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </div>
+                            `;
+                        } else if (['doc', 'docx'].includes(file.file_extension)) {
+                            fileHTML += `
+                                <a href="${file.uploaded_file_url}" target="_blank">
+                                    <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" width="100%" class="file-icon blur-up lazyload">
+                                    View Document
+                                </a>
+                            `;
+                        } else if (['ppt', 'pptx'].includes(file.file_extension)) {
+                            fileHTML += `
+                                <a href="${file.uploaded_file_url}" target="_blank">
+                                    <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint" width="100%" class="file-icon blur-up lazyload">
+                                    View Presentation
+                                </a>
+                            `;
+                        } else if (['xls', 'xlsx'].includes(file.file_extension)) {
+                            fileHTML += `
+                                <a href="${file.uploaded_file_url}" target="_blank">
+                                    <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel" width="100%" class="file-icon blur-up lazyload">
+                                    View Excel File
+                                </a>
+                            `;
+                        } else if (file.file_extension === 'zip') {
+                            fileHTML += `
+                                <a href="${file.uploaded_file_url}" target="_blank">
+                                    <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%" class="file-icon blur-up lazyload">
+                                    Download ZIP File
+                                </a>
+                            `;
+                        } else {
+                            fileHTML += `<p>Unknown file type: ${file.file_extension}</p>`;
+                        }
+
+                        // Removed the download icon as requested
+
+                        fileHTML += `
+                            <br>
+                            <p class="company-name"><strong>${file.company_location}</strong></p>
+                            <p class="text-muted date-time">
+                                <i class="fas fa-calendar-alt"></i> ${file.date} -  
+                                <i class="fas fa-clock"></i> ${file.time}
+                            </p>
+                            </div>
+                        </div>
+                        `;
+
+                        fileContent += fileHTML;
+                    });
+
+                    fileContent += `</div></div>`;
+                    resultContainer.innerHTML = fileContent;
+
+                    if (divider) divider.style.display = 'block';
+                } else {
+                    resultContainer.innerHTML = `<p>No file on this selected day</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching file:', error);
+                const resultContainer = document.querySelector('.result-container');
+                resultContainer.innerHTML = `<p>No file on this selected day</p>`;
+            });
+
+        });
+
+        daysContainer.appendChild(dayElement);
     }
-    
-    document.getElementById('month').addEventListener('change', loadCalendar);
-    document.getElementById('year').addEventListener('change', loadCalendar);
-    
-    // Start calendar
-    initializeCalendar();
-    
+}
+
+// Initialize calendar with current month/year
+function initializeCalendar() {
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1;
+    const currentYear = today.getFullYear();
+
+    document.getElementById('month').value = currentMonth;
+    document.getElementById('year').value = currentYear;
+
+    loadCalendar();
+}
+
+document.getElementById('month').addEventListener('change', loadCalendar);
+document.getElementById('year').addEventListener('change', loadCalendar);
+
+// Start calendar
+initializeCalendar();
+
 </script>
 
 

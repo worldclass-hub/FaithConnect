@@ -32,14 +32,14 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # SECRET_KEY = 'django-insecure-5=1$-+et+w#wdt(typ6vi+&kn0vdeqofkrr38tx8%@zhxtkube'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'cc53-197-211-59-66.ngrok-free.app']
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['your-railway-subdomain.up.railway.app', 'localhost', '127.0.0.1']
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://cc53-197-211-59-66.ngrok-free.app",
+    "https://your-railway-subdomain.up.railway.app",
 ]
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.app']
@@ -67,8 +67,7 @@ INSTALLED_APPS = [
 
     'ckeditor',
 
-    'cloudinary',
-    'cloudinary_storage',
+    
 
 
 ]

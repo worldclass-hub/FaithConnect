@@ -3,13 +3,24 @@ from .models import FileUpload, PDFUpload
 from ckeditor.fields import RichTextField
 from .models import Hymn, FrenchHymn, Hymn_Content
 from django import forms
-
-# Forms Lines Of Code for Uploading All Files
 class FileUploadForm(forms.ModelForm):
+    youtube_url = forms.URLField(  # rename this from youtube_link to youtube_url
+        required=False,
+        label="YouTube URL",
+        widget=forms.URLInput(attrs={'placeholder': 'Enter YouTube video URL (optional)'})
+    )
+
     class Meta:
         model = FileUpload
-        fields = ['uploaded_file', 'date', 'time', 'company_location']
+        fields = ['uploaded_file', 'youtube_url', 'date', 'time', 'company_location']
 
+    def clean(self):
+        cleaned_data = super().clean()
+        uploaded_file = cleaned_data.get('uploaded_file')
+        youtube_url = cleaned_data.get('youtube_url')
+
+        if not uploaded_file and not youtube_url:
+            raise forms.ValidationError("You must upload a file or provide a YouTube URL.")
 
 
 

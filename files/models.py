@@ -6,9 +6,9 @@ from datetime import date, datetime
 from ckeditor.fields import RichTextField
 
 
-
 class FileUpload(models.Model):
-    uploaded_file = models.FileField(upload_to='uploads/')
+    uploaded_file = models.FileField(upload_to='uploads/', blank=True, null=True)
+    youtube_url = models.URLField(blank=True, null=True)
     date = models.DateField()
     time = models.TimeField()
     company_location = models.CharField(max_length=255)
@@ -18,12 +18,16 @@ class FileUpload(models.Model):
 
     def file_extension(self):
         """Returns the file extension in lowercase"""
-        _, ext = os.path.splitext(self.uploaded_file.name)
-        return ext.lower()
+        if self.uploaded_file:
+            _, ext = os.path.splitext(self.uploaded_file.name)
+            return ext.lower()
+        return ''
 
     def clean(self):
-        """Ensure PDF files are not allowed"""
-        if self.file_extension() == '.pdf':
+        """Ensure PDF files are not allowed and at least one input is provided"""
+        if not self.uploaded_file and not self.youtube_url:
+            raise ValidationError("You must upload a file or provide a YouTube URL.")
+        if self.uploaded_file and self.file_extension() == '.pdf':
             raise ValidationError("PDF files are not allowed.")
         super().clean()
 
