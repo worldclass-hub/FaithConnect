@@ -7,7 +7,9 @@
     <!--Page Title-->
     <div class="page section-header text-center">
         <div class="page-title">
-            <div class="wrapper"><h1 class="page-width">Lookbook</h1></div>
+            <div class="wrapper">
+                <h1 class="page-width">Lookbook</h1>
+            </div>
         </div>
     </div>
 
@@ -28,7 +30,9 @@
                     </div>
                 </div>
             {% empty %}
-                <p>No images available.</p>
+                <div class="no-images">
+                    <p>No images available at the moment. Please check back later.</p>
+                </div>
             {% endfor %}
         </div>
 
@@ -49,35 +53,57 @@
     </div>
 </div>
 
-<!-- Custom Pagination Styling -->
+<!-- Styling Fixes -->
 <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
+    #page-content {
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .lookbook-1 {
+        flex-grow: 1;
+    }
+
+    .lookbook .no-images {
+        text-align: center;
+        font-size: 18px;
+        color: #777;
+        padding: 60px 20px;
+    }
+
     .pagination-container {
         width: 100%;
         display: flex;
         justify-content: center;
         margin-top: 30px;
     }
-    
+
     .pagination-buttons {
         display: flex;
-        gap: 8px;  /* Reduced gap for smaller buttons */
+        gap: 8px;
         flex-wrap: wrap;
     }
-    
+
     .pagination-buttons .btn {
-        padding: 6px 12px;  /* Smaller padding */
+        padding: 6px 12px;
         border-radius: 6px;
         background-color: #222;
         color: white;
         text-decoration: none;
         transition: background-color 0.3s ease;
-        font-size: 14px;  /* Smaller font size */
+        font-size: 14px;
     }
-    
+
     .pagination-buttons .btn:hover {
         background-color: #555;
     }
-    
 </style>
 
 {% endblock %}

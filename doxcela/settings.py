@@ -34,13 +34,13 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'cc53-197-211-59-66.ngrok-free.app']
-ALLOWED_HOSTS = ['your-railway-subdomain.up.railway.app', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://your-railway-subdomain.up.railway.app",
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
+
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.app']
 
@@ -277,7 +277,7 @@ SECRET_KEY = config('SECRET_KEY', default='unsafe-secret-key-for-dev')
 
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
-PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='https://faithconnect-1-9j7g.onrender.com')
+PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='http://127.0.0.1:8000')
 
 
 # # NGROK for local testing (run `ngrok http 8000`)

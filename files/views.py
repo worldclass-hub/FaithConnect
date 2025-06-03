@@ -1,72 +1,32 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required  # Import this
-from .forms import FileUploadForm
-from .models import FileUpload  # ✅ Import FileUpload model
-from .models import PDFUpload
-from .forms import PDFUploadForm
-from datetime import date, datetime
-from django.http import JsonResponse
-from django.db.models import Q
-from django.urls import reverse  # Import reverse to generate URLs
-from django.core.paginator import Paginator
-
-from django.http import JsonResponse
-from datetime import date
-from .models import FileUpload, PDFUpload
-from django.http import JsonResponse
-from datetime import date
-from .models import FileUpload, PDFUpload
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import Gallery
-
-# views.py
-from django.shortcuts import render, redirect
-from .forms import GalleryUploadForm
-from django.http import HttpResponse
-
-
-from django.core.paginator import Paginator
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
-
-
-from django.shortcuts import render, redirect
-from .forms import GalleryUploadForm
-from .models import Gallery  # Import your Gallery model
-
-from django.shortcuts import render
-from .models import Hymn, FrenchHymn, HausaHymn, IgboHymn, YorubaHymn, Hymn_Content, AboutPage
-
-
-
-from django.http import JsonResponse
-from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
-from .models import ContactMessage, AutoReplyMessage
+from django.urls import reverse
+from django.core.paginator import Paginator
+from django.http import JsonResponse, HttpResponse
+from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from django.templatetags.static import static
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.contrib.auth.models import User
 from email.mime.image import MIMEImage
-from datetime import datetime
+from urllib.parse import urlparse, parse_qs
+from django.conf import settings
 
+from datetime import date, datetime
+import os
+import re
+import uuid
+import requests
 
-# views.py
-from django.shortcuts import render
-from .models import ComingSoonPage
+from .forms import FileUploadForm, PDFUploadForm, GalleryUploadForm, UserProfileForm
+from .models import (
+    FileUpload, PDFUpload, Gallery, Hymn, FrenchHymn, HausaHymn, IgboHymn, YorubaHymn,
+    Hymn_Content, AboutPage, ContactMessage, AutoReplyMessage, ComingSoonPage,
+    UserProfile, NewUpdate, NewsletterSubscriber, DailyNewsletter, Donation
+)
 
-from django.shortcuts import render
-from django.db.models import Q
-from django.templatetags.static import static
-from .models import Hymn, FrenchHymn, YorubaHymn, IgboHymn, HausaHymn, PDFUpload, FileUpload
-
-
-from django.shortcuts import render, redirect
-from django.db.models import Q
-from django.templatetags.static import static
-from django.http import JsonResponse
-from .models import Hymn, HausaHymn, IgboHymn, YorubaHymn, FrenchHymn, PDFUpload, FileUpload
 
 
 
@@ -92,6 +52,85 @@ def coming_soon(request):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('signup')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+            return redirect('signup')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
+            return redirect('signup')
+
+        # ✅ Create and login the user
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            email=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        user.save()
+
+        login(request, user)  # ✅ Log the user in
+
+        messages.success(request, "Account created and logged in successfully!")
+        return redirect('excel_page')
+
+    return render(request, 'files/signup.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required
 def home(request):
     if request.method == "POST":
@@ -107,60 +146,25 @@ def home(request):
     return render(request, 'files/home.html', {'form': form})
 
 
-from django.shortcuts import render
-from django.http import JsonResponse
-from .models import FileUpload, UserProfile
-from .forms import UserProfileForm
-from datetime import datetime
-from django.shortcuts import render
-from .models import NewUpdate, FileUpload, UserProfile
-from django.http import JsonResponse
-from datetime import datetime
 
-from django.shortcuts import render
-from django.http import JsonResponse
-from datetime import datetime
-from .models import FileUpload, UserProfile, NewUpdate
-from .forms import UserProfileForm
 
-from django.shortcuts import render, redirect
-from .models import NewsletterSubscriber, UserProfile, NewUpdate
-from django.http import JsonResponse
-from datetime import datetime
-from django.core.mail import send_mail
-from django.core.mail import send_mail
-from django.http import JsonResponse
-from django.core.mail import send_mail, EmailMultiAlternatives
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime
-from .models import FileUpload, UserProfile, NewsletterSubscriber, NewUpdate, AutoReplyMessage
 
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.mail import EmailMultiAlternatives
-from datetime import datetime
-from .models import UserProfile, FileUpload, NewsletterSubscriber, NewUpdate
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.core.mail import EmailMultiAlternatives
-from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime
-from urllib.parse import urlparse
-import os
 
-from .models import UserProfile, NewsletterSubscriber, FileUpload, NewUpdate
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.core.mail import EmailMultiAlternatives
-from django.views.decorators.csrf import csrf_exempt
-from urllib.parse import urlparse
-from datetime import datetime
-import os
 
-from .models import FileUpload, UserProfile, NewsletterSubscriber, NewUpdate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def excel_page(request):
     # Allowed file extensions lists
@@ -332,6 +336,21 @@ def never_show_modal(request):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required
 def upload_pdf(request):
     if request.method == 'POST':
@@ -362,17 +381,19 @@ def upload_pdf(request):
 
 
 
-from django.http import JsonResponse
-from .forms import UserProfileForm
-from .models import UserProfile, PDFUpload
-from datetime import datetime
-from django.core.paginator import Paginator
-from django.shortcuts import render
-from django.http import JsonResponse
-from datetime import datetime
-from django.core.paginator import Paginator
-from .models import PDFUpload, UserProfile, NewUpdate
-from .forms import UserProfileForm
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def pdf_document(request):
     # Handle AJAX profile form submission
@@ -429,15 +450,19 @@ def user_logout(request):
 
 
 
-from django.http import JsonResponse
-from datetime import date
-from .models import FileUpload, PDFUpload
 
-from urllib.parse import urlparse, parse_qs
-from urllib.parse import urlparse, parse_qs
-from datetime import date
-from django.http import JsonResponse
-from .models import FileUpload, PDFUpload
+
+
+
+
+
+
+
+
+
+
+
+
 
 def extract_youtube_id(url):
     """
@@ -518,6 +543,18 @@ def get_file_for_date(request, year, month, day):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required
 def upload_image(request):
     if request.method == 'POST':
@@ -548,6 +585,20 @@ def upload_image(request):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required
 def lookbook(request):
     # Fetch all images from the Gallery model and order them by the most recent
@@ -565,6 +616,23 @@ def lookbook(request):
         'page_obj': page_obj,
         'updates': updates,  # Pass updates to template
     })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -639,12 +707,22 @@ def hymn_content(request):
 
 
 
-from django.http import JsonResponse
-from django.core.mail import EmailMultiAlternatives
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-from datetime import datetime
-from .models import NewsletterSubscriber, NewUpdate, UserProfile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def contact(request):
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -732,6 +810,19 @@ def never_show_modal(request):
             NewsletterSubscriber.objects.filter(email=email).update(has_closed_modal=True)
             return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error'})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -864,12 +955,17 @@ def submit_contact(request):
 
 
 
-from django.http import JsonResponse
-from django.core.mail import EmailMultiAlternatives
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-from datetime import datetime
-from .models import NewsletterSubscriber, NewUpdate, AboutPage, ComingSoonPage
+
+
+
+
+
+
+
+
+
+
+
 
 def about_view(request):
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -965,12 +1061,16 @@ def never_show_modal(request):
 
 
 
-from django.views.decorators.csrf import csrf_exempt
-from django.core.mail import EmailMultiAlternatives
-from django.http import JsonResponse
-from django.shortcuts import render
-from datetime import datetime
-from .models import NewsletterSubscriber, ComingSoonPage, UserProfile
+
+
+
+
+
+
+
+
+
+
 
 def coming_soon(request):
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -1071,10 +1171,12 @@ def never_show_modal(request):
 
 
 
-from django.http import JsonResponse
-from .forms import UserProfileForm
-from .models import UserProfile, PDFUpload, FileUpload, Hymn, HausaHymn, IgboHymn, YorubaHymn, FrenchHymn
-from django.db.models import Q
+
+
+
+
+
+
 
 def search_api(request):
     query = request.GET.get('q', '').strip()
@@ -1298,13 +1400,16 @@ def search_results(request):
 
 
 
-import os
-import re
-from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
-from django.shortcuts import render, redirect
-from email.mime.image import MIMEImage
-from .models import NewsletterSubscriber, DailyNewsletter
+
+
+
+
+
+
+
+
+
+
 
 @login_required
 def send_newsletter(request):
@@ -1366,49 +1471,6 @@ def send_newsletter(request):
 
 
 
-from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import login  # ✅ Import login
-from django.contrib.auth import authenticate  # (Optional)
-
-def signup_view(request):
-    if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
-        if password != confirm_password:
-            messages.error(request, "Passwords do not match.")
-            return redirect('signup')
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists.")
-            return redirect('signup')
-
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists.")
-            return redirect('signup')
-
-        # ✅ Create and login the user
-        user = User.objects.create_user(
-            username=username,
-            password=password,
-            email=email,
-            first_name=first_name,
-            last_name=last_name
-        )
-        user.save()
-
-        login(request, user)  # ✅ Log the user in
-
-        messages.success(request, "Account created and logged in successfully!")
-        return redirect('excel_page')
-
-    return render(request, 'files/signup.html')
 
 
 
@@ -1416,13 +1478,8 @@ def signup_view(request):
 
 
 
-import uuid
-import requests
-from django.conf import settings
-from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from .models import Donation
+
+
 
 def donation_form(request):
     return render(request, "files/donation_form.html")
@@ -1506,3 +1563,4 @@ def thank_you(request):
         return render(request, "files/thank_you.html", {"donation": donation})
     except Donation.DoesNotExist:
         return render(request, "files/thank_you.html", {"donation": None})
+
