@@ -1,6 +1,7 @@
 {% extends "files/page.html" %}
 {% load static %}
 {% block content %}
+{% load i18n %}
 
 <style>
 .image-container input {
@@ -104,7 +105,7 @@ body.no-scroll {
     <!-- Page Title -->
     <div class="page section-header text-center">
         <div class="page-title">
-            <div class="wrapper"><h1 class="page-width">Contact Us</h1></div>
+            <div class="wrapper"><h1 class="page-width">{% trans "Contact Us" %}</h1></div>
         </div>
     </div>
     <!-- End Page Title -->
@@ -115,12 +116,12 @@ body.no-scroll {
             <div class="row">
                 <div class="map-section__overlay-wrapper">
                     <div class="map-section__overlay">
-                        <h3 class="h4">Our Service</h3>
+                        <h3 class="h4">{% trans "Our Service" %}</h3>
                         <div class="rte-setting">
                             <p>123 Victoria St.<br>Lagos, Nigeria</p>
                             <p>Mon - Fri, 10am - 9pm<br>Saturday, 11am - 9pm<br>Sunday, 11am - 5pm</p>
                         </div>
-                        <p><a href="https://maps.google.com/?daddr=Victoria%20Island,%20Lagos,%20Nigeria" class="btn btn--secondary btn--small" target="_blank">Get directions</a></p>
+                        <p><a href="https://maps.google.com/?daddr=Victoria%20Island,%20Lagos,%20Nigeria" class="btn btn--secondary btn--small" target="_blank">{% trans "Get directions" %}</a></p>
                     </div>
                 </div>
             </div>
@@ -129,7 +130,7 @@ body.no-scroll {
 
     <div class="bredcrumbWrap">
         <div class="container breadcrumbs">
-            <a href="{% url 'excel_page' %}" title="Back to the home page">Home</a><span aria-hidden="true">›</span><span>Contact Us</span>
+            <a href="{% url 'excel_page' %}" title="Back to the home page">{% trans "Home" %}</a><span aria-hidden="true">›</span><span>{% trans "Contact Us" %}</span>
         </div>
     </div>
 
@@ -137,8 +138,9 @@ body.no-scroll {
         <div class="row">
             <!-- Contact Form -->
             <div class="col-12 col-sm-12 col-md-8 col-lg-8 mb-4">
-                <h2>Drop Us A Line</h2>
-                <p>If you have any questions or need assistance, feel free to contact the admin. We're here to help with anything you need!</p>
+            <h2>{% trans "Drop Us A Line" %}</h2>
+            <p>{% trans "If you have any questions or need assistance, feel free to contact the admin. We're here to help with anything you need!" %}</p>
+
 
                 <div class="formFeilds contact-form form-vertical">
                     <form id="contact_form" class="contact-form" enctype="multipart/form-data">
@@ -146,12 +148,12 @@ body.no-scroll {
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                    <input type="text" id="ContactFormName" name="name" placeholder="Name" required>
+                                    <input type="text" id="ContactFormName" name="name" placeholder="{% trans 'Name' %}" required>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                    <input type="email" id="ContactFormEmail" name="email" placeholder="Email" required>
+                                    <input type="email" id="ContactFormEmail" name="email" placeholder="{% trans 'Email' %}" required>
                                 </div>
                             </div>
                         </div>
@@ -159,12 +161,12 @@ body.no-scroll {
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                    <input type="tel" id="ContactFormPhone" name="phone" pattern="[0-9\-]*" placeholder="Phone Number" required>
+                                    <input type="tel" id="ContactFormPhone" name="phone" pattern="[0-9\-]*" placeholder="{% trans 'Phone Number' %}" required>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                    <input type="text" id="ContactSubject" name="subject" placeholder="Subject" required>
+                                    <input type="text" id="ContactSubject" name="subject" placeholder="{% trans 'Subject' %}" required>
                                 </div>
                             </div>
                         </div>
@@ -172,20 +174,20 @@ body.no-scroll {
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <textarea rows="10" id="ContactFormMessage" name="message" placeholder="Your Message" required></textarea>
+                                    <textarea rows="10" id="ContactFormMessage" name="message" placeholder="{% trans 'Your Message' %}" required></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <!-- File Upload -->
                         <label class="custom-file-upload" id="file-label">
-                            <span class="file-label-text" id="file-text">Upload your image</span>
+                            <span class="file-label-text" id="file-text">{% trans 'Upload your image' %}</span>
                             <input type="file" name="image" accept="image/*" required onchange="updateFileName(this)">
                         </label>
 
                         <div class="row">
                             <div class="col-12">
-                                <input type="submit" class="btn" value="Send Message">
+                                <input type="submit" class="btn" value="{% trans 'Send Message' %}">
                             </div>
                         </div>
                     </form>
@@ -195,7 +197,7 @@ body.no-scroll {
             <!-- Contact Info -->
             <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="open-hours">
-                    <strong>Service Hours</strong><br>
+                    <strong>{% trans "Service Hours" %}</strong><br>
                     Mon - Sat : 9am - 11pm<br>
                     Sunday: 11am - 5pm
                 </div>
@@ -299,7 +301,7 @@ background-color: rgba(255, 255, 255, 0.9); z-index: 9998; display: flex; align-
         form.reset();
 
         // Reset file label
-        document.getElementById('file-text').textContent = 'Upload your image';
+        document.getElementById('file-text').textContent = '{% trans "Upload your image" %}';
     }
 </script>
 

@@ -1,5 +1,7 @@
 {% extends "files/page.html" %}
 {% load static %}
+{% load i18n %}
+
 
 {% block content %}
 <style>
@@ -13,7 +15,7 @@ height: 300px;
         <!--Page Title-->
         <div class="page section-header text-center">
             <div class="page-title">
-                <div class="wrapper"><h1 class="page-width">About Us</h1></div>
+                <div class="wrapper"><h1 class="page-width">{% trans "About Us" %}</h1></div>
             </div>
         </div>
         <!--End Page Title-->
@@ -26,7 +28,7 @@ height: 300px;
 
                         <div class="rte-setting">
                             <br><br>
-                            <p><strong>History</strong></p>
+                            <p><strong>{% trans "History" %}</strong></p>
                             <p>{{ about.history|safe }}</p>
                         </div>
                     </div>
@@ -42,32 +44,32 @@ height: 300px;
            
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"> <strong>The Man Behind Doxcela</strong></h2>
+                    <h2 class="h2"> <strong>{% trans "The Man Behind Doxcela" %}</strong></h2>
                     <div class="rte-setting"><p>{{ about.the_man|safe }}</p></div>
                 </div>
                 
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"><strong>MISSION STATEMENT</strong></h2>
+                    <h2 class="h2"><strong>{% trans "MISSION STATEMENT" %}T</strong></h2>
                     <div class="rte-setting"><p>{{ about.mission_statement|safe }}</p></div>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"><strong>VISION</strong></h2>
+                    <h2 class="h2"><strong>{% trans "VISION" %}</strong></h2>
                     <div class="rte-setting"><p>{{ about.vision|safe }}</p></div>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"><strong>VALUE</strong></h2>
+                    <h2 class="h2"><strong>{% trans "VALUE" %}</strong></h2>
                     <div class="rte-setting"><p>{{ about.value|safe }}</p></div>
                 </div>
 
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"><strong>OUR SIX-FOLD MANDATE</strong></h2>
+                    <h2 class="h2"><strong>{% trans "OUR SIX-FOLD MANDATE" %}</strong></h2>
                     <div class="rte-setting"><p>{{ about.mandate|safe}}</p></div>
                 </div>
                 
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                    <h2 class="h2"><strong>CONTACT US</strong></h2>
+                    <h2 class="h2"><strong>{% trans "CONTACT US" %}</strong></h2>
                     <ul class="addressFooter">
                         <li><i class="icon anm anm-map-marker-al"></i><p>{{ about.contact_address|safe }}</p></li>
                         <li class="phone"><i class="icon anm anm-phone-s"></i><p>{{ about.phone|safe }}</p></li>

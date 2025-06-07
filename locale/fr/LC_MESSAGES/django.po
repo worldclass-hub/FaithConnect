@@ -1,0 +1,634 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-07 23:39+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: templates/files/about.html:18 templates/files/base.html:515
+#: templates/files/base.html:743 templates/files/hymn.html:466
+#: templates/files/hymn.html:851 templates/files/page.html:633
+#: templates/files/page.html:835
+msgid "About Us"
+msgstr "À propos de nous"
+
+#: templates/files/about.html:31
+msgid "History"
+msgstr "Histoire"
+
+#: templates/files/about.html:47
+msgid "The Man Behind Doxcela"
+msgstr "L'homme derrière Doxcela"
+
+#: templates/files/about.html:52
+msgid "MISSION STATEMENT"
+msgstr "Déclaration de mission"
+
+#: templates/files/about.html:57
+msgid "VISION"
+msgstr "Vision"
+
+#: templates/files/about.html:62
+msgid "VALUE"
+msgstr "Valeur"
+
+#: templates/files/about.html:67
+msgid "OUR SIX-FOLD MANDATE"
+msgstr "Notre mandat en six volets"
+
+#: templates/files/about.html:72
+msgid "CONTACT US"
+msgstr "Contactez-nous"
+
+#: templates/files/base.html:373 templates/files/hymn.html:325
+#: templates/files/page.html:493
+msgid "Search for any files..."
+msgstr "Rechercher des fichiers..."
+
+#: templates/files/base.html:449 templates/files/base.html:747
+#: templates/files/hymn.html:398 templates/files/hymn.html:855
+#: templates/files/page.html:565 templates/files/page.html:839
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: templates/files/base.html:451 templates/files/base.html:749
+#: templates/files/hymn.html:400 templates/files/hymn.html:857
+#: templates/files/page.html:567 templates/files/page.html:841
+msgid "Login"
+msgstr "Connexion"
+
+#: templates/files/base.html:452 templates/files/base.html:750
+#: templates/files/hymn.html:401 templates/files/hymn.html:858
+#: templates/files/page.html:568 templates/files/page.html:842
+msgid "Create Account"
+msgstr "Créer un compte"
+
+#: templates/files/base.html:489 templates/files/base.html:589
+#: templates/files/base.html:737 templates/files/coming_soon.html:182
+#: templates/files/contact.html:133 templates/files/hymn.html:437
+#: templates/files/hymn.html:535 templates/files/hymn.html:845
+#: templates/files/page.html:604 templates/files/page.html:699
+#: templates/files/page.html:829
+msgid "Home"
+msgstr "Accueil"
+
+#: templates/files/base.html:494 templates/files/hymn.html:444
+#: templates/files/page.html:611
+msgid "UPLOAD"
+msgstr "TÉLÉVERSER"
+
+#: templates/files/base.html:496 templates/files/base.html:591
+#: templates/files/base.html:734 templates/files/hymn.html:446
+#: templates/files/hymn.html:537 templates/files/hymn.html:842
+#: templates/files/page.html:613 templates/files/page.html:701
+#: templates/files/page.html:826
+msgid "Upload Media Files"
+msgstr "Téléverser des fichiers multimédias"
+
+#: templates/files/base.html:497 templates/files/base.html:592
+#: templates/files/base.html:735 templates/files/hymn.html:447
+#: templates/files/hymn.html:538 templates/files/hymn.html:843
+#: templates/files/page.html:614 templates/files/page.html:702
+#: templates/files/page.html:827
+msgid "Upload PDF"
+msgstr "Téléverser un PDF"
+
+#: templates/files/base.html:498 templates/files/base.html:593
+#: templates/files/hymn.html:448 templates/files/hymn.html:539
+#: templates/files/page.html:615 templates/files/page.html:703
+msgid "Upload LookBook"
+msgstr "Téléverser le LookBook"
+
+#: templates/files/base.html:499 templates/files/hymn.html:449
+#: templates/files/page.html:616
+msgid "Send Newletter"
+msgstr "Envoyer la newsletter"
+
+#: templates/files/base.html:506 templates/files/hymn.html:456
+#: templates/files/page.html:623
+msgid "Pages"
+msgstr "Pages"
+
+#: templates/files/base.html:509 templates/files/base.html:601
+#: templates/files/base.html:611 templates/files/base.html:731
+#: templates/files/hymn.html:459 templates/files/hymn.html:548
+#: templates/files/hymn.html:558 templates/files/hymn.html:839
+#: templates/files/page.html:626 templates/files/page.html:712
+#: templates/files/page.html:722 templates/files/page.html:823
+msgid "All Media Page"
+msgstr "Alle Dateien Seite"
+
+#: templates/files/base.html:510 templates/files/base.html:637
+#: templates/files/base.html:794 templates/files/hymn.html:460
+#: templates/files/hymn.html:584 templates/files/hymn.html:896
+#: templates/files/page.html:627 templates/files/page.html:749
+#: templates/files/page.html:880
+msgid "Donate"
+msgstr "Faire un don"
+
+#: templates/files/base.html:511 templates/files/base.html:604
+#: templates/files/base.html:612 templates/files/base.html:732
+#: templates/files/hymn.html:462 templates/files/hymn.html:551
+#: templates/files/hymn.html:559 templates/files/hymn.html:840
+#: templates/files/page.html:629 templates/files/page.html:715
+#: templates/files/page.html:723 templates/files/page.html:824
+msgid "PDF Page"
+msgstr "Page PDF"
+
+#: templates/files/base.html:514 templates/files/base.html:618
+#: templates/files/base.html:760 templates/files/contact.html:108
+#: templates/files/contact.html:133 templates/files/hymn.html:465
+#: templates/files/hymn.html:565 templates/files/hymn.html:867
+#: templates/files/page.html:632 templates/files/page.html:729
+#: templates/files/page.html:851
+msgid "Contact Us"
+msgstr "Contactez-nous"
+
+#: templates/files/base.html:519 templates/files/base.html:633
+#: templates/files/hymn.html:470 templates/files/hymn.html:580
+#: templates/files/page.html:636 templates/files/page.html:744
+msgid "New Update"
+msgstr "Nouvelle mise à jour"
+
+#: templates/files/base.html:520 templates/files/base.html:521
+#: templates/files/base.html:536 templates/files/base.html:538
+#: templates/files/base.html:601 templates/files/base.html:604
+#: templates/files/base.html:633 templates/files/base.html:634
+#: templates/files/base.html:636 templates/files/base.html:637
+#: templates/files/hymn.html:471 templates/files/hymn.html:472
+#: templates/files/hymn.html:489 templates/files/hymn.html:491
+#: templates/files/hymn.html:548 templates/files/hymn.html:551
+#: templates/files/hymn.html:580 templates/files/hymn.html:581
+#: templates/files/hymn.html:583 templates/files/hymn.html:584
+#: templates/files/page.html:637 templates/files/page.html:638
+#: templates/files/page.html:653 templates/files/page.html:655
+#: templates/files/page.html:712 templates/files/page.html:715
+#: templates/files/page.html:744 templates/files/page.html:746
+#: templates/files/page.html:748 templates/files/page.html:749
+msgid "New"
+msgstr "Nouveau"
+
+#: templates/files/base.html:521 templates/files/base.html:619
+#: templates/files/hymn.html:472 templates/files/hymn.html:566
+#: templates/files/page.html:638 templates/files/page.html:730
+msgid "Hymns"
+msgstr "Hymnes"
+
+#: templates/files/base.html:524 templates/files/base.html:621
+#: templates/files/hymn.html:475 templates/files/hymn.html:568
+#: templates/files/hymn.html:626 templates/files/page.html:641
+#: templates/files/page.html:732
+msgid "All Hymn Content"
+msgstr "Tout le contenu des hymnes"
+
+#: templates/files/base.html:525 templates/files/base.html:622
+#: templates/files/hymn.html:476 templates/files/hymn.html:569
+#: templates/files/hymn.html:627 templates/files/page.html:642
+#: templates/files/page.html:733
+msgid "English Hymn"
+msgstr "Hymnes anglais"
+
+#: templates/files/base.html:526 templates/files/base.html:623
+#: templates/files/hymn.html:478 templates/files/hymn.html:570
+#: templates/files/hymn.html:628 templates/files/page.html:643
+#: templates/files/page.html:734
+msgid "French Hymn"
+msgstr "Hymnes français"
+
+#: templates/files/base.html:527 templates/files/base.html:624
+#: templates/files/hymn.html:479 templates/files/hymn.html:571
+#: templates/files/hymn.html:629 templates/files/page.html:644
+#: templates/files/page.html:735
+msgid "Yoruba Hymn"
+msgstr "Hymnes yoruba"
+
+#: templates/files/base.html:528 templates/files/base.html:625
+#: templates/files/hymn.html:480 templates/files/hymn.html:572
+#: templates/files/hymn.html:630 templates/files/page.html:645
+#: templates/files/page.html:736
+msgid "Igbo Hymn"
+msgstr "Hymnes igbo"
+
+#: templates/files/base.html:529 templates/files/base.html:626
+#: templates/files/hymn.html:482 templates/files/hymn.html:573
+#: templates/files/hymn.html:631 templates/files/page.html:646
+#: templates/files/page.html:737
+msgid "Hausa Hymn"
+msgstr "Hymnes hausa"
+
+#: templates/files/base.html:530 templates/files/base.html:627
+#: templates/files/hymn.html:483 templates/files/hymn.html:574
+#: templates/files/hymn.html:632 templates/files/page.html:647
+#: templates/files/page.html:738
+msgid "German Hymn"
+msgstr "Hymnes allemands"
+
+#: templates/files/base.html:531 templates/files/base.html:628
+#: templates/files/hymn.html:484 templates/files/hymn.html:575
+#: templates/files/hymn.html:633 templates/files/page.html:648
+#: templates/files/page.html:739
+msgid "Chinese Hymn"
+msgstr "赞美诗中文"
+
+#: templates/files/base.html:535 templates/files/base.html:634
+#: templates/files/base.html:759 templates/files/hymn.html:488
+#: templates/files/hymn.html:581 templates/files/hymn.html:866
+#: templates/files/lookbook.html:12 templates/files/page.html:652
+#: templates/files/page.html:746 templates/files/page.html:850
+msgid "LookBook"
+msgstr "Téléverser le LookBook"
+
+#: templates/files/base.html:537 templates/files/base.html:636
+#: templates/files/base.html:744 templates/files/hymn.html:490
+#: templates/files/hymn.html:583 templates/files/hymn.html:852
+#: templates/files/page.html:654 templates/files/page.html:748
+#: templates/files/page.html:836
+msgid "Coming soon"
+msgstr "Bientôt disponible"
+
+#: templates/files/base.html:543 templates/files/base.html:616
+#: templates/files/hymn.html:496 templates/files/hymn.html:563
+#: templates/files/page.html:660 templates/files/page.html:727
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: templates/files/base.html:548 templates/files/base.html:632
+#: templates/files/hymn.html:501 templates/files/hymn.html:579
+#: templates/files/page.html:743
+msgid "About"
+msgstr "À propos de nous"
+
+#: templates/files/base.html:549 templates/files/hymn.html:502
+msgid "Contact"
+msgstr "Contactez-nous"
+
+#: templates/files/base.html:587 templates/files/hymn.html:533
+#: templates/files/page.html:697
+msgid "Close Menu"
+msgstr "Fermer le menu"
+
+#: templates/files/base.html:594 templates/files/hymn.html:540
+#: templates/files/page.html:704
+msgid "Send Newsletter"
+msgstr "Envoyer la newsletter"
+
+#: templates/files/base.html:608 templates/files/base.html:757
+#: templates/files/hymn.html:555 templates/files/page.html:719
+#: templates/files/page.html:848
+msgid "More Page"
+msgstr "Alle Dateien Seite"
+
+#: templates/files/base.html:670 templates/files/hymn.html:799
+#: templates/files/page.html:783
+msgid "sign up for"
+msgstr "inscrivez-vous pour"
+
+#: templates/files/base.html:670 templates/files/hymn.html:799
+#: templates/files/page.html:783
+msgid "newsletter"
+msgstr "Envoyer la newsletter"
+
+#: templates/files/base.html:675 templates/files/coming_soon.html:166
+#: templates/files/hymn.html:804 templates/files/page.html:788
+msgid "Email address"
+msgstr "Adresse e-mail"
+
+#: templates/files/base.html:678 templates/files/hymn.html:807
+#: templates/files/page.html:791
+msgid "Subscribe"
+msgstr "S'abonner"
+
+#: templates/files/base.html:729 templates/files/hymn.html:837
+#: templates/files/page.html:821
+msgid "Quick Look"
+msgstr "Aperçu rapide"
+
+#: templates/files/base.html:741 templates/files/hymn.html:849
+#: templates/files/page.html:833
+msgid "Informations"
+msgstr "Informations"
+
+#: templates/files/base.html:761 templates/files/hymn.html:868
+#: templates/files/page.html:852
+msgid "Hymn List"
+msgstr "HymListe des Hymnesnes"
+
+#: templates/files/base.html:765 templates/files/hymn.html:872
+#: templates/files/page.html:856
+msgid "Reach Us"
+msgstr "Contactez-nous"
+
+#: templates/files/coming_soon.html:164
+msgid "Follow us for updates now!"
+msgstr "Suivez-nous pour les mises à jour maintenant !"
+
+#: templates/files/coming_soon.html:168
+msgid "Notify me"
+msgstr "Prévenez-moi"
+
+#: templates/files/contact.html:119
+msgid "Our Service"
+msgstr "Notre service"
+
+#: templates/files/contact.html:124
+msgid "Get directions"
+msgstr "Obtenir l'itinéraire"
+
+#: templates/files/contact.html:141
+msgid "Drop Us A Line"
+msgstr "Laissez-nous un message"
+
+#: templates/files/contact.html:142
+msgid ""
+"If you have any questions or need assistance, feel free to contact the "
+"admin. We're here to help with anything you need!"
+msgstr ""
+"Si vous avez des questions ou besoin d'aide, n'hésitez pas à contacter "
+"l'administrateur. Nous sommes là pour vous aider avec tout ce dont vous avez "
+"besoin !"
+
+#: templates/files/contact.html:151
+msgid "Name"
+msgstr "Nom"
+
+#: templates/files/contact.html:156
+msgid "Email"
+msgstr "E-mail"
+
+#: templates/files/contact.html:164
+msgid "Phone Number"
+msgstr "Numéro de téléphone"
+
+#: templates/files/contact.html:169
+msgid "Subject"
+msgstr "Sujet"
+
+#: templates/files/contact.html:177
+msgid "Your Message"
+msgstr "Votre message"
+
+#: templates/files/contact.html:184 templates/files/contact.html:304
+msgid "Upload your image"
+msgstr "Téléverser tous les fichiers"
+
+#: templates/files/contact.html:190
+msgid "Send Message"
+msgstr "Envoyer le message"
+
+#: templates/files/contact.html:200
+msgid "Service Hours"
+msgstr "Heures de service"
+
+#: templates/files/excel_page.html:339
+msgid "All Files Page"
+msgstr "Alle Dateien Seite"
+
+#: templates/files/excel_page.html:357 templates/files/pdf_document.html:379
+#: templates/files/search_results.html:429
+msgid "Browse Files by Date"
+msgstr "Parcourir les fichiers par date"
+
+#: templates/files/excel_page.html:362 templates/files/pdf_document.html:383
+msgid "January"
+msgstr "Janvier"
+
+#: templates/files/excel_page.html:363 templates/files/pdf_document.html:384
+msgid "February"
+msgstr "Février"
+
+#: templates/files/excel_page.html:364 templates/files/pdf_document.html:385
+msgid "March"
+msgstr "Mars"
+
+#: templates/files/excel_page.html:365 templates/files/pdf_document.html:386
+msgid "April"
+msgstr "Avril"
+
+#: templates/files/excel_page.html:366 templates/files/pdf_document.html:387
+msgid "May"
+msgstr "Mai"
+
+#: templates/files/excel_page.html:367 templates/files/pdf_document.html:388
+msgid "June"
+msgstr "Juin"
+
+#: templates/files/excel_page.html:368 templates/files/pdf_document.html:389
+msgid "July"
+msgstr "Juillet"
+
+#: templates/files/excel_page.html:369 templates/files/pdf_document.html:390
+msgid "August"
+msgstr "Août"
+
+#: templates/files/excel_page.html:370 templates/files/pdf_document.html:391
+msgid "September"
+msgstr "Septembre"
+
+#: templates/files/excel_page.html:371 templates/files/pdf_document.html:392
+msgid "October"
+msgstr "Octobre"
+
+#: templates/files/excel_page.html:372 templates/files/pdf_document.html:393
+msgid "November"
+msgstr "Novembre"
+
+#: templates/files/excel_page.html:373 templates/files/pdf_document.html:394
+msgid "December"
+msgstr "Décembre"
+
+#: templates/files/excel_page.html:380 templates/files/pdf_document.html:401
+msgid "Mon"
+msgstr "Lun"
+
+#: templates/files/excel_page.html:381 templates/files/pdf_document.html:402
+msgid "Tue"
+msgstr "Mar"
+
+#: templates/files/excel_page.html:382 templates/files/pdf_document.html:403
+msgid "Wed"
+msgstr "Mer"
+
+#: templates/files/excel_page.html:383 templates/files/pdf_document.html:404
+msgid "Thu"
+msgstr "Jeu"
+
+#: templates/files/excel_page.html:384 templates/files/pdf_document.html:405
+msgid "Fri"
+msgstr "Ven"
+
+#: templates/files/excel_page.html:385 templates/files/pdf_document.html:406
+msgid "Sat"
+msgstr "Sam"
+
+#: templates/files/excel_page.html:386 templates/files/pdf_document.html:407
+msgid "Sun"
+msgstr "Dim"
+
+#: templates/files/excel_page.html:404 templates/files/pdf_document.html:428
+#: templates/files/search_results.html:473
+msgid "Recently Files"
+msgstr "Fichiers récents"
+
+#: templates/files/excel_page.html:484 templates/files/search_results.html:554
+msgid "No files uploaded yet."
+msgstr "Aucun fichier n'a encore été téléchargé."
+
+#: templates/files/excel_page.html:497 templates/files/hymn.html:760
+#: templates/files/pdf_document.html:478
+#: templates/files/search_results.html:599
+msgid "Secure Your Files Here"
+msgstr "Protégez Vos Fichiers Ici"
+
+#: templates/files/excel_page.html:509 templates/files/hymn.html:772
+#: templates/files/pdf_document.html:486
+#: templates/files/search_results.html:609
+msgid "Information"
+msgstr "Information"
+
+#: templates/files/excel_page.html:511 templates/files/search_results.html:612
+msgid ""
+"Access a complete collection of our media resources—all in one place. "
+"Whether it's a video, image, document, or audio file, you’ll find it here, "
+"safe, organized, and ready when you need it."
+msgstr ""
+"Accédez à une collection complète de nos ressources médias—tout en un seul "
+"endroit. Que ce soit une vidéo, une image, un document ou un fichier audio, "
+"vous le trouverez ici, en sécurité, organisé, et prêt quand vous en avez "
+"besoin."
+
+# French
+#: templates/files/excel_page.html:524 templates/files/search_results.html:626
+msgid "Media Center"
+msgstr "Centre Média"
+
+#: templates/files/excel_page.html:527 templates/files/search_results.html:628
+msgid ""
+"Welcome to our Media Center! Here, you can access all our shared files in "
+"one convenient place — from documents like PDFs, Word, and Excel files to "
+"videos, images, and audio clips. Browse, download, and stay connected with "
+"everything you need, anytime."
+msgstr ""
+"Bienvenue dans notre Centre Média ! Ici, vous pouvez accéder à tous nos "
+"fichiers partagés en un seul endroit pratique — des documents comme les PDF, "
+"Word et Excel aux vidéos, images et clips audio. Parcourez, téléchargez et "
+"restez connecté avec tout ce dont vous avez besoin, à tout moment."
+
+#: templates/files/excel_page.html:543
+msgid "All Uploaded Files"
+msgstr "Tous les fichiers téléchargés"
+
+#: templates/files/excel_page.html:641 templates/files/pdf_document.html:561
+msgid "Load More"
+msgstr "Charger plus"
+
+#: templates/files/excel_page.html:649 templates/files/pdf_document.html:569
+msgid "Show All Uploads"
+msgstr "Afficher tous les téléchargements"
+
+#: templates/files/hymn.html:607
+msgid "Hymn Book"
+msgstr "Livre de cantiques"
+
+#: templates/files/hymn.html:775
+msgid ""
+"Explore a heartfelt collection of hymns that speak to the soul. From classic "
+"verses to cherished melodies, these songs of faith offer inspiration, "
+"comfort, and connection across all seasons of life."
+msgstr ""
+"Explorez une collection émouvante de cantiques qui parlent à l'âme. Des vers "
+"classiques aux mélodies chéries, ces chants de foi offrent inspiration, "
+"réconfort et connexion à chaque saison de la vie."
+
+#: templates/files/hymn_content.html:110 templates/files/hymn_list.html:84
+msgid "Hymns of Faith"
+msgstr "Cantiques de foi"
+
+#: templates/files/hymn_content.html:112 templates/files/hymn_list.html:86
+msgid ""
+"Hymns are not just melodies — they are sacred echoes of devotion, woven with "
+"truth, hope, and spiritual depth. For generations, these timeless songs have "
+"lifted hearts, comforted souls, and drawn people closer to God. As you "
+"explore our collection of hymns, may each verse remind you of the power, "
+"peace, and presence found in worship."
+msgstr ""
+"Les cantiques ne sont pas de simples mélodies — ce sont des échos sacrés de "
+"dévotion, tissés de vérité, d'espérance et de profondeur spirituelle. Depuis "
+"des générations, ces chants intemporels ont élevé les cœurs, réconforté les "
+"âmes et rapproché les gens de Dieu. En explorant notre collection de "
+"cantiques, que chaque verset vous rappelle la puissance, la paix et la "
+"présence que l'on trouve dans l'adoration."
+
+#: templates/files/hymn_content.html:128
+msgid "No hymns available yet."
+msgstr "Aucun cantique disponible pour le moment."
+
+#: templates/files/lookbook.html:30
+msgid "Download"
+msgstr "Télécharger"
+
+#: templates/files/lookbook.html:35
+msgid "No images available at the moment. Please check back later."
+msgstr "Aucune image disponible pour le moment. Veuillez revenir plus tard."
+
+#: templates/files/page.html:911
+msgid "New Updates - 2025"
+msgstr "Nouvelles mises à jour - 2025"
+
+#: templates/files/page.html:938
+msgid "No updates yet."
+msgstr "Pas encore de mises à jour."
+
+#: templates/files/pdf_document.html:464 templates/files/pdf_document.html:548
+msgid "No PDFs uploaded yet."
+msgstr "Aucun PDF n'a encore été téléchargé."
+
+#: templates/files/pdf_document.html:489
+msgid ""
+"Discover a rich collection of downloadable files, including PDFs for "
+"children, parents, couples, and more. Everything is organized for easy access"
+"—upload, view, and download with confidence and security, anytime you need."
+msgstr ""
+"Découvrez une riche collection de fichiers téléchargeables, y compris des "
+"PDF pour les enfants, les parents, les couples et plus encore. Tout est "
+"organisé pour un accès facile — téléversez, consultez et téléchargez en "
+"toute confiance et sécurité, à tout moment."
+
+#: templates/files/pdf_document.html:500
+msgid "Explore Our PDF Collection"
+msgstr "Explorez notre collection de PDF"
+
+#: templates/files/pdf_document.html:501
+msgid ""
+"PDF files are a reliable way to store and share documents while preserving "
+"their original layout and formatting. Here, you'll find a wide range of PDFs "
+"tailored for everyone—children, parents, couples, and more. From educational "
+"resources and guides to inspirational content and printable materials, "
+"everything is neatly organized for easy access, viewing, and download."
+msgstr ""
+"Les fichiers PDF sont un moyen fiable de stocker et de partager des "
+"documents tout en préservant leur mise en page et leur format d'origine. "
+"Ici, vous trouverez une large gamme de PDF adaptés à tous : enfants, "
+"parents, couples, etc. Des ressources éducatives et des guides aux contenus "
+"inspirants et matériels imprimables, tout est soigneusement organisé pour un "
+"accès, une visualisation et un téléchargement faciles."
+
+#: templates/files/search_results.html:585
+msgid "No recent PDFs available."
+msgstr "Aucun PDF récent disponible."
+
+#: templates/files/search_results.html:945
+msgid "No results found for"
+msgstr "Aucun résultat trouvé pour"

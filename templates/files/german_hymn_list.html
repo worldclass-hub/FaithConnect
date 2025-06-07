@@ -1,0 +1,132 @@
+{% extends "files/hymn.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+
+    .sidebar_widget {
+        position: relative;
+        overflow: hidden; /* Prevents the blur effect from spilling over the edges */
+    }
+    
+    .banner-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        height: 300px; /* Set the banner height */
+    }
+    
+    .banner-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures the image covers the space without distorting it */
+        filter: blur(1px); /* Apply the blur effect directly to the image */
+        z-index: 1; /* Ensure that the blur image stays below the text */
+    }
+    
+    .sidebar_widget .banner-container .banner-image {
+        position: relative; /* Allow for stacking of content inside banner-container */
+    }
+    
+    .banner-content {
+        position: absolute;
+        top: 87%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white; /* White text for contrast */
+        z-index: 2; /* Ensure text is on top of the blurred background */
+    }
+    
+    .banner-text {
+        font-size: 12px; /* Adjust the font size */
+        font-weight: bold;
+        text-align: center;
+        color: black; /* Ensuring the text color is white */
+    }
+    
+    
+
+
+
+
+    .custom-image-size {
+        height: 120px;       /* Adjust this height as needed */
+        width: 120px !important; /* Force the width to be 100% of the parent container */
+        max-width: 400px;    /* Limit the width to a maximum of 400px */
+        object-fit: cover;   /* Ensure the image covers the area while preserving aspect ratio */
+        display: block;      /* Ensure the image is treated as a block-level element */
+    }
+    @media (max-width: 768px) { /* Target screens with width of 768px or less */
+        .list-view-item {
+            display: flex;
+            align-items: center; /* Align items vertically to the center */
+        }
+    
+        .list-view-item__image-column {
+            margin-right: 60px; /* Adjust the space between the image and the text */
+        }
+    
+        .list-view-item__title-column {
+            text-align: left;  /* Align the text to the left */
+            max-width: 60%;    /* Restrict the width of the text column to balance with the image */
+        }
+    }
+    
+
+
+.blur-up.lazyload {
+    position: relative;
+    filter: blur(10px);
+    transition: filter 0.3s ease;
+}
+
+.blur-up.lazyload::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9); /* Dark overlay */
+    z-index: 1;
+}
+
+    
+</style>
+
+<!--Main Content-->
+<div class="col-12 col-sm-12 col-md-9 col-lg-9 main-col">
+	<div class="category-description">
+		<h3>Glaubenslieder</h3>
+		<p>
+			Hymnen sind nicht nur Melodien – sie sind heilige Botschaften der Liebe und Hingabe, durchdrungen von Wahrheit, Hoffnung und geistlicher Tiefe. Seit Jahrhunderten erheben diese zeitlosen Lieder die Herzen, trösten die Seelen und bringen Menschen näher zu Gott. Während du unsere Sammlung durchstöberst, erinnere dich bei jeder Strophe an Gottes Kraft, Frieden und Gegenwart im Glauben.
+		</p>
+	</div>
+	<hr>
+	<div class="productList">
+		<div class="list-view-items grid--view-items">
+			{% for hymn in hymns %}
+			<div class="list-product list-view-item">
+				<div class="list-view-item__image-column">
+					<div class="list-view-item__image-wrapper">
+						<a href="{% url 'german_hymn_detail' hymn.id %}">
+							<img class="list-view-item__image blur-up lazyload custom-image-size" data-src="{{ hymn.image.url }}" src="{{ hymn.image.url }}" alt="{{ hymn.title }}" title="{{ hymn.title }}">
+						</a>
+					</div>
+				</div>
+				<div class="list-view-item__title-column">
+					<div class="h4 grid-view-item__title">
+						<a href="{% url 'german_hymn_detail' hymn.id %}"><strong>{{ hymn.title }}</strong></a>
+					</div>
+					<p style="color: #808080; font-weight: bold;">{{ hymn.get_hymn_type_display }}</p>
+					<p>{{ hymn.description|truncatewords:20 }}</p>
+					<form class="variants" action="{% url 'german_hymn_detail' hymn.id %}">
+						<button class="btn btn--small" type="submit">Lied ansehen</button>
+					</form>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

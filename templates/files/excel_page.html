@@ -1,6 +1,7 @@
 {% extends "files/base.html" %}
 {% load static %}
 {% load my_filters %}
+{% load i18n %}
 
 {% block content %}
 <!-- Improved CSS -->
@@ -335,7 +336,7 @@
     	<div class="collection-header">
 			<div class="collection-hero">
         		<div class="collection-hero__image"><img class=" lazyload" data-src="{% static 'login-form/images/wallpaperflare.com_wallpaper.jpg' %}" src="{% static 'login-form/images/wallpaperflare.com_wallpaper.jpg' %}" alt="Women" title="Women" /></div>
-        		<div class="collection-hero__title-wrapper"><h1 class="collection-hero__title page-width">All Files Page </h1></div>
+        		<div class="collection-hero__title-wrapper"><h1 class="collection-hero__title page-width">{% trans "All Files Page" %} </h1></div>
       		</div>
 		</div>
         <!--End Collection Banner-->
@@ -353,36 +354,37 @@
                         
 <!-- Calendar -->
 <div class="calendar-wrapper">
-    <h2>Browse Files by Date</h2>
+<h2>{% trans "Browse Files by Date" %}</h2>
   
     <div class="calendar">
       <div class="calendar-header">
           <select id="month" class="calendar-select">
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
+            <option value="1">{% trans "January" %}</option>
+            <option value="2">{% trans "February" %}</option>
+            <option value="3">{% trans "March" %}</option>
+            <option value="4">{% trans "April" %}</option>
+            <option value="5">{% trans "May" %}</option>
+            <option value="6">{% trans "June" %}</option>
+            <option value="7">{% trans "July" %}</option>
+            <option value="8">{% trans "August" %}</option>
+            <option value="9">{% trans "September" %}</option>
+            <option value="10">{% trans "October" %}</option>
+            <option value="11">{% trans "November" %}</option>
+            <option value="12">{% trans "December" %}</option>
           </select>
           <input type="number" id="year" class="calendar-select" placeholder="Enter Year" />
       </div>
   
       <div class="calendar-body">
         <div class="weekdays">
-            <span>Mon</span>
-            <span>Tue</span>
-            <span>Wed</span>
-            <span>Thu</span>
-            <span>Fri</span>
-            <span>Sat</span>
-            <span>Sun</span>
+            <span>{% trans "Mon" %}</span>
+            <span>{% trans "Tue" %}</span>
+            <span>{% trans "Wed" %}</span>
+            <span>{% trans "Thu" %}</span>
+            <span>{% trans "Fri" %}</span>
+            <span>{% trans "Sat" %}</span>
+            <span>{% trans "Sun" %}</span>
+
         </div>
           
           <div class="calendar-days">
@@ -399,7 +401,7 @@
   <div class="sidebar_widget">
     <div class="widget-title">
         <br><br>
-      <h2>Recently Files</h2>
+<h2>{% trans "Recently Files" %}</h2>
 </div>
 <div class="widget-content">
     <div class="list list-sidebar-products">
@@ -478,6 +480,8 @@
                         </div>
                     </div>
                 </div> 
+                {% empty %}
+                <p style="margin-left: 35px;">{% trans "No files uploaded yet." %}</p>
             {% endfor %}
         </div>
     </div>
@@ -490,7 +494,7 @@
                         <div class="banner-container">
                             <img src="{% static 'login-form/images/doxcela1.jpeg' %}" alt="" class="banner-image" />
                             <div class="banner-content">
-                                <p class="banner-text">Secure Your Files Here</p>
+                                <p class="banner-text">{% trans "Secure Your Files Here" %}</p>
                             </div>
                         </div>
                         </div>
@@ -502,10 +506,10 @@
                     <!-- Information -->
                     <div class="sidebar_widget">
                         <div class="widget-title">
-                            <h2>Information</h2>
-                        </div>
-                        <div class="widget-content">
-                            <p>Access a complete collection of our media resources—all in one place. Whether it's a video, image, document, or audio file, you’ll find it here, safe, organized, and ready when you need it.</p>
+                            <h2>{% trans "Information" %}</h2>
+                            <div class="widget-content">
+                                <p>{% trans "Access a complete collection of our media resources—all in one place. Whether it's a video, image, document, or audio file, you’ll find it here, safe, organized, and ready when you need it." %}</p>
+                            </div>
                         </div>
                     </div>
                     <!-- End Information -->
@@ -517,8 +521,12 @@
                 <div class="col-12 col-sm-12 col-md-9 col-lg-9 main-col shop-grid-5">
                 	<div class="productList">
                     	<div class="category-description">
-                        <h3>Media Center</h3>
-                        <p>Welcome to our Media Center! Here, you can access all our shared files in one convenient place — from documents like PDFs, Word, and Excel files to videos, images, and audio clips. Browse, download, and stay connected with everything you need, anytime.</p>
+                        <h3>{% trans "Media Center" %}</h3>
+
+                       <p>
+                        {% blocktrans %}Welcome to our Media Center! Here, you can access all our shared files in one convenient place — from documents like PDFs, Word, and Excel files to videos, images, and audio clips. Browse, download, and stay connected with everything you need, anytime.{% endblocktrans %}
+                        </p>
+
                         </div>
                         <hr>
                     	<!--Toolbar-->
@@ -532,7 +540,7 @@
                 {% load my_filters %}
 
                 <div class="grid-products grid--view-items all-files-container" id="itemsContainer">
-                    <h3>All Uploaded Files</h3>
+                <h3>{% trans "All Uploaded Files" %}</h3>
                     <br>
                     <div class="row">
                         {% for file in files %}
@@ -630,16 +638,16 @@
                    <!-- Load More Button -->
                     <div class="infinitpaginOuter" {% if files|length <= 6 %} style="display:none;" {% endif %}>
                       <div class="infinitpagin">    
-                          <button id="loadMoreBtn" class="btn">Load More</button>
+                          <button id="loadMoreBtn" class="btn">{% trans "Load More" %}</button>
+
                       </div>
                     </div>   
                     
                  <!-- Button (Initially hidden) -->
                  <div id="show-all-uploads-container" style="display: none;">
                     <div class="infinitpagin">
-                        <a href="{% url 'excel_page' %}" class="btn">
-                            Show All Uploads
-                        </a>
+                         <a href="{% url 'excel_page' %}" class="btn">{% trans "Show All Uploads" %}</a>
+
                     </div>
                 </div>
                 

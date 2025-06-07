@@ -1,4 +1,6 @@
 {% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 
@@ -313,6 +315,48 @@ body.modal-open, html.modal-open {
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+
+
+
+
+.language-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.language-dd {
+    font-weight: bold;
+    cursor: pointer;
+    padding-right: 10px;
+}
+.language-dropdown::after {
+    font-size: 0.7em;
+    margin-left: 5px;
+}
+.language-dropdown ul {
+    display: none;
+    position: absolute;
+    background: white;
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    z-index: 999;
+    margin: 0;
+}
+.language-dropdown:hover ul {
+    display: block;
+}
+.language-dropdown form button {
+    background: none;
+    border: none;
+    padding: 5px 0;
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+    width: 100%;
+    text-align: left;
+}
+
         
     </style>
 
@@ -326,7 +370,7 @@ body.modal-open, html.modal-open {
                 <i class="icon anm anm-search-l"></i>
             </button>
             <input class="search__input" type="search" name="q" id="searchInput" value=""
-                placeholder="Search entire store..." aria-label="Search" autocomplete="off">
+                placeholder="{% trans 'Search for any files...' %}" aria-label="Search" autocomplete="off">
         </form>
 
         <!-- Button with no square border or background -->
@@ -346,14 +390,49 @@ body.modal-open, html.modal-open {
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-10 col-sm-8 col-md-5 col-lg-4">
+<div class="language-dropdown">
+    <span class="language-dd">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% if LANGUAGE_CODE == 'en' %}English
+        {% elif LANGUAGE_CODE == 'fr' %}French
+        {% elif LANGUAGE_CODE == 'de' %}German
+        {% elif LANGUAGE_CODE == 'zh-hans' %}Chinese
+        {% else %}{{ LANGUAGE_CODE|upper }}
+        {% endif %}
+    </span>
+    <ul id="language">
+        <li>
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="en">
+                <button type="submit">English</button>
+            </form>
+        </li>
+        <li>
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="de">
+                <button type="submit">German</button>
+            </form>
+        </li>
+        <li>
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="fr">
+                <button type="submit">French</button>
+            </form>
+        </li>
+        <li>
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="zh-hans">
+                <button type="submit">Chinese</button>
+            </form>
+        </li>
+    </ul>
+</div>
 
-                        <div class="language-dropdown">
-                            <span class="language-dd">English</span>
-                            <ul id="language">
-                                <li class="">German</li>
-                                <li class="">French</li>
-                            </ul>
-                        </div>
+
                         <p class="phone-no"><i class="anm anm-phone-s"></i> +234 8022854677</p>
                     </div>
                     <div class="col-sm-4 col-md-4 col-lg-4 d-none d-lg-none d-md-block d-lg-block">
@@ -367,10 +446,11 @@ body.modal-open, html.modal-open {
                         <ul class="customer-links list-inline">
                             <li>
                                 {% if user.is_authenticated %}
-                                <a href="{% url 'logout' %}">Logout</a>
+                                <a href="{% url 'logout' %}">{% trans "Logout" %}</a>
                                 {% else %}
-                                <a href="{% url 'login' %}" style="margin-right: 20px;">Login</a>
-                                <a href="{% url 'signup' %}">Create Account</a>
+                                <a href="{% url 'login' %}" style="margin-right: 20px;">{% trans "Login" %}</a>
+                                <a href="{% url 'signup' %}">{% trans "Create Account" %}</a>
+
                                 {% endif %}
                             </li>
                         </ul>
@@ -406,71 +486,68 @@ body.modal-open, html.modal-open {
                         <nav class="grid__item" id="AccessibleNav">
                             <!-- for mobile -->
                             <ul id="siteNav" class="site-nav medium center hidearrow">
-                                <li class="lvl1 parent "><a href="{% url 'excel_page' %}">Home </a>
-
-                                </li>
+                            <li class="lvl1 parent "><a href="{% url 'excel_page' %}">{% trans "Home" %}</a></li>
 
 
                                 {% if user.is_authenticated and user.is_superuser %}
-                                <li class="lvl1 parent dropdown">
-                                    <a href="#">UPLOAD <i class="anm anm-angle-down-l"></i></a>
+                               <li class="lvl1 parent dropdown">
+                                    <a href="#">{% trans "UPLOAD" %} <i class="anm anm-angle-down-l"></i></a>
                                     <ul class="dropdown">
-                                        <li><a href="{% url 'home' %}" class="site-nav">Upload All Files</a></li>
-                                        <li><a href="{% url 'upload_pdf' %}" class="site-nav">Upload PDF</a></li>
-                                        <li><a href="{% url 'gallery_upload' %}" class="site-nav">Upload LookBook</a></li>
-                                        <li><a href="{% url 'send_newsletter' %}" class="site-nav">Send Newletter</a></li>
+                                        <li><a href="{% url 'home' %}" class="site-nav">{% trans "Upload Media Files" %}</a></li>
+                                        <li><a href="{% url 'upload_pdf' %}" class="site-nav">{% trans "Upload PDF" %}</a></li>
+                                        <li><a href="{% url 'gallery_upload' %}" class="site-nav">{% trans "Upload LookBook" %}</a></li>
+                                        <li><a href="{% url 'send_newsletter' %}" class="site-nav">{% trans "Send Newletter" %}</a></li>
                                     </ul>
                                 </li>
+
                             {% endif %}
                             
 
-                                <li class="lvl1 parent dropdown"><a href="#">Pages <i
+                                <li class="lvl1 parent dropdown"><a href="#">{% trans "Pages" %} <i
                                             class="anm anm-angle-down-l"></i></a>
                                     <ul class="dropdown">
-                                        <li><a href="{% url 'excel_page' %}" class="site-nav">All Files Page</a></li>
-                                        <li><a href="{% url 'donation_form' %}" class="site-nav">Donate</a></li>
-                                        <li><a href="{% url 'pdf_document' %}" class="site-nav">PDF Page</a></li>
-                                        
+                                    <li><a href="{% url 'excel_page' %}" class="site-nav">{% trans "All Media Page" %}</a></li>
+                                    <li><a href="{% url 'donation_form' %}" class="site-nav">{% trans "Donate" %}</a></li>
+                                    <li><a href="{% url 'pdf_document' %}" class="site-nav">{% trans "PDF Page" %}</a></li>
+                                                            
                                         {% if user.is_authenticated and user.is_staff %}
-                                            <li><a href="{% url 'contact' %}" class="site-nav">Contact Us</a></li>
-                                            <li><a href="{% url 'about' %}" class="site-nav">About Us</a></li>
+                                            <li><a href="{% url 'contact' %}" class="site-nav">{% trans "Contact Us" %}</a></li>
+                                            <li><a href="{% url 'about' %}" class="site-nav">{% trans "About Us" %}</a></li>
+
                                         {% endif %}
 
-                                        <li><a href="#" id="openModalBtnDesktop" class="site-nav">New Update <span
-                                            class="lbl nm_label1">New</span></a></li>
-
-                                        <li><a class="site-nav">Hymns <span class="lbl nm_label1">New</span> <i
-                                                    class="anm anm-angle-right-l"></i></a>
+                                        <li><a href="#" id="openModalBtnDesktop" class="site-nav">{% trans "New Update" %}  <span
+                                            class="lbl nm_label1">{% trans "New" %}</span></a></li>
+                                        <li><a class="site-nav">{% trans "Hymns" %}  <span class="lbl nm_label1">{% trans "New" %}</span> <i
+                                                class="anm anm-angle-right-l"></i></a>
                                             <ul>
-                                                <li><a href="{% url 'hymn_content' %}" class="site-nav">All Hymn
-                                                        Content</a></li>
-                                                <li><a href="{% url 'hymn_list' %}" class="site-nav">English Hymn</a>
-                                                </li>
-                                                <li><a href="{% url 'french_hymn_list' %}" class="site-nav">French
-                                                        Hymn</a></li>
-                                                <li><a href="{% url 'yoruba_hymn_list' %}" class="site-nav">Yoruba
-                                                        Hymn</a></li>
-                                                <li><a href="{% url 'igbo_hymn_list' %}" class="site-nav">Igbo Hymn</a>
-                                                </li>
-                                                <li><a href="{% url 'hausa_hymn_list' %}" class="site-nav">Hausa
-                                                        Hymn</a></li>
+                                                <li><a href="{% url 'hymn_content' %}" class="site-nav">{% trans "All Hymn Content" %}</a></li>
+                                                <li><a href="{% url 'hymn_list' %}" class="site-nav">{% trans "English Hymn" %}</a></li>
+                                                <li><a href="{% url 'french_hymn_list' %}" class="site-nav">{% trans "French Hymn" %}</a></li>
+                                                <li><a href="{% url 'yoruba_hymn_list' %}" class="site-nav">{% trans "Yoruba Hymn" %}</a></li>
+                                                <li><a href="{% url 'igbo_hymn_list' %}" class="site-nav">{% trans "Igbo Hymn" %}</a></li>
+                                                <li><a href="{% url 'hausa_hymn_list' %}" class="site-nav">{% trans "Hausa Hymn" %}</a></li>
+                                                <li><a href="{% url 'german_hymn_list' %}" class="site-nav">{% trans "German Hymn" %}</a></li>
+                                                <li><a href="{% url 'chinese_hymn_list' %}" class="site-nav">{% trans "Chinese Hymn" %}</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="{% url 'lookbook' %}" class="site-nav">LookBook <span
-                                                    class="lbl nm_label1">New</span> </a></li>
-                                        <li><a href="{% url 'coming_soon' %}" class="site-nav">Coming soon <span
-                                                    class="lbl nm_label1">New</span> </a></li>
+
+                                        <li><a href="{% url 'lookbook' %}" class="site-nav">{% trans "LookBook" %}  <span
+                                                    class="lbl nm_label1">{% trans "New" %}</span> </a></li>
+                                        <li><a href="{% url 'coming_soon' %}" class="site-nav">{% trans "Coming soon" %} <span
+                                                    class="lbl nm_label1">{% trans "New" %}</span> </a></li>
                                     </ul>
                                 </li>
                                 <li>
                                     {% if request.user.is_superuser %}
-                                <li class="lvl1 parent dropdown"><a href="{% url 'admin:index' %}">Dashboard <i
+                                <li class="lvl1 parent dropdown"><a href="{% url 'admin:index' %}">{% trans "Dashboard" %} <i
                                             class="anm anm-angle-down-l"></i></a></li>
                                 {% endif %}
 
                                 {% if not user.is_authenticated or not user.is_staff %}
-                                <li class="lvl1 parent dropdown"><a href="{% url 'about' %}">About <i class="anm anm-angle-down-l"></i></a></li>
-                                <li class="lvl1 parent dropdown"><a href="{% url 'contact' %}">Contact <i class="anm anm-angle-down-l"></i></a></li>
+                                <li class="lvl1 parent dropdown"><a href="{% url 'about' %}">{% trans "About" %} <i class="anm anm-angle-down-l"></i></a></li>
+                                <li class="lvl1 parent dropdown"><a href="{% url 'contact' %}">{% trans "Contact" %} <i class="anm anm-angle-down-l"></i></a></li>
+
                             {% endif %}
                             
 
@@ -507,54 +584,57 @@ body.modal-open, html.modal-open {
 
         <!--Mobile Menu-->
         <div class="mobile-nav-wrapper" role="navigation">
-            <div class="closemobileMenu"><i class="icon anm anm-times-l pull-right"></i> Close Menu</div>
+            <div class="closemobileMenu"><i class="icon anm anm-times-l pull-right"></i> {% trans "Close Menu" %}</div>
             <ul id="MobileNav" class="mobile-nav">
-                <li class="lvl1 parent "><a href="{% url 'excel_page' %}">Home </a></li>
+                <li class="lvl1 parent "><a href="{% url 'excel_page' %}">{% trans "Home" %} </a></li>
                 {% if request.user.is_superuser %}
-                <li class="lvl1 parent "><a href="{% url 'home' %}">Upload All Files </a></li>
-                <li class="lvl1 parent "><a href="{% url 'upload_pdf' %}">Upload PDF </a></li>
-                <li class="lvl1 parent "><a href="{% url 'gallery_upload' %}">Upload LookBook </a></li>
-                <li class="lvl1 parent "><a href="{% url 'send_newsletter' %}">Send Newsletter </a></li>
+                <li class="lvl1 parent "><a href="{% url 'home' %}">{% trans "Upload Media Files" %} </a></li>
+                <li class="lvl1 parent "><a href="{% url 'upload_pdf' %}">{% trans "Upload PDF" %} </a></li>
+                <li class="lvl1 parent "><a href="{% url 'gallery_upload' %}">{% trans "Upload LookBook" %} </a></li>
+                <li class="lvl1 parent "><a href="{% url 'send_newsletter' %}">{% trans "Send Newsletter" %} </a></li>
                 {% endif %}
 
              
 
                 {% if not request.user.is_staff %}
                     <li class="lvl1 parent">
-                        <a href="{% url 'excel_page' %}">All Files Page <span class="lbl nm_label1">New</span></a>
+                        <a href="{% url 'excel_page' %}">{% trans "All Media Page" %} <span class="lbl nm_label1">{% trans "New" %}</span></a>
                     </li>
                     <li class="lvl1 parent">
-                        <a href="{% url 'pdf_document' %}">PDF Page <span class="lbl nm_label1">New</span></a>
+                        <a href="{% url 'pdf_document' %}">{% trans "PDF Page" %} <span class="lbl nm_label1">{% trans "New" %}</span></a>
                     </li>
                 {% endif %}             
 
-                <li class="lvl1 parent megamenu"><a href="#">More Page<i class="anm anm-plus-l"></i></a>
+                <li class="lvl1 parent megamenu"><a href="#">{% trans "More Page" %}<i class="anm anm-plus-l"></i></a>
                     <ul>
                         {% if user.is_authenticated and user.is_staff %}
-                        <li><a href="{% url 'excel_page' %}" class="site-nav">All Files Page</a></li>
-                        <li><a href="{% url 'pdf_document' %}" class="site-nav">PDF Page</a></li>
+                        <li><a href="{% url 'excel_page' %}" class="site-nav">{% trans "All Media Page" %}</a></li>
+                        <li><a href="{% url 'pdf_document' %}" class="site-nav">{% trans "PDF Page" %}</a></li>
                          {% endif %}
                     
                         {% if request.user.is_superuser %}
-                        <li><a href="{% url 'admin:index' %}" class="site-nav">Dashboard</a></li>
+                        <li><a href="{% url 'admin:index' %}" class="site-nav">{% trans "Dashboard" %}</a></li>
                         {% endif %}
-                        <li><a href="{% url 'contact' %}" class="site-nav">Contact Us</a></li>
-                        <li><a  class="site-nav">Hymns <i class="anm anm-plus-l"></i></a>
+                        <li><a href="{% url 'contact' %}" class="site-nav">{% trans "Contact Us" %}</a></li>
+                        <li><a  class="site-nav">{% trans "Hymns" %} <i class="anm anm-plus-l"></i></a>
                             <ul>
-                                <li><a href="{% url 'hymn_content' %}" class="site-nav last">All Hymn Content</a></li>
-                                <li><a href="{% url 'hymn_list' %}" class="site-nav">English Hymn</a></li>
-                                <li><a href="{% url 'french_hymn_list' %}" class="site-nav">French Hymn</a></li>
-                                <li><a href="{% url 'yoruba_hymn_list' %}" class="site-nav">Yoruba Hymn</a></li>
-                                <li><a href="{% url 'igbo_hymn_list' %}" class="site-nav">Igbo Hymn</a></li>
-                                <li><a href="{% url 'hausa_hymn_list' %}" class="site-nav">Hausa Hymn</a></li>
+                                <li><a href="{% url 'hymn_content' %}" class="site-nav last">{% trans "All Hymn Content" %}</a></li>
+                                <li><a href="{% url 'hymn_list' %}" class="site-nav">{% trans "English Hymn" %}</a></li>
+                                <li><a href="{% url 'french_hymn_list' %}" class="site-nav">{% trans "French Hymn" %}</a></li>
+                                <li><a href="{% url 'yoruba_hymn_list' %}" class="site-nav">{% trans "Yoruba Hymn" %}</a></li>
+                                <li><a href="{% url 'igbo_hymn_list' %}" class="site-nav">{% trans "Igbo Hymn" %}</a></li>
+                                <li><a href="{% url 'hausa_hymn_list' %}" class="site-nav">{% trans "Hausa Hymn" %}</a></li>
+                                <li><a href="{% url 'german_hymn_list' %}" class="site-nav">{% trans "German Hymn" %}</a></li>
+                                <li><a href="{% url 'chinese_hymn_list' %}" class="site-nav">{% trans "Chinese Hymn" %}</a></li>
+
                             </ul>
                         </li>
-                        <li class="lvl1 parent "><a href="{% url 'about' %}">About </a></li>
-                        <li><a href="#" id="openModalBtnMobile" class="site-nav">New Update <span class="lbl nm_label1">New</span></a></li>
-                        <li><a href="{% url 'lookbook' %}" class="site-nav">LookBook <span class="lbl nm_label1">New</span></a></li>
+                        <li class="lvl1 parent "><a href="{% url 'about' %}">{% trans "About" %} </a></li>
+                        <li><a href="#" id="openModalBtnMobile" class="site-nav">{% trans "New Update" %}  <span class="lbl nm_label1">{% trans "New" %}</span></a></li>
+                        <li><a href="{% url 'lookbook' %}" class="site-nav">{% trans "LookBook" %} <span class="lbl nm_label1">{% trans "New" %}</span></a></li>
 
-                        <li><a href="{% url 'coming_soon' %}" class="site-nav">Coming soon <span class="lbl nm_label1">New</span></a></li>
-                        <li><a href="{% url 'donation_form' %}" class="site-nav">Donate today <span class="lbl nm_label1">New</span></a></li>
+                        <li><a href="{% url 'coming_soon' %}" class="site-nav">{% trans "Coming soon" %} <span class="lbl nm_label1">{% trans "New" %}</span></a></li>
+                        <li><a href="{% url 'donation_form' %}" class="site-nav">{% trans "Donate" %} <span class="lbl nm_label1">{% trans "New" %}</span></a></li>
                     </ul>
                 </li>
 
@@ -587,15 +667,15 @@ body.modal-open, html.modal-open {
                             <div class="display-table">
                                 <div class="display-table-cell footer-newsletter">
                                     <div class="section-header text-center">
-                                        <label class="h2"><span>sign up for </span>newsletter</label>
+                                        <label class="h2"><span>{% trans "sign up for" %} </span>{% trans "newsletter" %}</label>
                                     </div>
                                     <form id="newsletterForm" method="POST">
                                         {% csrf_token %}
                                         <div class="input-group">
-                                            <input type="email" class="input-group__field newsletter__input" name="email" value="" placeholder="Email address" required="">
+                                            <input type="email" class="input-group__field newsletter__input" name="email" value="" placeholder="{% trans 'Email address' %}" required="">
                                             <span class="input-group__btn">
                                                 <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe">
-                                                    <span class="newsletter__submit-text--large">Subscribe</span>
+                                                    <span class="newsletter__submit-text--large">{% trans "Subscribe" %}</span>
                                                 </button>
                                             </span>
                                         </div>
@@ -646,43 +726,43 @@ body.modal-open, html.modal-open {
                     <div class="footer-top">
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
-                                <h4 class="h4">Quick Look</h4>
+                                <h4 class="h4">{% trans "Quick Look" %}</h4>
                                 <ul>
-                                    <li><a href="{% url 'excel_page' %}">All Files Page</a></li>
-                                    <li><a href="{% url 'pdf_document' %}">PDF Page</a></li>
+                                    <li><a href="{% url 'excel_page' %}">{% trans "All Media Page" %}</a></li>
+                                    <li><a href="{% url 'pdf_document' %}">{% trans "PDF Page" %}</a></li>
                                     {% if request.user.is_authenticated and request.user.is_superuser %}
-                                    <li><a href="{% url 'home' %}">Upload All Files</a></li>
-                                    <li><a href="{% url 'upload_pdf' %}">Upload PDF</a></li>
+                                    <li><a href="{% url 'home' %}">{% trans "Upload Media Files" %}</a></li>
+                                    <li><a href="{% url 'upload_pdf' %}">{% trans "Upload PDF" %}</a></li>
                                     {% endif %}
-                                    <li><a href="{% url 'excel_page' %}">Home</a></li>
+                                    <li><a href="{% url 'excel_page' %}">{% trans "Home" %}</a></li>
                                 </ul>
                             </div>
                             <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
-                                <h4 class="h4">Informations</h4>
+                                <h4 class="h4">{% trans "Informations" %}</h4>
                                 <ul>
-                                    <li><a href="{% url 'about' %}">About us</a></li>
-                                    <li><a href="{% url 'coming_soon' %}">Coming soon</a></li>
+                                    <li><a href="{% url 'about' %}">{% trans "About Us" %}</a></li>
+                                    <li><a href="{% url 'coming_soon' %}">{% trans "Coming soon" %}</a></li>
                                     <li>
                                         {% if user.is_authenticated %}
-                                        <a href="{% url 'logout' %}">Logout</a>
+                                        <a href="{% url 'logout' %}">{% trans "Logout" %}</a>
                                         {% else %}
-                                        <a href="{% url 'login' %}">Login</a>                                      
-                                        <a href="{% url 'signup' %}">Create Account</a>
+                                        <a href="{% url 'login' %}">{% trans "Login" %}</a>                                      
+                                        <a href="{% url 'signup' %}">{% trans "Create Account" %}</a>
 
                                         {% endif %}
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
-                                <h4 class="h4">More Page</h4>
+                                <h4 class="h4">{% trans "More Page" %}</h4>
                                 <ul>
-                                    <li><a href="{% url 'lookbook' %}">LookBook</a></li>
-                                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
-                                    <li><a href="{% url 'hymn_content' %}">Hymn List</a></li>
+                                    <li><a href="{% url 'lookbook' %}">{% trans "LookBook" %}</a></li>
+                                    <li><a href="{% url 'contact' %}">{% trans "Contact Us" %}</a></li>
+                                    <li><a href="{% url 'hymn_content' %}">{% trans "Hymn List" %}</a></li>
                                 </ul>
                             </div>
                             <div class="col-12 col-sm-12 col-md-3 col-lg-3 contact-box">
-                                <h4 class="h4">Contact Us</h4>
+                                <h4 class="h4">{% trans "Reach Us" %}</h4>
                                 <ul class="addressFooter">
                                     <li><i class="icon anm anm-map-marker-al"></i>
                                         <p>Lagos,<br>Nigeria NG</p>
@@ -711,7 +791,7 @@ body.modal-open, html.modal-open {
                                     <li>
                                         <a href="{% url 'donation_form' %}" class="donate-link">
                                             <i class="fas fa-hand-holding-usd fa-lg" aria-hidden="true"></i>
-                                            <span class="donate-text">Donate</span>
+                                            <span class="donate-text">{% trans "Donate" %}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -1172,12 +1252,13 @@ background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justif
                         // Loop through results and display them
                         data.results.forEach(result => {
                             const li = document.createElement("li");
+                            const language = result.language ? result.language.charAt(0).toUpperCase() + result.language.slice(1) : "English";
 
                             // If it's a hymn with lyrics
                             if (result.lyrics) {
                                 li.innerHTML = `
                                     <a href="/search-results/?q=${query}&id=${result.id}&language=${result.language.toLowerCase()}#hymn-${result.id}" class="search-result-item">
-                                        <strong>${result.title || 'Untitled Hymn'}</strong><br>
+                                        <strong>🎵 ${result.title || 'Untitled Hymn'} - (${language})</strong><br>
                                         <small>${result.lyrics}</small>
                                     </a>
                                 `;
@@ -1186,7 +1267,7 @@ background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justif
                             else if (result.description) {
                                 li.innerHTML = `
                                     <a href="/search-results/?q=${query}&id=${result.id}&language=${result.language.toLowerCase()}#hymn-${result.id}" class="search-result-item">
-                                        <strong>${result.title || 'Untitled Hymn'}</strong><br>
+                                        <strong>🎵 ${result.title || 'Untitled Hymn'} - (${language})</strong><br>
                                         <small>${result.description}</small>
                                     </a>
                                 `;

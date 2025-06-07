@@ -1,0 +1,96 @@
+{% extends "files/hymn.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+
+    .sidebar_widget {
+        position: relative;
+        overflow: hidden; /* Prevents the blur effect from spilling over the edges */
+    }
+    
+    .banner-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        height: 300px; /* Set the banner height */
+    }
+    
+    .banner-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures the image covers the space without distorting it */
+        filter: blur(1px); /* Apply the blur effect directly to the image */
+        z-index: 1; /* Ensure that the blur image stays below the text */
+    }
+    
+    .sidebar_widget .banner-container .banner-image {
+        position: relative; /* Allow for stacking of content inside banner-container */
+    }
+    
+    .banner-content {
+        position: absolute;
+        top: 87%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white; /* White text for contrast */
+        z-index: 2; /* Ensure text is on top of the blurred background */
+    }
+    
+    .banner-text {
+        font-size: 12px; /* Adjust the font size */
+        font-weight: bold;
+        text-align: center;
+        color: black; /* Ensuring the text color is white */
+    }
+    
+    
+
+
+
+
+    .custom-image-size {
+        height: 120px;       /* Adjust this height as needed */
+        width: 120px !important; /* Force the width to be 100% of the parent container */
+        max-width: 400px;    /* Limit the width to a maximum of 400px */
+        object-fit: cover;   /* Ensure the image covers the area while preserving aspect ratio */
+        display: block;      /* Ensure the image is treated as a block-level element */
+    }
+    @media (max-width: 768px) { /* Target screens with width of 768px or less */
+        .list-view-item {
+            display: flex;
+            align-items: center; /* Align items vertically to the center */
+        }
+    
+        .list-view-item__image-column {
+            margin-right: 60px; /* Adjust the space between the image and the text */
+        }
+    
+        .list-view-item__title-column {
+            text-align: left;  /* Align the text to the left */
+            max-width: 60%;    /* Restrict the width of the text column to balance with the image */
+        }
+    }
+    
+    
+</style>
+
+<!--Main Content-->
+<div class="col-12 col-sm-12 col-md-9 col-lg-9 main-col">
+	<div class="category-description">
+		<h3>圣歌</h3>
+		<p>
+			圣歌不仅仅是歌曲——它们是信仰、希望和虔诚的永恒表达。这些圣歌有着数百年的丰富历史，源自圣典和古典传统，持续激励着一代又一代人。随着我们探索这些充满力量的诗句，我们庆祝圣歌跨越时空所承载的深度、美丽与精神遗产。
+		</p>
+	</div>
+	<hr>
+	<div class="productList">
+		<div class="list-view-items grid--view-items">
+			<p style="color: #C0C6C7; font-weight: bold; text-align: center; font-size: 14px; text-transform: uppercase;">{{ hymn.get_hymn_type_display }}</p>
+			<p style="color: black; font-weight: bold; text-align: center; font-size: 25px; text-transform: uppercase;">{{ hymn.title }}</p>
+
+			<div>{{ hymn.lyrics|safe }}</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

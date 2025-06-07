@@ -1,5 +1,6 @@
 {% extends "files/hymn.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 <style>
@@ -106,9 +107,9 @@ hr {
                 <!--Main Content-->
                 <div class="col-12 col-sm-12 col-md-9 col-lg-9 main-col">
                 	<div class="category-description">
-                    	<h3>Hymns of Faith</h3>
+                    	<h3>{% trans "Hymns of Faith" %}</h3>
                         <p>
-                            Hymns are not just melodies — they are sacred echoes of devotion, woven with truth, hope, and spiritual depth. For generations, these timeless songs have lifted hearts, comforted souls, and drawn people closer to God. As you explore our collection of hymns, may each verse remind you of the power, peace, and presence found in worship.
+                            {% trans "Hymns are not just melodies — they are sacred echoes of devotion, woven with truth, hope, and spiritual depth. For generations, these timeless songs have lifted hearts, comforted souls, and drawn people closer to God. As you explore our collection of hymns, may each verse remind you of the power, peace, and presence found in worship." %}
                         </p>
 
                     </div>
@@ -124,7 +125,7 @@ hr {
                             <br>
                             <br>
                             {% empty %}
-                            <p>No hymns available yet.</p>
+                                <p>{% trans "No hymns available yet." %}</p>
                         {% endfor %}
                 
                         </div>

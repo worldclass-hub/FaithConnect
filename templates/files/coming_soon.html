@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -160,11 +161,11 @@
                             <h3 class="password__title"><b>{{page.note}}</b></h3>
                             <form method="post" action="#" id="contact_form" accept-charset="UTF-8" class="contact-form">
                                 {% csrf_token %}
-                                <p class="password__form-heading h4">Follow us for updates now!</p>
+                                <p class="password__form-heading h4">{% trans "Follow us for updates now!" %}</p>
                                 <div class="input-group password__input-group">
-                                    <input type="email" name="email" class="input-group__field" placeholder="Email address">
+                                    <input type="email" name="email" class="input-group__field" placeholder="{% trans 'Email address' %}">
                                     <span class="input-group__btn">
-                                        <button type="submit" class="btn"><span>Notify me</span></button>
+                                        <button type="submit" class="btn"><span>{% trans "Notify me" %}</span></button>
                                     </span>
                                 </div>
                             </form>
@@ -178,7 +179,7 @@
                                     <li><a href="#"><i class="icon icon-youtube"></i></a></li>
                                     <li><a href="#"><i class="icon icon-vimeo-alt"></i></a></li>
                                 </ul>
-                                <a href="{% url 'excel_page' %}" class="home-link">Home</a>
+                                <a href="{% url 'excel_page' %}" class="home-link">{% trans "Home" %}</a>
                             </div>
                         </div>
                     </div>

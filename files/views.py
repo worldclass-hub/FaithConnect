@@ -23,7 +23,7 @@ import requests
 from .forms import FileUploadForm, PDFUploadForm, GalleryUploadForm, UserProfileForm
 from .models import (
     FileUpload, PDFUpload, Gallery, Hymn, FrenchHymn, HausaHymn, IgboHymn, YorubaHymn,
-    Hymn_Content, AboutPage, ContactMessage, AutoReplyMessage, ComingSoonPage,
+    ChineseHymn, GermanHymn, Hymn_Content, AboutPage, ContactMessage, AutoReplyMessage, ComingSoonPage,
     UserProfile, NewUpdate, NewsletterSubscriber, DailyNewsletter, Donation
 )
 
@@ -699,12 +699,36 @@ def hausa_hymn_detail(request, hymn_id):
     return render(request, 'files/hausa_hymn_detail.html', {'hymn': hymn, 'updates': updates})
 
 
+
 def hymn_content(request):
     hymns = Hymn_Content.objects.all()
     updates = NewUpdate.objects.all().order_by('-upload_date')
     return render(request, 'files/hymn_content.html', {'hymns': hymns, 'updates': updates})
 
 
+
+# Chinese Hymn Views
+def chinese_hymn_list(request):
+    hymns = ChineseHymn.objects.all()
+    updates = NewUpdate.objects.all().order_by('-upload_date')
+    return render(request, 'files/chinese_hymn_list.html', {'hymns': hymns, 'updates': updates})
+
+def chinese_hymn_detail(request, hymn_id):
+    hymn = ChineseHymn.objects.get(id=hymn_id)
+    updates = NewUpdate.objects.all().order_by('-upload_date')
+    return render(request, 'files/chinese_hymn_detail.html', {'hymn': hymn, 'updates': updates})
+
+
+# German Hymn Views
+def german_hymn_list(request):
+    hymns = GermanHymn.objects.all()
+    updates = NewUpdate.objects.all().order_by('-upload_date')
+    return render(request, 'files/german_hymn_list.html', {'hymns': hymns, 'updates': updates})
+
+def german_hymn_detail(request, hymn_id):
+    hymn = GermanHymn.objects.get(id=hymn_id)
+    updates = NewUpdate.objects.all().order_by('-upload_date')
+    return render(request, 'files/german_hymn_detail.html', {'hymn': hymn, 'updates': updates})
 
 
 
@@ -1177,7 +1201,6 @@ def never_show_modal(request):
 
 
 
-
 def search_api(request):
     query = request.GET.get('q', '').strip()
     results = []
@@ -1207,14 +1230,17 @@ def search_api(request):
             Q(date__icontains=query)
         )
 
-        # Added youtube_url search here in FileUpload
         file_results = FileUpload.objects.filter(
             Q(company_location__icontains=query) |
             Q(date__icontains=query) |
             Q(youtube_url__icontains=query)
         )
 
-        hymn_models = [Hymn, HausaHymn, IgboHymn, YorubaHymn, FrenchHymn]
+        hymn_models = [
+            Hymn, HausaHymn, IgboHymn, YorubaHymn,
+            FrenchHymn, ChineseHymn, GermanHymn
+        ]
+
         for model in hymn_models:
             hymn_results = model.objects.filter(
                 Q(title__icontains=query) |
@@ -1240,7 +1266,6 @@ def search_api(request):
             })
 
         for file in file_results:
-            # Check if this file has a YouTube URL (video)
             if file.youtube_url:
                 title = file.company_location or "YouTube Video"
                 results.append({
@@ -1269,7 +1294,6 @@ def search_api(request):
         "user_has_profile": user_has_profile,
         "updates": updates
     })
-
 
 def search_results(request):
     query = request.GET.get('q', '').strip()
@@ -1323,25 +1347,40 @@ def search_results(request):
             Q(lyrics__icontains=query)
         )
 
-        if yoruba_hymn_results.exists():
-            first_result = yoruba_hymn_results.first()
-            highlight_id = first_result.id
+        chinese_hymn_results = ChineseHymn.objects.filter(
+            Q(title__icontains=query) |
+            Q(hymn_type__icontains=query) |
+            Q(description__icontains=query) |
+            Q(lyrics__icontains=query)
+        )
+
+        german_hymn_results = GermanHymn.objects.filter(
+            Q(title__icontains=query) |
+            Q(hymn_type__icontains=query) |
+            Q(description__icontains=query) |
+            Q(lyrics__icontains=query)
+        )
+
+        if chinese_hymn_results.exists():
+            highlight_id = chinese_hymn_results.first().id
+            highlight_language = 'chinese'
+        elif german_hymn_results.exists():
+            highlight_id = german_hymn_results.first().id
+            highlight_language = 'german'
+        elif yoruba_hymn_results.exists():
+            highlight_id = yoruba_hymn_results.first().id
             highlight_language = 'yoruba'
         elif hymn_results.exists():
-            first_result = hymn_results.first()
-            highlight_id = first_result.id
+            highlight_id = hymn_results.first().id
             highlight_language = 'english'
         elif french_hymn_results.exists():
-            first_result = french_hymn_results.first()
-            highlight_id = first_result.id
+            highlight_id = french_hymn_results.first().id
             highlight_language = 'french'
         elif igbo_hymn_results.exists():
-            first_result = igbo_hymn_results.first()
-            highlight_id = first_result.id
+            highlight_id = igbo_hymn_results.first().id
             highlight_language = 'igbo'
         elif hausa_hymn_results.exists():
-            first_result = hausa_hymn_results.first()
-            highlight_id = first_result.id
+            highlight_id = hausa_hymn_results.first().id
             highlight_language = 'hausa'
 
         if highlight_id and highlight_language and not request.GET.get('id'):
@@ -1354,10 +1393,10 @@ def search_results(request):
         yoruba_hymn_results = YorubaHymn.objects.none()
         igbo_hymn_results = IgboHymn.objects.none()
         hausa_hymn_results = HausaHymn.objects.none()
+        chinese_hymn_results = ChineseHymn.objects.none()
+        german_hymn_results = GermanHymn.objects.none()
 
-    user_has_profile = False
-    if request.user.is_authenticated:
-        user_has_profile = UserProfile.objects.filter(user=request.user).exists()
+    user_has_profile = request.user.is_authenticated and UserProfile.objects.filter(user=request.user).exists()
 
     pdf_results_with_images = []
     for pdf in pdf_results:
@@ -1387,12 +1426,13 @@ def search_results(request):
         "yoruba_hymn_results": yoruba_hymn_results,
         "igbo_hymn_results": igbo_hymn_results,
         "hausa_hymn_results": hausa_hymn_results,
+        "chinese_hymn_results": chinese_hymn_results,
+        "german_hymn_results": german_hymn_results,
         "recent_files": recent_files,
         "recent_pdfs": recent_pdfs,
         "user_has_profile": user_has_profile,
         "updates": updates
     })
-
 
 
 

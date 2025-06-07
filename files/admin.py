@@ -1,30 +1,50 @@
-from django.contrib import admin
-from .models import FileUpload, PDFUpload
-
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.utils.html import format_html
-from .models import FileUpload
-import os
+from django.template.response import TemplateResponse
+from django.urls import reverse, path
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import redirect
+from django.db.models import Q
 from django.templatetags.static import static
-from django.contrib import admin
-from .models import Hymn
+from django.core.mail import send_mail
 
-from django.contrib import admin
-from .models import FrenchHymn, YorubaHymn, IgboHymn, HausaHymn
-
-
-# admin.py
-from django.utils.html import format_html
-from django.contrib import admin
-from .models import Gallery
-
-
-from django.contrib import admin
-from .models import Hymn_Content
-
-from django.templatetags.static import static
-from django.utils.html import format_html
 import os
+import csv
+import io
+from calendar import month_name
+from collections import defaultdict
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+
+from ckeditor.widgets import CKEditorWidget
+
+from .models import (
+    FileUpload, PDFUpload, Gallery, Hymn, Hymn_Content,
+    FrenchHymn, YorubaHymn, IgboHymn, HausaHymn, ChineseHymn, GermanHymn,
+    NewsletterSubscriber, DailyNewsletter,
+    NewUpdate, UserProfile,
+    ComingSoonPage, AboutPage, ContactMessage, AutoReplyMessage
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @admin.register(FileUpload)
 class FileUploadAdmin(admin.ModelAdmin):
     # Ensure the 'file_icon' method is included in list_display
@@ -54,9 +74,26 @@ class FileUploadAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
+
+
+
+
+
+
 @admin.register(PDFUpload)
 class PDFUploadAdmin(admin.ModelAdmin):
     list_display = ('company_location', 'info_id', 'pdf_file', 'date', 'time')
+
+
+
+
+
+
+
 
 
 
@@ -74,11 +111,63 @@ admin.site.register(Gallery, GalleryAdmin)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 class HymnAdmin(admin.ModelAdmin):
     list_display = ('title', 'hymn_type', 'image', 'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(Hymn, HymnAdmin)
+
+
+
+
+
+
+
+
+
+
+
+
+class ChineseHymnAdmin(admin.ModelAdmin):
+    list_display = ('title', 'hymn_type', 'image', 'description')
+    search_fields = ('title', 'description', 'hymn_type')
+
+admin.site.register(ChineseHymn, ChineseHymnAdmin)
+
+
+
+
+
+
+
+
+
+class GermanHymnAdmin(admin.ModelAdmin):
+    list_display = ('title', 'hymn_type', 'image', 'description')
+    search_fields = ('title', 'description', 'hymn_type')
+
+admin.site.register(GermanHymn, GermanHymnAdmin)
+
+
+
+
+
+
+
+
 
 
 
@@ -93,11 +182,36 @@ admin.site.register(FrenchHymn, FrenchHymnAdmin)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 class YorubaHymnAdmin(admin.ModelAdmin):
     list_display = ('title', 'hymn_type', 'image', 'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(YorubaHymn, YorubaHymnAdmin)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -111,11 +225,38 @@ admin.site.register(IgboHymn, IgboHymnAdmin)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 class HausaHymnAdmin(admin.ModelAdmin):
     list_display = ('title', 'hymn_type', 'image', 'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(HausaHymn, HausaHymnAdmin)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @admin.register(Hymn_Content)
@@ -129,8 +270,20 @@ class EnglishHymnAdmin(admin.ModelAdmin):
 
 
 
-from django.contrib import admin, messages
-from .models import ContactMessage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
@@ -151,8 +304,15 @@ class ContactMessageAdmin(admin.ModelAdmin):
 
 
 
-from django.contrib import admin
-from .models import AutoReplyMessage
+
+
+
+
+
+
+
+
+
 
 @admin.register(AutoReplyMessage)
 class AutoReplyMessageAdmin(admin.ModelAdmin):
@@ -163,9 +323,19 @@ class AutoReplyMessageAdmin(admin.ModelAdmin):
 
 
 
-from django.contrib import admin
-from .models import AboutPage
-from ckeditor.widgets import CKEditorWidget
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class AboutPageAdmin(admin.ModelAdmin):
     list_display = ('title', 'phone', 'email', 'history', 'the_man', 'mandate')
@@ -194,10 +364,19 @@ admin.site.register(AboutPage, AboutPageAdmin)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 # admin.py
-from django.contrib import admin
-from django.utils.html import format_html
-from .models import ComingSoonPage
 
 @admin.register(ComingSoonPage)
 class ComingSoonPageAdmin(admin.ModelAdmin):
@@ -214,22 +393,16 @@ class ComingSoonPageAdmin(admin.ModelAdmin):
 
 
 
-from django.contrib import admin
-from django.utils.html import format_html
-from django.template.response import TemplateResponse
-from django.contrib import messages
-from django.urls import reverse, path
-from collections import defaultdict
-from .models import UserProfile
-from calendar import month_name
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import redirect
-from django.db.models import Q
-import csv
-import io
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
+
+
+
+
+
+
+
+
+
+
 
 
 @admin.register(UserProfile)
@@ -409,8 +582,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 
-from django.contrib import admin
-from .models import NewUpdate
+
 
 class NewUpdateAdmin(admin.ModelAdmin):
     list_display = ('title', 'upload_date', 'user')
@@ -420,9 +592,16 @@ admin.site.register(NewUpdate, NewUpdateAdmin)
 
 
 
-from django.contrib import admin
-from django.core.mail import send_mail
-from .models import NewsletterSubscriber, DailyNewsletter
+
+
+
+
+
+
+
+
+
+
 
 # Custom action to send a newsletter to all subscribers
 @admin.action(description="Send selected newsletter to all subscribers")

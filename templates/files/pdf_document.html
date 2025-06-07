@@ -1,5 +1,6 @@
 {% extends "files/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -375,35 +376,35 @@
 
                     <div class="calendar-wrapper">
                     <!-- Calendar -->
-                    <h2>Browse Files by Date</h2>
+                    <h2>{% trans "Browse Files by Date" %}</h2>
                     <div class="calendar">
                         <div class="calendar-header">
                             <select id="month" class="calendar-select">
-                                <option value="1">January</option>
-                                <option value="2">February</option>
-                                <option value="3">March</option>
-                                <option value="4">April</option>
-                                <option value="5">May</option>
-                                <option value="6">June</option>
-                                <option value="7">July</option>
-                                <option value="8">August</option>
-                                <option value="9">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
+                            <option value="1">{% trans "January" %}</option>
+                            <option value="2">{% trans "February" %}</option>
+                            <option value="3">{% trans "March" %}</option>
+                            <option value="4">{% trans "April" %}</option>
+                            <option value="5">{% trans "May" %}</option>
+                            <option value="6">{% trans "June" %}</option>
+                            <option value="7">{% trans "July" %}</option>
+                            <option value="8">{% trans "August" %}</option>
+                            <option value="9">{% trans "September" %}</option>
+                            <option value="10">{% trans "October" %}</option>
+                            <option value="11">{% trans "November" %}</option>
+                            <option value="12">{% trans "December" %}</option>
                             </select>
                             <input type="number" id="year" class="calendar-select" placeholder="Enter Year" />
                         </div>
 
                         <div class="calendar-body">
                             <div class="weekdays">
-                                <span>Mon</span>
-                                <span>Tue</span>
-                                <span>Wed</span>
-                                <span>Thu</span>
-                                <span>Fri</span>
-                                <span>Sat</span>
-                                <span>Sun</span>
+                            <span>{% trans "Mon" %}</span>
+                            <span>{% trans "Tue" %}</span>
+                            <span>{% trans "Wed" %}</span>
+                            <span>{% trans "Thu" %}</span>
+                            <span>{% trans "Fri" %}</span>
+                            <span>{% trans "Sat" %}</span>
+                            <span>{% trans "Sun" %}</span>
                             </div>
 
                             <div class="calendar-days">
@@ -424,7 +425,7 @@
                         <div class="widget-title">
                             <br>
                             <br>
-                            <h2>Recent PDF Files</h2>
+                        <h2>{% trans "Recently Files" %}</h2>
                         </div>
                         <div class="widget-content">
                             <div class="list list-sidebar-products">
@@ -460,7 +461,7 @@
                                         </div>
                                     </div>
                                     {% empty %}
-                                    <p style="margin-left: 35px;">No PDFs uploaded yet.</p>
+                                    <p style="margin-left: 35px;">{% trans "No PDFs uploaded yet." %}</p>
                                     {% endfor %}
 
                                 </div>
@@ -474,7 +475,7 @@
                         <div class="banner-container">
                             <img src="{% static 'login-form/images/doxcela1.jpeg' %}" alt="" class="banner-image" />
                             <div class="banner-content">
-                                <p class="banner-text">Secure Your Files Here</p>
+                                <p class="banner-text">{% trans "Secure Your Files Here" %}</p>
                             </div>
                         </div>
                     </div>
@@ -482,10 +483,10 @@
                     <!-- Information -->
                     <div class="sidebar_widget">
                         <div class="widget-title">
-                            <h2>Information</h2>
+                            <h2>{% trans "Information" %}</h2>
                         </div>
                         <div class="widget-content">
-                            <p>Discover a rich collection of downloadable files, including PDFs for children, parents, couples, and more. Everything is organized for easy access—upload, view, and download with confidence and security, anytime you need.</p>
+                            <p>{% trans "Discover a rich collection of downloadable files, including PDFs for children, parents, couples, and more. Everything is organized for easy access—upload, view, and download with confidence and security, anytime you need." %}</p>
                         </div>
                     </div>
                     <!-- End Information -->
@@ -496,8 +497,8 @@
             <!--Main Content-->
             <div class="col-12 col-sm-12 col-md-9 col-lg-9 main-col">
                 <div class="category-description">
-                <h4>Explore Our PDF Collection</h4>
-                <p>PDF files are a reliable way to store and share documents while preserving their original layout and formatting. Here, you'll find a wide range of PDFs tailored for everyone—children, parents, couples, and more. From educational resources and guides to inspirational content and printable materials, everything is neatly organized for easy access, viewing, and download.</p>
+                <h4>{% trans "Explore Our PDF Collection" %}</h4>
+                <p>{% trans "PDF files are a reliable way to store and share documents while preserving their original layout and formatting. Here, you'll find a wide range of PDFs tailored for everyone—children, parents, couples, and more. From educational resources and guides to inspirational content and printable materials, everything is neatly organized for easy access, viewing, and download." %}</p>
 
                 </div>
                 <hr>
@@ -544,7 +545,8 @@
                             </div>
                         </div>
                         {% empty %}
-                        <p>No PDFs uploaded yet.</p>
+                        <p>{% trans "No PDFs uploaded yet." %}</p>
+                        
                         {% endfor %}
                     </div>
 
@@ -556,7 +558,7 @@
                 <!-- Load More Button -->
                 <div class="infinitpaginOuter" {% if page_obj.has_next %} {% else %} style="display:none;" {% endif %}>
                     <div class="infinitpagin">
-                        <button id="loadMoreBtn" class="btn">Load More</button>
+                          <button id="loadMoreBtn" class="btn">{% trans "Load More" %}</button>
                     </div>
                 </div>
 
@@ -564,9 +566,8 @@
                 <!-- Button (Initially hidden) -->
                 <div id="show-all-uploads-container" style="display: none;">
                     <div class="infinitpagin">
-                        <a href="{% url 'pdf_document' %}" class="btn">
-                            Show All Uploads
-                        </a>
+                    <a href="{% url 'excel_page' %}" class="btn">{% trans "Show All Uploads" %}</a>
+
                     </div>
                 </div>
 

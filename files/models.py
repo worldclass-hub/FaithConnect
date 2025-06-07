@@ -342,6 +342,112 @@ class HausaHymn(models.Model):
 
 
 
+class ChineseHymn(models.Model):
+    HYMN_TYPE_CHOICES = [
+        ('morning', '清晨'),
+        ('evening', '傍晚'),
+        ('the_lords_day', '主日'),
+        ('praises', '赞美诗'),
+        ('advent', '降临节'),
+        ('christmas', '圣诞节'),
+        ('closing_opening_year', '年终与年初'),
+        ('warning_petition_gospel_call', '警告、祈求与福音呼召'),
+        ('lent_repentance', '四旬期与悔改'),
+        ('palm_sunday', '棕枝主日'),
+        ('suffering_death', '受难与死亡'),
+        ('resurrection', '复活'),
+        ('lords_day_after_resurrection', '复活后的主日'),
+        ('ascension', '升天'),
+        ('holy_ghost', '圣灵'),
+        ('pentecostal_revival', '五旬节复兴'),
+        ('missionary', '宣教'),
+        ('word_of_god', '神的话语'),
+        ('baptism', '洗礼'),
+        ('holy_communion', '圣餐'),
+        ('holy_matrimony', '圣婚'),
+        ('children_youth', '儿童与青年'),
+        ('prayer', '祷告'),
+        ('divine_healing', '神圣医治'),
+        ('faith', '信心'),
+        ('unity_peace', '合一与和平'),
+        ('time_old_age', '晚年'),
+        ('harvest_anniversaries', '收获与周年庆'),
+        ('love', '爱'),
+        ('guidance_protection', '引导与保护'),
+        ('labour_service', '劳作与事奉'),
+        ('trials_victories', '试炼与得胜'),
+        ('encouragement', '鼓励'),
+        ('building_dedication', '建筑奉献'),
+        ('servants_for_god', '神的仆人'),
+        ('farewell', '告别'),
+        ('church_heaven_earth', '地上与天上的教会'),
+        ('various_hymns', '各类赞美诗'),
+    ]
+
+    title = models.CharField(max_length=255)
+    hymn_type = models.CharField(max_length=100, choices=HYMN_TYPE_CHOICES)
+    image = models.ImageField(upload_to='chinese_hymns/')
+    description = models.TextField(blank=True)
+    lyrics = RichTextField(null=True)
+
+    def __str__(self):
+        return self.title
+
+
+
+
+class GermanHymn(models.Model):
+    HYMN_TYPE_CHOICES = [
+        ('morning', 'Morgen'),
+        ('evening', 'Abend'),
+        ('the_lords_day', 'Tag des Herrn'),
+        ('praises', 'Loblieder'),
+        ('advent', 'Advent'),
+        ('christmas', 'Weihnachten'),
+        ('closing_opening_year', 'Jahresabschluss und -beginn'),
+        ('warning_petition_gospel_call', 'Warnung, Bitte und Evangelium'),
+        ('lent_repentance', 'Fastenzeit und Buße'),
+        ('palm_sunday', 'Palmsonntag'),
+        ('suffering_death', 'Leiden und Tod'),
+        ('resurrection', 'Auferstehung'),
+        ('lords_day_after_resurrection', 'Sonntag nach der Auferstehung'),
+        ('ascension', 'Himmelfahrt'),
+        ('holy_ghost', 'Heiliger Geist'),
+        ('pentecostal_revival', 'Pfingstliche Erweckung'),
+        ('missionary', 'Mission'),
+        ('word_of_god', 'Gottes Wort'),
+        ('baptism', 'Taufe'),
+        ('holy_communion', 'Heiliges Abendmahl'),
+        ('holy_matrimony', 'Heilige Ehe'),
+        ('children_youth', 'Kinder und Jugendliche'),
+        ('prayer', 'Gebet'),
+        ('divine_healing', 'Göttliche Heilung'),
+        ('faith', 'Glaube'),
+        ('unity_peace', 'Einheit und Frieden'),
+        ('time_old_age', 'Alter'),
+        ('harvest_anniversaries', 'Ernte und Jubiläen'),
+        ('love', 'Liebe'),
+        ('guidance_protection', 'Führung und Schutz'),
+        ('labour_service', 'Arbeit und Dienst'),
+        ('trials_victories', 'Prüfungen und Siege'),
+        ('encouragement', 'Ermutigung'),
+        ('building_dedication', 'Einweihung von Gebäuden'),
+        ('servants_for_god', 'Diener Gottes'),
+        ('farewell', 'Abschied'),
+        ('church_heaven_earth', 'Kirche im Himmel und auf Erden'),
+        ('various_hymns', 'Verschiedene Lieder'),
+    ]
+
+    title = models.CharField(max_length=255)
+    hymn_type = models.CharField(max_length=100, choices=HYMN_TYPE_CHOICES)
+    image = models.ImageField(upload_to='german_hymns/')
+    description = models.TextField(blank=True)
+    lyrics = RichTextField(null=True)
+
+    def __str__(self):
+        return self.title
+
+
 
 
 class Hymn_Content(models.Model):

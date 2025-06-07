@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf.urls.i18n import set_language
+
 from . import views  # Make sure to import views here
 
 urlpatterns = [
@@ -30,6 +32,15 @@ urlpatterns = [
     path('hausa-hymns/', views.hausa_hymn_list, name='hausa_hymn_list'),
     path('hausa-hymns/<int:hymn_id>/', views.hausa_hymn_detail, name='hausa_hymn_detail'),
 
+    # Chinese Hymns
+    path('chinese-hymns/', views.chinese_hymn_list, name='chinese_hymn_list'),
+    path('chinese-hymns/<int:hymn_id>/', views.chinese_hymn_detail, name='chinese_hymn_detail'),
+
+    # German Hymns
+    path('german-hymns/', views.german_hymn_list, name='german_hymn_list'),
+    path('german-hymns/<int:hymn_id>/', views.german_hymn_detail, name='german_hymn_detail'),
+
+
     path('hymn_content/', views.hymn_content, name='hymn_content'),
 
     
@@ -45,6 +56,8 @@ urlpatterns = [
     path("donate/initiate/", views.initiate_donation, name="initiate_donation"),
     path("paystack/verify/", views.verify_payment, name="verify_payment"),
     path("thank-you/", views.thank_you, name="thank_you"),
+
+    path('set-language/', set_language, name='set_language'),  # 👈 use this
 
 
 ]

@@ -3,6 +3,9 @@ from .models import FileUpload, PDFUpload
 from ckeditor.fields import RichTextField
 from .models import Hymn, FrenchHymn, Hymn_Content
 from django import forms
+
+
+
 class FileUploadForm(forms.ModelForm):
     youtube_url = forms.URLField(  # rename this from youtube_link to youtube_url
         required=False,

@@ -1,5 +1,6 @@
 {% extends "files/page.html" %}
 {% load static %}
+{% load i18n %}
 {% block content %}
 
 <!--Body Content-->
@@ -8,7 +9,7 @@
     <div class="page section-header text-center">
         <div class="page-title">
             <div class="wrapper">
-                <h1 class="page-width">Lookbook</h1>
+                <h1 class="page-width">{% trans "LookBook" %}</h1>
             </div>
         </div>
     </div>
@@ -26,12 +27,12 @@
                         <!-- Display title of the image -->
                         <h2>{{ image.title }}</h2>
                         <!-- Download link -->
-                        <a class="btn" href="{{ image.uploaded_file.url }}" download>Download</a>
+                        <a class="btn" href="{{ image.uploaded_file.url }}" download>{% trans "Download" %}</a>
                     </div>
                 </div>
             {% empty %}
                 <div class="no-images">
-                    <p>No images available at the moment. Please check back later.</p>
+                    <p>{% trans "No images available at the moment. Please check back later." %}</p>
                 </div>
             {% endfor %}
         </div>
