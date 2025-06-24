@@ -1,0 +1,1461 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GMMI</title>
+      <!-- Favicon -->
+  <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png">
+  <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+  <script src="{% static 'assets/js/typed.min.js' %}"></script>
+
+  <style>
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .animate-bounce-slow {
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+
+    .shiny-text {
+      background: linear-gradient(to right, #7c3aed, #facc15, #0f172a, #7c3aed);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 4s linear infinite;
+    }
+
+    .bg-stars {
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      background-size: cover;
+    }
+
+    @keyframes fastBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.bounce-fast {
+  animation: fastBounce 0.6s ease-in-out infinite;
+}
+
+  .grid {
+    transition: opacity 0.6s ease;
+  }
+
+  .grid[style*="display: none"] {
+    opacity: 0;
+  }
+
+
+  .font-playfair {
+      font-family: 'Playfair Display', serif;
+  }
+  .font-poppins {
+      font-family: 'Poppins', sans-serif;
+  }
+
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+
+
+
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+  }
+
+
+
+
+
+  
+
+
+
+
+  #perspective-carousel-section .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  #perspective-carousel-section .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  #perspective-carousel-section .card {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+    cursor: grab;
+    will-change: transform;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 3rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    width: 14rem;
+    height: 30rem;
+    border-radius: 1.5rem;
+    background-color: white;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (min-width: 640px) {
+    #perspective-carousel-section .card {
+      width: 18rem;
+      height: 38rem;
+    }
+
+    #perspective-carousel-section .carousel {
+      overflow-x: hidden !important;
+    }
+  }
+
+  #perspective-carousel-section .card:hover {
+    transform: scale(1.08) rotateY(0deg);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 20;
+    cursor: grabbing;
+  }
+
+  #perspective-carousel-section .card:not(:hover) {
+    transform: rotateY(15deg) scale(0.95);
+    filter: brightness(0.85);
+    opacity: 0.9;
+  }
+
+
+
+
+  .cursor::after {
+      content: '|';
+      animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1 }
+    50% { opacity: 0 }
+  }
+  </style>
+
+
+
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-black text-white">
+
+
+
+<!-- Navbar -->
+<header class="bg-black bg-opacity-90 shadow-md fixed w-full z-50">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+      <img src="static/login-form/images/GMMI_LOGO.png" alt="GMMI Logo" class="h-10 w-10 animate-bounce"/>
+      <span class="text-lg font-bold shiny-text block md:hidden">GMMI</span>
+      <span class="text-xl font-bold shiny-text hidden md:block">Global Mandate Ministry International</span>
+    </div>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center relative">
+      <a href="{% url 'about' %}" class="hover:text-yellow-400">About</a>
+
+      <!-- Testimonies Dropdown (Desktop) -->
+        {% if user.is_authenticated and user.is_staff %}
+        <div class="relative group">
+          <button onclick="toggleSubMenu('desktopTestimonyDropdown')" class="hover:text-yellow-400 focus:outline-none">Upload</button>
+          <div id="desktopTestimonyDropdown" class="transition-all duration-300 ease-in-out absolute left-0 mt-2 w-48 bg-black text-white rounded-lg shadow-lg border border-gray-700 hidden z-50">
+            <a href="{% url 'home' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Upload Media Files</a>
+            <a href="{% url 'upload_pdf' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Upload PDF</a>
+            <a href="{% url 'gallery_upload' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Upload LookBook</a>
+            <a href="{% url 'send_newsletter' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Send Newsletter</a>
+          </div>
+        </div>
+        {% endif %}
+
+
+      <!-- Connect Dropdown (Desktop) -->
+      <div class="relative group">
+        <button onclick="toggleSubMenu('desktopConnectDropdown')" class="hover:text-yellow-400 focus:outline-none">Pages</button>
+        <div id="desktopConnectDropdown" class="transition-all duration-300 ease-in-out absolute left-0 mt-2 w-48 bg-black text-white rounded-lg shadow-lg border border-gray-700 hidden z-50">
+          <a href="{% url 'excel_page' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">All Media Page</a>
+          <a href="{% url 'donation_form' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Donate</a>
+          <a href="{% url 'pdf_document' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Pdf Page</a>
+          <a href="{% url 'contact' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Contact Us</a>
+          <a href="#" id="openModalBtnDesktop" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Announcement</a>
+          <a href="{% url 'hymn_content' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Hymn</a>
+          <a href="{% url 'lookbook' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">LookBook</a>
+          <a href="{% url 'coming_soon' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Coming Soon</a>
+        </div>
+      </div>
+
+      <!-- Account Dropdown (Desktop) -->
+      <div class="relative group">
+        <button onclick="toggleSubMenu('desktopAccountDropdown')" class="hover:text-yellow-400 focus:outline-none">Account</button>
+        <div id="desktopAccountDropdown" class="transition-all duration-300 ease-in-out absolute left-0 mt-2 w-48 bg-black text-white rounded-lg shadow-lg border border-gray-700 hidden z-50">
+          {% if user.is_authenticated %}
+            {% if user.is_staff %}
+              <a href="{% url 'admin:index' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Dashboard</a>
+              <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Logout</a>
+            {% else %}
+              <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Logout</a>
+            {% endif %}
+          {% else %}
+            <a href="{% url 'login' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Sign In</a>
+            <a href="{% url 'signup' %}" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <a href="#prayer" class="hover:text-yellow-400">Prayer Request</a>
+    </nav>
+    <!-- 🔥 The End  of Account Dropdown (Desktop)  -->
+
+
+
+    <!-- Mobile Menu Toggle -->
+    <div class="md:hidden">
+      <button id="menuToggle" class="text-yellow-400 focus:outline-none">☰</button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-black bg-opacity-95 text-white px-6 pb-4 space-y-1">
+    <a href="#" class="block py-2 hover:text-yellow-400">About</a>
+
+    <!-- Connect Dropdown (Mobile) -->
+    <div>
+      <button class="w-full text-left py-2 hover:text-yellow-400" onclick="toggleSubMenu('connectDropdown')">Upload ⌄</button>
+      <div id="connectDropdown" class="pl-4 hidden transition-all duration-300 ease-in-out">
+        <a href="{% url 'home' %}" class="block py-2 hover:text-yellow-400">Upload Media Files</a>
+        <a href="{% url 'upload_pdf' %}" class="block py-2 hover:text-yellow-400">Upload PDF</a>
+        <a href="{% url 'gallery_upload' %}" class="block py-2 hover:text-yellow-400">Upload LookBook</a>
+        <a href="{% url 'send_newsletter' %}" class="block py-2 hover:text-yellow-400">Upload Newsletter</a>
+      </div>
+    </div>
+
+    <!-- Testimonies Dropdown (Mobile) -->
+        {% if user.is_authenticated and user.is_staff %}
+
+    <div>
+      <button class="w-full text-left py-2 hover:text-yellow-400" onclick="toggleSubMenu('testimonyDropdown')">Pages ⌄</button>
+      <div id="testimonyDropdown" class="pl-4 hidden transition-all duration-300 ease-in-out">
+        <a href="{% url 'excel_page' %}" class="block py-2 hover:text-yellow-400">All Media Page</a>
+        <a href="{% url 'donation_form' %}" class="block py-2 hover:text-yellow-400"> Donate</a>
+        <a href="{% url 'pdf_document' %}" class="block py-2 hover:text-yellow-400"> Pdf Page</a>
+        <a href="{% url 'contact' %}" class="block py-2 hover:text-yellow-400"> Contact Us</a>
+        <a href="{% url 'hymn_content' %}" class="block py-2 hover:text-yellow-400"> Hymn</a>
+        <a href="{% url 'lookbook' %}" class="block py-2 hover:text-yellow-400"> LookBook</a>
+        <a href="{% url 'coming_soon' %}" class="block py-2 hover:text-yellow-400"> Coming Soon</a>
+      </div>
+    </div>
+        {% endif %}
+
+
+
+    <!-- Account Dropdown (Mobile) -->
+    <div>
+      <button class="w-full text-left py-2 hover:text-yellow-400" onclick="toggleSubMenu('accountDropdown')">Account ⌄</button>
+      <div id="accountDropdown" class="pl-4 hidden transition-all duration-300 ease-in-out">
+        {% if user.is_authenticated %}
+          {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}" class="block py-2 hover:text-yellow-400">Dashboard</a>
+            <a href="{% url 'logout' %}" class="block py-2 hover:text-yellow-400">Logout</a>
+          {% else %}
+            <a href="{% url 'logout' %}" class="block py-2 hover:text-yellow-400">Logout</a>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'login' %}" class="block py-2 hover:text-yellow-400">Sign In</a>
+          <a href="{% url 'signup' %}" class="block py-2 hover:text-yellow-400">Sign Up</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <a href="#" id="openModalBtnMobile" class="block py-2 hover:text-yellow-400">Announcement</a>
+    <a href="#prayer" class="block py-2 hover:text-yellow-400">Prayer Request</a>
+  </div>
+<!-- 🔥 The End  of Account Dropdown (Mobile)  -->
+
+</header>
+
+
+
+
+
+
+
+<!-- Hero Section -->
+<section class="h-screen flex flex-col items-center justify-center text-center px-4 bg-cover bg-center" style="background-image: url('static/login-form/images/wall14.jpg')">
+  <h1 class="text-5xl md:text-6xl font-extrabold mb-6 shiny-text" id="typing"></h1>
+  <p class="text-xl md:text-2xl max-w-2xl mb-8">Global Mandate Ministry International</p>
+  <div class="flex space-x-4">
+    <a href="#live" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-bold hover:bg-yellow-300 transition">Watch Live</a>
+    <a href="#prayer" class="bg-purple-700 text-white px-6 py-3 rounded-full font-bold hover:bg-purple-600 transition">Prayer Request</a>
+  </div>
+</section>
+<!-- 🔥 The End  of Hero Section -->
+
+
+
+
+
+
+
+
+
+
+
+<!-- Redesigned YouTube Live Section -->
+<section id="live" class="py-24 px-4 bg-gradient-to-b from-gray-950 via-gray-900 to-black text-center relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-indigo-800/20 pointer-events-none"></div>
+  <div class="relative z-10 max-w-6xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-bold text-white mb-10 tracking-tight">Watch Our Live Worship</h2>
+    <p class="text-gray-400 mb-8 text-lg max-w-2xl mx-auto">Experience the power of God's presence through our weekly live worship and teachings.</p>
+    <div class="rounded-xl overflow-hidden shadow-xl border border-gray-700 max-w-4xl mx-auto aspect-w-16 aspect-h-9">
+      <iframe class="w-full h-full" src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID&autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+<!-- 🔥 The End  of Youtube Live Section -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 🔥 The Beginning  of Living Word -->
+<section class="relative py-20 px-4 text-white overflow-hidden bg-black">
+  <!-- Background Image from Static -->
+  <div class="absolute inset-0">
+    <img 
+      src="{% static 'login-form/images/wall19.jpg' %}" 
+      alt="Open Bible Background"
+      class="w-full h-full object-cover opacity-70"
+    />
+    <div class="absolute inset-0 bg-black bg-opacity-70"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-4xl mx-auto text-center">
+    <!-- Mature Title -->
+    <h2 class="text-4xl md:text-5xl font-serif font-semibold text-[#d4af37] tracking-wide mb-6 border-b border-[#d4af37] inline-block pb-2">
+      The Living Word
+    </h2>
+
+    <!-- Typing Scripture -->
+    <p id="scripture" class="text-2xl font-mono leading-relaxed cursor px-4 sm:px-0 text-gray-100 mt-4"></p>
+  </div>
+</section>
+<!-- 🔥 The End  of  Living Word  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Countdown Section -->
+<section id="countdown" class="py-24 px-4 bg-black text-white relative overflow-hidden">
+  <div class="absolute inset-0 bg-stars opacity-5 pointer-events-none"></div>
+  <div class="relative z-10 max-w-5xl mx-auto text-center">
+    <!-- Heading -->
+    <h2 class="text-4xl md:text-5xl font-bold mb-12" id="countdown-heading">Next Sunday Service Countdown</h2>
+
+    <!-- Countdown Grid -->
+    <div id="countdown-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-8">
+      <div class="flex flex-col items-center bg-white/5 backdrop-blur-lg p-6 rounded-xl border border-gray-700 shadow-lg">
+        <span id="ndays" class="text-5xl font-mono font-bold text-emerald-400">00</span>
+        <span class="mt-2 text-sm text-gray-300">Days</span>
+      </div>
+      <div class="flex flex-col items-center bg-white/5 backdrop-blur-lg p-6 rounded-xl border border-gray-700 shadow-lg">
+        <span id="nhours" class="text-5xl font-mono font-bold text-blue-400">00</span>
+        <span class="mt-2 text-sm text-gray-300">Hours</span>
+      </div>
+      <div class="flex flex-col items-center bg-white/5 backdrop-blur-lg p-6 rounded-xl border border-gray-700 shadow-lg">
+        <span id="nminutes" class="text-5xl font-mono font-bold text-yellow-400">00</span>
+        <span class="mt-2 text-sm text-gray-300">Minutes</span>
+      </div>
+      <div class="flex flex-col items-center bg-white/5 backdrop-blur-lg p-6 rounded-xl border border-gray-700 shadow-lg">
+        <span id="nseconds" class="text-5xl font-mono font-bold text-pink-400">00</span>
+        <span class="mt-2 text-sm text-gray-300">Seconds</span>
+      </div>
+    </div>
+
+    <!-- Message / Marquee -->
+    <div class="mt-10 text-gray-400 text-sm max-w-xl mx-auto" id="countdown-message">
+      Be part of our transformational Sunday encounter. It’s not just a service — it’s an experience!
+    </div>
+  </div>
+</section>
+<!-- 🔥 The End  of  Countdown To Church Service   -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ✅ SECTION: Infinite Perspective Carousel -->
+<section id="perspective-carousel-section" class="bg-gradient-to-br from-gray-900 to-gray-800 py-8 px-4 sm:py-12 sm:px-6">
+  <div class="max-w-7xl mx-auto relative">
+
+    <!-- Left Arrow -->
+    <button aria-label="Scroll Left"
+      class="carousel-left-arrow hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-indigo-600/90 hover:bg-indigo-700 text-white rounded-full p-3 shadow-lg">
+      &#8592;
+    </button>
+
+    <!-- Right Arrow -->
+    <button aria-label="Scroll Right"
+      class="carousel-right-arrow hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-indigo-600/90 hover:bg-indigo-700 text-white rounded-full p-3 shadow-lg">
+      &#8594;
+    </button>
+
+    <!-- Carousel Container -->
+    <div class="carousel flex gap-4 sm:gap-8 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory px-2 sm:px-6 py-8 perspective"
+         style="perspective: 1200px;"></div>
+  </div>
+</section>
+<!-- 🔥 The End  of  Infinite Perspective Carousel  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Section For School Of Ministry -->
+<section id="ministries" class="relative bg-black text-white">
+  <!-- Background Image -->
+  <div class="absolute inset-0">
+    <img
+      src="/static/login-form/images/school_ministry1.PNG"
+      alt="KSOM background"
+      class="w-full h-full object-cover opacity-9"
+    />
+    <div class="absolute inset-0 bg-black bg-opacity-70"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-10">
+    <div>
+      <h2 class="text-sm uppercase font-semibold tracking-wide text-white">GMMI</h2>
+<h1 class="text-4xl md:text-5xl font-bold mb-6">
+  Global Mandate School of Ministry
+</h1>
+<p class="text-lg mb-6 leading-relaxed text-gray-200">
+  The Global Mandate School of Ministry (GMSOM) is a programme organized by Global Mandate Ministry Int with the vision of raising kingdom ambassadors to transform the society.
+  We seek to raise, train and equip kingdom ambassadors who will represent Christ and His agenda in any/every sphere of influence they find themselves.
+</p>
+<p class="text-md text-gray-300 mb-8">
+  We seek to raise, train and equip kingdom ambassadors who will represent Christ and His agenda in any/every sphere of influence they find themselves.
+</p>
+
+      <a
+        href="{% url 'overview' %}"
+        class="inline-block px-8 py-3 border border-yellow-400 text-white rounded-full font-semibold hover:bg-yellow-400 hover:text-black transition duration-300"
+      >
+        REGISTER
+      </a>
+    </div>
+  </div>
+</section>
+<!-- 🔥 The End  of  School of Ministries  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 🔥 The Beginning  of Prayer Request   -->
+<section id="prayer" class="bg-gray-900 text-white py-20 px-6 relative overflow-hidden">
+  <!-- Floating Blobs -->
+  <div class="absolute top-0 left-0 w-44 h-44 bg-pink-500 rounded-full filter blur-3xl opacity-30 animate-pulse"></div>
+  <div class="absolute bottom-10 right-0 w-44 h-44 bg-purple-500 rounded-full filter blur-3xl opacity-30 animate-pulse"></div>
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-yellow-500 rounded-full filter blur-2xl opacity-20 animate-ping"></div>
+
+  <div class="max-w-xl mx-auto z-10 relative">
+    <div class="text-center mb-8">
+      <h2 class="text-4xl font-extrabold mb-2">🙏 Submit Your Prayer</h2>
+      <p class="text-gray-300">Let us agree with you in faith. Drop your request and we’ll pray for you.</p>
+    </div>
+
+    <form id="prayerForm" class="space-y-4">
+      {% csrf_token %}
+      <input type="text" name="name" placeholder="Your Name" required
+             class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
+
+      <input type="email" name="email" placeholder="Your Email" required
+             class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
+
+      <textarea name="message" rows="5" placeholder="Type your prayer request here..." required
+                class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
+
+      <button id="submitBtn" type="submit"
+              class="w-full bg-pink-600 hover:bg-pink-700 py-3 rounded-lg font-semibold transition duration-300 flex items-center justify-center gap-2">
+        <span id="btnText">Send Request</span>
+        <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 100 16v-4l-3.5 3.5L12 24v-4a8 8 0 01-8-8z">
+          </path>
+        </svg>
+      </button>
+    </form>
+
+    <!-- ✅ Success Message -->
+    <div id="successMessage" class="hidden mt-6 text-green-400 text-center font-medium animate-fade-in">
+      🙌🏽 Prayer request sent successfully. God is already at work!
+    </div>
+  </div>
+</section>
+<!-- 🔥 The End  of Prayer Request -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 🔥 The Beginning  of   Footer -->
+<footer class="relative bg-gradient-to-r from-purple-800 to-indigo-900 text-white pt-1 overflow-hidden">
+  <!-- 🔥 Fire Pulse Line -->
+  <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-yellow-400 to-red-600 animate-pulse"></div>
+
+  <!-- 🌟 Footer Content -->
+  <div class="max-w-6xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+    <div class="flex items-center space-x-4">
+      <img src="static/login-form/images/GMMI_LOGO.png" class="w-16 h-16 rounded-full shadow-md">
+      <div>
+        <h2 class="text-xl font-bold">GMMI</h2>
+        <p class="text-sm">Global Mandate Ministry International</p>
+      </div>
+    </div>
+    <ul class="flex space-x-6 text-sm">
+      <li><a href="{% url 'about' %}" class="hover:text-yellow-400">About</a></li>
+      <li><a href="#ministries" class="hover:text-yellow-400">Ministries</a></li>
+      <li><a href="{% url 'contact' %}" class="hover:text-yellow-400">Contact</a></li>
+      <li><a href="{% url 'donation_form' %}" class="hover:text-yellow-400">Give</a></li>
+    </ul>
+  </div>
+
+  <!-- 🔚 Bottom Text -->
+  <div class="border-t border-white/10 mt-6 py-4 text-center text-sm text-white/60">
+    &copy; <span id="footerYear"></span> GMMI - All Glory to Jesus.
+  </div>
+</footer>
+<!-- 🔥 The End  of  Footer  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- PRELOADER: Fast Load + Instant Scripture Typing + Background -->
+<div id="preloader4" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-cover bg-center text-white transition-opacity duration-700"
+     style="background-image: url('static/login-form/images/wall21.jpg');">
+
+  <!-- Logo -->
+  <img src="static/login-form/images/GMMI_LOGO.png" alt="GMMI Logo" class="h-20 w-20 animate-bounce" />
+
+  <!-- Scripture -->
+  <p id="scripture4" class="mt-6 px-4 text-sm text-center font-mono leading-relaxed max-w-md"></p>
+
+  <!-- Loading with animated dots -->
+  <p id="loadingText" class="mt-2 text-xs font-mono tracking-wide uppercase text-gray-200">Loading<span id="dots">.</span></p>
+</div>
+<!-- 🔥 The End  of  preloader-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Announcement Modal New Update -->
+<div id="customModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl mx-4 p-6 relative overflow-y-auto max-h-[90vh]">
+    <button id="closeModalBtn" class="absolute top-3 right-3 text-3xl text-gray-600 hover:text-red-600 font-bold">&times;</button>
+    <h3 class="text-xl md:text-2xl font-bold text-center mb-6 text-black">Announcements - 2025</h3>
+
+    <div class="space-y-10">
+      {% for update in updates %}
+      <div class="border-b border-gray-300 pb-6">
+        <p class="text-sm text-right text-gray-600 mb-2">
+          <strong>Date:</strong> <span class="text-red-600">{{ update.upload_date }}</span>
+        </p>
+
+        {% if update.image %}
+        <div class="mb-4">
+          <img src="{{ update.image.url }}" alt="Update Image" class="w-full rounded-md">
+        </div>
+        {% endif %}
+
+        <div class="text-center font-semibold text-lg text-black mb-3">
+          {{ update.title }}
+        </div>
+
+        <div class="text-gray-800 mb-3">
+          {{ update.content|safe }}
+        </div>
+
+        <p class="text-sm text-right text-gray-500">
+          <strong>Posted by - </strong><span>{{ update.user.username }}</span>
+        </p>
+      </div>
+      {% empty %}
+      <p class="text-center text-gray-500">No updates yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<!-- End of Announcement Modal New Update -->
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Beginning of the script for each section -->
+
+
+            <!-- Beginning of Announcement script section -->
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                const modal = document.getElementById('customModal');
+                const closeBtn = document.getElementById('closeModalBtn');
+
+                function openModal() {
+                  modal.classList.remove('hidden');
+                  document.body.classList.add('overflow-hidden');
+                }
+
+                function closeModal() {
+                  modal.classList.add('hidden');
+                  document.body.classList.remove('overflow-hidden');
+                }
+
+                const openBtnDesktop = document.getElementById('openModalBtnDesktop');
+                const openBtnMobile = document.getElementById('openModalBtnMobile');
+
+                if (openBtnDesktop) {
+                  openBtnDesktop.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    openModal();
+                  });
+                }
+
+                if (openBtnMobile) {
+                  openBtnMobile.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    openModal();
+                  });
+                }
+
+                closeBtn.addEventListener('click', function () {
+                  closeModal();
+                });
+              });
+            </script>
+          <!-- The End of Announcement script section -->
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+          <!-- Beginning of preloader script section -->
+          <script>
+            document.addEventListener('DOMContentLoaded', () => {
+              // Scriptures
+              const scriptures = [
+                '"I can do all things through Christ who strengthens me." – Philippians 4:13',
+                '"The Lord is my shepherd; I shall not want." – Psalm 23:1',
+                '"Trust in the Lord with all your heart." – Proverbs 3:5',
+                '"They that wait upon the Lord shall renew their strength." – Isaiah 40:31',
+                '"The name of the Lord is a strong tower." – Proverbs 18:10',
+                '"No weapon formed against you shall prosper." – Isaiah 54:17',
+                '"In Him was life; and the life was the light of men." – John 1:4'
+              ];
+              const selected = scriptures[Math.floor(Math.random() * scriptures.length)];
+              const el = document.getElementById('scripture4');
+
+              // Typewriter logic
+              let idx = 0;
+              function typeScripture() {
+                if (idx < selected.length) {
+                  el.textContent += selected[idx];
+                  idx++;
+                  setTimeout(typeScripture, 40);
+                }
+              }
+              typeScripture(); // Start immediately
+
+              // Animate dots
+              const dotsEl = document.getElementById('dots');
+              let dotCount = 1;
+              const dotInterval = setInterval(() => {
+                dotsEl.textContent = '.'.repeat(dotCount);
+                dotCount = dotCount < 3 ? dotCount + 1 : 1;
+              }, 400);
+
+              // Hide after short time
+              setTimeout(() => {
+                const preloader = document.getElementById('preloader4');
+                preloader.classList.add('opacity-0');
+                setTimeout(() => {
+                  clearInterval(dotInterval);
+                  preloader.style.display = 'none';
+                }, 700);
+              }, 4500); // Show for 4.5s
+            });
+          </script>
+          <!-- The End of preloader script section -->
+
+
+
+
+
+
+
+
+          
+
+
+
+
+          <!-- ✅ The Beginning of the Prayer Request Submission Script -->
+          <script>
+            function getCookie(name) {
+              let cookieValue = null;
+              if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                  }
+                }
+              }
+              return cookieValue;
+            }
+
+            document.getElementById('prayerForm').addEventListener('submit', function(e) {
+              e.preventDefault();
+
+              const form = e.target;
+              const successMsg = document.getElementById('successMessage');
+              const submitBtn = document.getElementById('submitBtn');
+              const btnText = document.getElementById('btnText');
+              const spinner = document.getElementById('spinner');
+              const formData = new FormData(form);
+
+              // ⏳ Start Loading
+              submitBtn.disabled = true;
+              btnText.textContent = "Sending...";
+              spinner.classList.remove('hidden');
+
+              fetch("{% url 'prayer-request' %}", {
+                method: "POST",
+                headers: {
+                  "X-CSRFToken": getCookie('csrftoken'),
+                },
+                body: formData
+              })
+              .then(response => {
+                // ✅ Stop Loading
+                submitBtn.disabled = false;
+                btnText.textContent = "Send Request";
+                spinner.classList.add('hidden');
+
+                if (response.ok) {
+                  form.reset();
+                  successMsg.classList.remove('hidden');
+                  setTimeout(() => {
+                    successMsg.classList.add('hidden');
+                  }, 5000);
+                } else {
+                  alert("Something went wrong while submitting. Please try again.");
+                }
+              })
+              .catch(error => {
+                console.error("Submission error:", error);
+                submitBtn.disabled = false;
+                btnText.textContent = "Send Request";
+                spinner.classList.add('hidden');
+                alert("Network error. Please try again.");
+              });
+            });
+          </script>
+      <!-- ✅ The End of the Prayer Request Submission Script -->
+
+
+
+
+
+
+
+
+
+
+
+
+          <!-- ✅ The Beginning of the Footer Script -->
+          <script>
+            document.getElementById("footerYear").textContent = new Date().getFullYear();
+          </script>
+          <!-- ✅ The End of the Footer Script -->
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- ✅ The Beginning of the card script  -->
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const section = document.getElementById('perspective-carousel-section');
+            const carousel = section.querySelector('.carousel');
+            const leftArrow = section.querySelector('.carousel-left-arrow');
+            const rightArrow = section.querySelector('.carousel-right-arrow');
+
+            const ministries = [
+              {
+                name: "Children Ministry",
+                image: "{% static 'login-form/images/Kidspray3.png' %}",
+                color: "bg-pink-500",
+                link: "/children-ministry/",
+                tag: "Children"
+              },
+              {
+                name: "Women Ministry",
+                image: "{% static 'login-form/images/Womenpray3.png' %}",
+                color: "bg-red-600",
+                link: "/women-ministry/",
+                tag: "Women"
+              },
+              {
+                name: "Evangelism Ministry",
+                image: "{% static 'login-form/images/Evangelism3.png' %}",
+                color: "bg-yellow-600",
+                link: "/evangelism-ministry/",
+                tag: "Evangelism"
+              },
+              {
+                name: "Youth Ministry",
+                image: "{% static 'login-form/images/Youthpray3.png' %}",
+                color: "bg-green-600",
+                link: "/youth-ministry/",
+                tag: "Youth"
+              },
+              {
+                name: "Worship Ministry",
+                image: "{% static 'login-form/images/Worship2.png' %}",
+                color: "bg-purple-600",
+                link: "/worship-ministry/",
+                tag: "Worship"
+              },
+              {
+                name: "Men Ministry",
+                image: "{% static 'login-form/images/Menpray3.png' %}",
+                color: "bg-blue-600",
+                link: "/men-ministry/",
+                tag: "Men"
+              }
+            ];
+
+            function renderCarousel() {
+              carousel.innerHTML = "";
+              ministries.forEach(ministry => {
+                const card = document.createElement("div");
+                card.className = "card snap-start relative transform-gpu shadow-2xl flex-shrink-0 w-56 sm:w-72 h-[30rem] sm:h-[38rem] rounded-3xl overflow-hidden";
+                card.innerHTML = `
+                  <img src="${ministry.image}" alt="${ministry.name}" class="w-full h-full object-cover absolute inset-0 z-0" />
+                  <div class="absolute bottom-6 left-6 z-10 text-white">
+                    <span class="${ministry.color} text-white px-3 py-1 rounded-full font-semibold text-xs sm:text-sm shadow-lg uppercase">${ministry.tag}</span>
+                    <h3 class="mt-2 text-xl sm:text-2xl font-extrabold drop-shadow-lg">${ministry.name}</h3>
+                    <a href="${ministry.link}" class="mt-4 inline-block px-8 py-1 rounded-full text-gray-200 font-semibold bg-black bg-opacity-60 hover:bg-opacity-30 hover:text-white">Tap to Connect</a>
+                  </div>
+                `;
+                carousel.appendChild(card);
+              });
+
+              // Reattach hover effects
+              const cards = carousel.querySelectorAll('.card');
+              cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                  cards.forEach(c => {
+                    if (c !== card) {
+                      c.style.transform = 'rotateY(15deg) scale(0.9)';
+                      c.style.filter = 'brightness(0.7)';
+                      c.style.opacity = '0.7';
+                      c.style.zIndex = '10';
+                    } else {
+                      c.style.transform = 'rotateY(0deg) scale(1.1)';
+                      c.style.filter = 'brightness(1)';
+                      c.style.opacity = '1';
+                      c.style.zIndex = '50';
+                    }
+                  });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                  cards.forEach(c => {
+                    c.style.transform = 'rotateY(15deg) scale(0.95)';
+                    c.style.filter = 'brightness(0.85)';
+                    c.style.opacity = '0.9';
+                    c.style.zIndex = '1';
+                  });
+                });
+              });
+            }
+
+            renderCarousel();
+
+            rightArrow.addEventListener('click', () => {
+              ministries.push(ministries.shift());
+              renderCarousel();
+            });
+
+            leftArrow.addEventListener('click', () => {
+              ministries.unshift(ministries.pop());
+              renderCarousel();
+            });
+
+            function isMobileScreen() {
+              return window.innerWidth < 640;
+            }
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            carousel.addEventListener('mousedown', (e) => {
+              if (!isMobileScreen()) return;
+              isDown = true;
+              carousel.classList.add('cursor-grabbing');
+              startX = e.pageX - carousel.offsetLeft;
+              scrollLeft = carousel.scrollLeft;
+            });
+
+            carousel.addEventListener('mouseup', () => {
+              if (!isMobileScreen()) return;
+              isDown = false;
+              carousel.classList.remove('cursor-grabbing');
+            });
+
+            carousel.addEventListener('mouseleave', () => {
+              if (!isMobileScreen()) return;
+              isDown = false;
+              carousel.classList.remove('cursor-grabbing');
+            });
+
+            carousel.addEventListener('mousemove', (e) => {
+              if (!isMobileScreen() || !isDown) return;
+              e.preventDefault();
+              const x = e.pageX - carousel.offsetLeft;
+              const walk = (x - startX) * 2;
+              carousel.scrollLeft = scrollLeft - walk;
+            });
+
+            let touchStartX = 0;
+            let touchScrollLeft = 0;
+
+            carousel.addEventListener('touchstart', (e) => {
+              touchStartX = e.touches[0].pageX;
+              touchScrollLeft = carousel.scrollLeft;
+            });
+
+            carousel.addEventListener('touchmove', (e) => {
+              const touchX = e.touches[0].pageX;
+              const walk = (touchStartX - touchX) * 2;
+              carousel.scrollLeft = touchScrollLeft + walk;
+            });
+          });
+        </script>
+      <!-- ✅ The End of the card script  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- The Beginning of the Countdown Script -->
+        <script>
+          let marqueeShown = false;
+          let welcomeShown = false;
+
+          function countdown() {
+            const now = new Date();
+
+            const nextSunday = new Date(now);
+            const dayOffset = (7 - now.getDay()) % 7;
+            nextSunday.setDate(now.getDate() + (now.getDay() === 0 && now.getHours() >= 8 ? 7 : dayOffset || 7));
+            nextSunday.setHours(8, 0, 0, 0);
+
+            const heading = document.getElementById("countdown-heading");
+            const messageBox = document.getElementById("countdown-message");
+            const grid = document.getElementById("countdown-grid");
+
+            const sunday8 = new Date(now);
+            sunday8.setHours(8, 0, 0, 0);
+
+            const sunday2 = new Date(now);
+            sunday2.setHours(14, 0, 0, 0);
+
+            if (now.getDay() === 0) {
+              if (now >= sunday8 && now < sunday2) {
+                // Service in progress
+                grid.style.display = "none";
+                if (!marqueeShown) {
+                  heading.textContent = "";
+                  messageBox.innerHTML = `
+                    <marquee behavior="scroll" direction="left" scrollamount="5" class="text-yellow-400 font-semibold">
+                      ✨ The service is in progress... ⏰ Kindly join on time.
+                    </marquee>`;
+                  marqueeShown = true;
+                  welcomeShown = false;
+                }
+                return;
+              } else if (now < sunday8) {
+                // Before 8AM on Sunday
+                grid.style.display = "none";
+                if (!welcomeShown) {
+                  heading.textContent = "Welcome to Sunday 🙌";
+                  messageBox.textContent = "Our powerful service starts shortly by 10:00 AM. Stay expectant!";
+                  welcomeShown = true;
+                  marqueeShown = false;
+                }
+                return;
+              }
+            }
+
+            // Other days: show countdown
+            const diff = nextSunday - now;
+            updateCountdown(diff);
+            grid.style.display = "grid";
+            heading.textContent = "Next Sunday Service Countdown";
+            messageBox.textContent = "Be part of our transformational Sunday encounter. It’s not just a service — it’s an experience!";
+            marqueeShown = false;
+            welcomeShown = false;
+          }
+
+          function updateCountdown(diff) {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById("ndays").textContent = String(days).padStart(2, "0");
+            document.getElementById("nhours").textContent = String(hours).padStart(2, "0");
+            document.getElementById("nminutes").textContent = String(minutes).padStart(2, "0");
+            document.getElementById("nseconds").textContent = String(seconds).padStart(2, "0");
+          }
+
+          window.addEventListener("DOMContentLoaded", () => {
+            countdown();
+            setInterval(countdown, 1000);
+          });
+        </script>
+      <!-- The End of the Countdown Script -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- The Beginning of the Living Word Typing script -->
+        <script>
+          (function () {
+            const scriptures = [
+              "The Lord is my shepherd; I shall not want. – Psalm 23:1",
+              "I can do all things through Christ who strengthens me. – Philippians 4:13",
+              "For God so loved the world that He gave His only Son. – John 3:16",
+              "Be still, and know that I am God. – Psalm 46:10",
+              "No weapon formed against you shall prosper. – Isaiah 54:17",
+              "Trust in the Lord with all your heart. – Proverbs 3:5",
+              "The joy of the Lord is your strength. – Nehemiah 8:10",
+              "He that is in you is greater than he that is in the world. – 1 John 4:4",
+              "Even though I walk through the valley... I will fear no evil. – Psalm 23:4",
+              "Call unto me and I will answer you. – Jeremiah 33:3",
+              "They that wait upon the Lord shall renew their strength. – Isaiah 40:31",
+              "God is our refuge and strength. – Psalm 46:1",
+              "Delight yourself in the Lord... – Psalm 37:4",
+              "My grace is sufficient for you. – 2 Corinthians 12:9",
+              "If God is for us, who can be against us? – Romans 8:31",
+              "Seek first the kingdom of God... – Matthew 6:33",
+              "Create in me a clean heart, O God. – Psalm 51:10",
+              "We walk by faith, not by sight. – 2 Corinthians 5:7",
+              "I am the way, the truth, and the life. – John 14:6",
+              "Come to me, all who are weary... – Matthew 11:28",
+              "Let everything that has breath praise the Lord. – Psalm 150:6",
+              "The name of the Lord is a strong tower. – Proverbs 18:10",
+              "Your word is a lamp to my feet. – Psalm 119:105",
+              "I will never leave you nor forsake you. – Hebrews 13:5",
+              "Blessed are the pure in heart... – Matthew 5:8",
+              // repeated or mixed to make 100 entries
+              ...Array(75).fill(null).map(() => [
+                "The Lord is my shepherd; I shall not want. – Psalm 23:1",
+                "I can do all things through Christ who strengthens me. – Philippians 4:13",
+                "Trust in the Lord with all your heart. – Proverbs 3:5",
+                "Even though I walk through the valley... I will fear no evil. – Psalm 23:4",
+                "Be still, and know that I am God. – Psalm 46:10"
+              ][Math.floor(Math.random() * 5)])
+            ];
+
+            let i = 0, j = 0;
+            let isDeleting = false;
+            const el = document.getElementById("scripture");
+
+            function startScriptureTyping() {
+              const verse = scriptures[i % scriptures.length];
+              if (!isDeleting) {
+                el.innerHTML = verse.slice(0, j + 1);
+                j++;
+                if (j === verse.length) {
+                  isDeleting = true;
+                  setTimeout(startScriptureTyping, 3500);
+                  return;
+                }
+              } else {
+                el.innerHTML = verse.slice(0, j - 1);
+                j--;
+                if (j === 0) {
+                  isDeleting = false;
+                  i++;
+                }
+              }
+              setTimeout(startScriptureTyping, isDeleting ? 25 : 55);
+            }
+
+            startScriptureTyping();
+          })();
+        </script>
+      <!-- The End of the Living Word Typing script -->
+
+
+
+
+
+
+      
+
+        <!--The Beginning Hero typing script -->
+        <script>
+          new Typed("#typing", {
+            strings: ["GMMI", "Empowering Lives", "Raising Champions", "Impacting the Nations"],
+            typeSpeed: 70,
+            backSpeed: 40,
+            backDelay: 1500,
+            loop: true,
+          });
+        </script>
+      <!--The End Hero typing script -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- 🔥 The Beginning of Script for Head Menu Dropdowns -->
+        <script>
+          document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+          });
+
+          function toggleSubMenu(id) {
+            const dropdowns = document.querySelectorAll('[id$="Dropdown"]');
+            dropdowns.forEach(el => {
+              if (el.id !== id) {
+                el.classList.add('hidden');
+              }
+            });
+            const current = document.getElementById(id);
+            current.classList.toggle('hidden');
+          }
+
+          document.addEventListener('click', function (e) {
+            ['desktopConnectDropdown', 'desktopTestimonyDropdown', 'desktopAccountDropdown'].forEach(id => {
+              const dropdown = document.getElementById(id);
+              const button = dropdown?.previousElementSibling;
+              if (dropdown && !dropdown.contains(e.target) && !button.contains(e.target)) {
+                dropdown.classList.add('hidden');
+              }
+            });
+          });
+        </script>
+        <!-- 🔥 The End of Script for Head Menu Dropdowns -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- End of the script for each section -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} 
+<!-- 🌟 Seamless GMSOM Testimony Marquee -->
+<section class="bg-gradient-to-br from-black via-gray-900 to-black py-10 overflow-hidden">
+  <div class="relative">
+    <div class="marquee-track flex gap-12 animate-marquee px-6 whitespace-nowrap">
+      {% for testimony in testimonies %}
+        <div class="text-lg font-medium text-yellow-400 min-w-max flex-shrink-0">
+          {{ testimony.emoji|safe }} "{{ testimony.quote|safe }}" – {{ testimony.name }}
+        </div>
+      {% endfor %}
+      {% for testimony in testimonies %}
+        <div class="text-lg font-medium text-yellow-400 min-w-max flex-shrink-0">
+          {{ testimony.emoji|safe }} "{{ testimony.quote|safe }}" – {{ testimony.name }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 💫 Marquee Animation CSS -->
+<style>
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+</style>
+
+ {% endcomment %}

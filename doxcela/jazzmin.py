@@ -13,7 +13,7 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Doxcela",
 
     # Logo to use for your site, must be present in static files
-    "site_logo": "/img/doxcela2-modified.png",
+    "site_logo": "/img/GMMI_LOGO.png",
 
     
 

@@ -8,11 +8,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title> Doxcela</title>
+<title> GMMI</title>
 <meta name="description" content="description">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Favicon -->
-<link rel="icon" href="{% static 'login-form/images/doxcela2.png' %}" type="image/png">
+<link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png">
 <!-- Plugins CSS -->
 <link rel="stylesheet" href="{% static 'assets/css/plugins.css' %}">
 <!-- Bootstap CSS -->
@@ -388,7 +388,7 @@ body.modal-open, html.modal-open {
                     <p class="phone-no"><i class="anm anm-phone-s"></i> +234 8022854677</p>
                 </div>
                 <div class="col-sm-4 col-md-4 col-lg-4 d-none d-lg-none d-md-block d-lg-block">
-                	<div class="text-center"><p class="top-header_middle-text"> Doxcela</p></div>
+                	<div class="text-center"><p class="top-header_middle-text"> GMMI</p></div>
                 </div>
                 <div class="col-2 col-sm-4 col-md-3 col-lg-4 text-right">
                 	<span class="user-menu d-block d-lg-none"><i class="anm anm-user-al" aria-hidden="true"></i></span>
@@ -414,11 +414,11 @@ body.modal-open, html.modal-open {
             	<!--Desktop Logo-->
                 <div class="logo col-md-2 col-lg-2 d-none d-lg-block">
                     <a href="{% url 'excel_page' %}" style="display: flex; align-items: center; gap: 5px; text-decoration: none;">
-                        <img src="{% static 'login-form/images/doxcela2.png' %}" 
-                             alt="Doxcela Logo" 
-                             title="Doxcela Logo" 
+                        <img src="{% static 'login-form/images/GMMI_LOGO.png' %}" 
+                             alt="GMMI Logo" 
+                             title="GMMI Logo" 
                              style="width: 30px; height: 30px;">  
-                        <span style="font-size: 24px; line-height: 30px; font-weight: bold;">DOXCELA</span>
+                        <span style="font-size: 24px; line-height: 30px; font-weight: bold;">GMMI</span>
                     </a>
                     
                 </div>
@@ -434,7 +434,7 @@ body.modal-open, html.modal-open {
                       <nav class="grid__item" id="AccessibleNav">
                         <!-- for mobile -->
                         <ul id="siteNav" class="site-nav medium center hidearrow">
-                            <li class="lvl1 parent "><a href="{% url 'excel_page' %}">{% trans "Home" %} </a>
+                            <li class="lvl1 parent "><a href="{% url 'welcome' %}">{% trans "Home" %} </a>
 
                             </li>
 
@@ -508,11 +508,11 @@ body.modal-open, html.modal-open {
                 <div class="col-6 col-sm-6 col-md-6 col-lg-2 d-block d-lg-none mobile-logo">
                 	<div class="logo">
                         <a href="{% url 'excel_page' %}" style="display: flex; align-items: center; gap: 5px; text-decoration: none;">
-                            <img src="{% static 'login-form/images/doxcela2.png' %}" 
-                                 alt="Doxcela Logo" 
-                                 title="Doxcela Logo" 
+                            <img src="{% static 'login-form/images/GMMI_LOGO.png' %}" 
+                                 alt="GMMI Logo" 
+                                 title="GMMI Logo" 
                                  style="width: 30px; height: 30px;">  
-                            <span style="font-size: 24px; line-height: 30px; font-weight: bold;">DOXCELA</span>
+                            <span style="font-size: 24px; line-height: 30px; font-weight: bold;">GMMI</span>
                         </a>
                     </div>
                 </div>
@@ -532,7 +532,7 @@ body.modal-open, html.modal-open {
     <div class="mobile-nav-wrapper" role="navigation">
         <div class="closemobileMenu"><i class="icon anm anm-times-l pull-right"></i> {% trans "Close Menu" %}</div>
         <ul id="MobileNav" class="mobile-nav">
-            <li class="lvl1 parent "><a href="{% url 'excel_page' %}">{% trans "Home" %} </a></li>
+            <li class="lvl1 parent "><a href="{% url 'welcome' %}">{% trans "Home" %} </a></li>
             {% if request.user.is_superuser %}
             <li class="lvl1 parent "><a href="{% url 'home' %}">{% trans "Upload Media Files" %} </a></li>
             <li class="lvl1 parent "><a href="{% url 'upload_pdf' %}">{% trans "Upload PDF" %} </a></li>
@@ -842,7 +842,7 @@ body.modal-open, html.modal-open {
                                     <li><a href="{% url 'home' %}">{% trans "Upload Media Files" %} </a></li>
                                     <li><a href="{% url 'upload_pdf' %}">{% trans "Upload PDF" %} </a></li>
                                     {% endif %}
-                                    <li><a href="{% url 'excel_page' %}">{% trans "Home" %} </a></li>
+                                    <li><a href="{% url 'welcome' %}">{% trans "Home" %} </a></li>
                             </ul>
                         </div>
                         <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
@@ -882,7 +882,7 @@ body.modal-open, html.modal-open {
                 <div class="footer-bottom">
                 	<div class="row">
                     	<!--Footer Copyright-->
-	                	<div class="col-12 col-sm-12 col-md-6 col-lg-6 order-1 order-md-0 order-lg-0 order-sm-1 copyright text-sm-center text-md-left text-lg-left"><span></span> <a href="templateshub.net">Doxcela</a></div>
+	                	<div class="col-12 col-sm-12 col-md-6 col-lg-6 order-1 order-md-0 order-lg-0 order-sm-1 copyright text-sm-center text-md-left text-lg-left"><span></span> <a href="templateshub.net">GMMI</a></div>
                         <!--End Footer Copyright-->
 
 

@@ -87,3 +87,16 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['fullname', 'dob', 'profile_image', 'gender', 'phone', 'gmail']
+
+
+
+
+
+# prayer/forms.py
+from django import forms
+from .models import PrayerRequest
+
+class PrayerRequestForm(forms.ModelForm):
+    class Meta:
+        model = PrayerRequest
+        fields = ['name', 'email', 'message']

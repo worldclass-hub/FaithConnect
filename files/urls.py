@@ -4,7 +4,10 @@ from django.conf.urls.i18n import set_language
 from . import views  # Make sure to import views here
 
 urlpatterns = [
-    path('', views.excel_page, name='excel_page'),  # Ensure the path is registered
+
+    path('', views.welcome_view, name='welcome'),
+
+    path('excel_page/', views.excel_page, name='excel_page'),  # Ensure the path is registered
     path("login/", views.user_login, name="login"),
     path("home/", views.home, name="home"),  # Home page URL
     path('about/', views.about_view, name='about'),  # Ensure the path is registered
@@ -58,6 +61,20 @@ urlpatterns = [
     path("thank-you/", views.thank_you, name="thank_you"),
 
     path('set-language/', set_language, name='set_language'),  # 👈 use this
+
+
+    path('children-ministry/', views.children_ministry, name='children_ministry'),
+    path('women-ministry/', views.women_ministry, name='women_ministry'),
+    path('evangelism-ministry/', views.evangelism_ministry, name='evangelism_ministry'),
+    path('youth-ministry/', views.youth_ministry, name='youth_ministry'),
+    path('worship-ministry/', views.worship_ministry, name='worship_ministry'),
+    path('men-ministry/', views.men_ministry, name='men_ministry'),
+    path('overview/', views.overview, name='overview'),
+    path('prayer/', views.prayer_request_view, name='prayer-request'),
+    # path('testimony/', views.testimony_view, name='testimony'),
+
+
+
 
 
 ]

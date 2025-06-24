@@ -7,10 +7,27 @@ from django.shortcuts import redirect
 from django.db.models import Q
 from django.templatetags.static import static
 from django.core.mail import send_mail
+from io import BytesIO
+
+# PDF
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors
+
+# Word
+from docx import Document
+from docx.shared import Pt, RGBColor, Inches
+from PIL import Image
+from docx.oxml import parse_xml  # ✅ Correct import
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+
 
 import os
 import csv
 import io
+import csv
+import datetime
 from calendar import month_name
 from collections import defaultdict
 from reportlab.pdfgen import canvas
@@ -24,8 +41,12 @@ from .models import (
     FrenchHymn, YorubaHymn, IgboHymn, HausaHymn, ChineseHymn, GermanHymn,
     NewsletterSubscriber, DailyNewsletter,
     NewUpdate, UserProfile,
-    ComingSoonPage, AboutPage, ContactMessage, AutoReplyMessage
+    ComingSoonPage, AboutPage, ContactMessage, AutoReplyMessage, PrayerRequest
 )
+
+
+
+
 
 
 
@@ -626,3 +647,217 @@ class DailyNewsletterAdmin(admin.ModelAdmin):
 # Registering models in the admin panel
 admin.site.register(NewsletterSubscriber)  # To show the list of subscribers
 admin.site.register(DailyNewsletter, DailyNewsletterAdmin)  # To show the newsletter list and actions
+
+
+
+
+
+
+
+
+
+
+@admin.register(PrayerRequest)
+class PrayerRequestAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('name', 'email', 'message')
+    readonly_fields = ('name', 'email', 'message', 'created_at')
+    ordering = ('-created_at',)
+    actions = ['export_as_csv', 'export_as_pdf', 'export_as_word']
+
+    def has_add_permission(self, request):
+        return False
+
+    # ✅ CSV Export
+    def export_as_csv(self, request, queryset):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="prayer_requests.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Name', 'Email', 'Message', 'Created At'])
+        for prayer in queryset:
+            writer.writerow([prayer.name, prayer.email, prayer.message, prayer.created_at])
+        return response
+    export_as_csv.short_description = "📤 Export selected to CSV"
+
+    # ✅ PDF Export
+    def export_as_pdf(self, request, queryset):
+        buffer = BytesIO()
+        p = canvas.Canvas(buffer, pagesize=A4)
+        width, height = A4
+        y = height - 100
+        page_number = 1
+
+        logo_path = os.path.join('static', 'login-form', 'images', 'GMMI_LOGO.png')
+        watermark_text = "GMMIConnect"
+
+        def draw_header():
+            nonlocal y
+            try:
+                logo = ImageReader(logo_path)
+                p.drawImage(logo, 40, height - 80, width=60, height=60, mask='auto')
+            except:
+                pass
+            p.setFont("Helvetica-Bold", 16)
+            p.drawString(110, height - 60, "Prayer Requests Report")
+            p.setFont("Helvetica", 10)
+            p.drawRightString(width - 40, height - 60, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+            y = height - 100
+
+        def draw_footer():
+            p.setFont("Helvetica-Oblique", 8)
+            p.setFillColor(colors.grey)
+            p.drawCentredString(width / 2.0, 20, f"Page {page_number}")
+            p.saveState()
+            p.setFont("Helvetica-Bold", 40)
+            p.setFillColorRGB(0.9, 0.9, 0.9)
+            p.translate(width / 2, height / 2)
+            p.rotate(45)
+            p.drawCentredString(0, 0, watermark_text)
+            p.restoreState()
+
+        draw_header()
+        p.setFont("Helvetica", 11)
+
+        for obj in queryset:
+            if y < 100:
+                draw_footer()
+                p.showPage()
+                page_number += 1
+                draw_header()
+                p.setFont("Helvetica", 11)
+
+            p.setFillColor(colors.black)
+            p.drawString(50, y, f"Name: {obj.name}")
+            y -= 18
+            p.drawString(50, y, f"Email: {obj.email}")
+            y -= 18
+            p.drawString(50, y, f"Date: {obj.created_at.strftime('%Y-%m-%d %H:%M')}")
+            y -= 18
+            p.drawString(50, y, "Message:")
+            y -= 16
+
+            for line in obj.message.splitlines():
+                if y < 80:
+                    draw_footer()
+                    p.showPage()
+                    page_number += 1
+                    draw_header()
+                    p.setFont("Helvetica", 11)
+                p.drawString(70, y, line.strip())
+                y -= 14
+
+            y -= 20
+
+        draw_footer()
+        p.save()
+        buffer.seek(0)
+        return HttpResponse(buffer, content_type='application/pdf', headers={
+            'Content-Disposition': 'attachment; filename="prayer_requests.pdf"'
+        })
+    export_as_pdf.short_description = "🧾 Export selected to PDF"
+
+    # ✅ Word Export with Watermark + Logo
+    def export_as_word(self, request, queryset):
+        document = Document()
+        section = document.sections[0]
+        header = section.header
+        header_paragraph = header.paragraphs[0]
+
+        # 🔰 Logo
+        logo_path = os.path.join('static', 'login-form', 'images', 'GMMI_LOGO.png')
+        if os.path.exists(logo_path):
+            run = header_paragraph.add_run()
+            run.add_picture(logo_path, width=Inches(1.5))
+            header_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+        # 💧 Watermark using VML XML
+        watermark_paragraph = header.add_paragraph()
+        watermark_run = watermark_paragraph.add_run()
+
+        shape_xml = r"""
+        <w:pict xmlns:v="urn:schemas-microsoft-com:vml"
+                xmlns:w="urn:schemas-microsoft-com:office:word"
+                xmlns:o="urn:schemas-microsoft-com:office:office">
+            <v:shape id="WordArt1" o:spid="_x0000_s1025" type="#_x0000_t136"
+                     style="position:absolute; margin-left:0; margin-top:0;
+                            width:500pt; height:100pt; z-index:-251654144;
+                            mso-wrap-edited:f; rotation:315"
+                     fillcolor="#e6e6e6" stroked="f">
+                <v:textpath style="font-family:Calibri; font-size:36pt"
+                            on="t" string="GMMIConnect"/>
+                <v:fill opacity="0.1"/>
+            </v:shape>
+        </w:pict>
+        """
+        watermark_element = parse_xml(shape_xml)  # ✅ fixed line
+        watermark_run._r.append(watermark_element)
+
+        # 📄 Title
+        document.add_paragraph()
+        title = document.add_heading("Prayer Requests Report", level=1)
+        title.runs[0].font.size = Pt(24)
+        title.runs[0].font.name = "Calibri"
+
+        # 🗓️ Date
+        date_paragraph = document.add_paragraph()
+        date_run = date_paragraph.add_run(f"Date Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}")
+        date_run.bold = True
+        date_run.font.size = Pt(10)
+        date_run.font.name = "Calibri"
+        document.add_paragraph()
+
+        for obj in queryset:
+            header = document.add_paragraph()
+            header_run = header.add_run("🧎🏽 Prayer Request")
+            header_run.bold = True
+            header_run.font.size = Pt(13)
+            header_run.font.name = "Calibri"
+            header_run.font.color.rgb = RGBColor(46, 116, 181)
+
+            p1 = document.add_paragraph()
+            r1 = p1.add_run(f"Name: {obj.name}")
+            r1.bold = True
+            r1.font.size = Pt(11)
+
+            p2 = document.add_paragraph()
+            r2 = p2.add_run(f"Email: {obj.email}")
+            r2.font.size = Pt(11)
+
+            p3 = document.add_paragraph()
+            r3 = p3.add_run(f"Date: {obj.created_at.strftime('%Y-%m-%d %H:%M')}")
+            r3.font.size = Pt(11)
+
+            document.add_paragraph("Message:", style="Intense Quote")
+
+            for line in obj.message.splitlines():
+                msg_paragraph = document.add_paragraph()
+                msg_run = msg_paragraph.add_run(line.strip())
+                msg_run.italic = True
+                msg_run.font.size = Pt(10)
+                msg_run.font.color.rgb = RGBColor(100, 100, 100)
+
+            document.add_paragraph("\n")
+
+        buffer = BytesIO()
+        document.save(buffer)
+        buffer.seek(0)
+
+        return HttpResponse(
+            buffer.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            headers={'Content-Disposition': 'attachment; filename="prayer_requests.docx"'}
+        )
+    export_as_word.short_description = "📝 Export selected to Word (.docx)"
+
+
+
+
+
+# from .models import Testimony
+
+
+# @admin.register(Testimony)
+# class TestimonyAdmin(admin.ModelAdmin):
+#     list_display = ("name", "quote", "created_at")
+#     search_fields = ("name", "quote")

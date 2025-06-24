@@ -20,14 +20,25 @@ import re
 import uuid
 import requests
 
-from .forms import FileUploadForm, PDFUploadForm, GalleryUploadForm, UserProfileForm
+
+# prayer/views.py
+
+from .forms import FileUploadForm, PDFUploadForm, GalleryUploadForm, UserProfileForm, PrayerRequestForm
 from .models import (
     FileUpload, PDFUpload, Gallery, Hymn, FrenchHymn, HausaHymn, IgboHymn, YorubaHymn,
     ChineseHymn, GermanHymn, Hymn_Content, AboutPage, ContactMessage, AutoReplyMessage, ComingSoonPage,
     UserProfile, NewUpdate, NewsletterSubscriber, DailyNewsletter, Donation
 )
+from .models import NewUpdate  # import both models
 
+def welcome_view(request):
+    updates = NewUpdate.objects.all().order_by('-upload_date')
+    # testimonies = Testimony.objects.all()
 
+    return render(request, 'files/welcome.html', {
+        'updates': updates,
+        # 'testimonies': testimonies,
+    })
 
 
 
@@ -1604,3 +1615,71 @@ def thank_you(request):
     except Donation.DoesNotExist:
         return render(request, "files/thank_you.html", {"donation": None})
 
+
+
+
+
+
+
+def children_ministry(request):
+    return render(request, 'files/children_ministry.html')
+
+def women_ministry(request):
+    return render(request, 'files/women_ministry.html')
+
+def evangelism_ministry(request):
+    return render(request, 'files/evangelism_ministry.html')
+
+def youth_ministry(request):
+    return render(request, 'files/youth_ministry.html')
+
+def worship_ministry(request):
+    return render(request, 'files/worship_ministry.html')
+
+def men_ministry(request):
+    return render(request, 'files/men_ministry.html')
+
+
+def overview(request):
+    return render(request, 'files/overview.html')
+
+
+
+
+
+
+
+
+def prayer_request_view(request):
+    if request.method == 'POST':
+        form = PrayerRequestForm(request.POST)
+        if form.is_valid():
+            prayer = form.save()
+
+            # Send confirmation email
+            send_mail(
+                subject="🙏 Your Prayer Request Was Received",
+                message=(
+                    f"Dear {prayer.name},\n\n"
+                    f"Thank you for your prayer request:\n\n"
+                    f"\"{prayer.message}\"\n\n"
+                    f"We are standing with you in faith!\n\n"
+                    f"Blessings,\nGMMIConnect Team"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[prayer.email],
+                fail_silently=False,
+            )
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'fail', 'errors': form.errors}, status=400)
+    return JsonResponse({'status': 'invalid'}, status=405)
+
+
+
+
+
+
+def testimony_view(request):
+    testimonies = Testimony.objects.all().order_by('-created_at')
+    return render(request, 'files/testimony.html', {'testimonies': testimonies})

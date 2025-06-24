@@ -1,139 +1,112 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Make a Donation</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GMMI | Donate</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+    }
 
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f0f4f8, #d9e6f2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+    .glass {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-        .container {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #1d3557;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="number"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="number"]:focus {
-            border-color: #4c9aff;
-            outline: none;
-        }
-
-        .btn-submit {
-            background: #1d3557;
-            color: white;
-            border: none;
-            padding: 14px 0;
-            width: 100%;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .btn-submit:hover {
-            background: #16324f;
-        }
-
-        .error {
-            background: #ffe0e0;
-            color: #a70000;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                padding: 25px 20px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-        }
-    </style>
+    .floating-label input:focus ~ label,
+    .floating-label input:not(:placeholder-shown) ~ label {
+      transform: translateY(-24px);
+      scale: 0.85;
+      color: #facc15;
+    }
+  </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Make a Donation</h1>
-        {% if message %}
-            <div class="error">{{ message }}</div>
-        {% endif %}
+<body class="text-white flex items-center justify-center min-h-screen px-4">
 
-        <form method="POST" action="{% url 'initiate_donation' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" placeholder="e.g. Samuel Emenike" required>
-            </div>
+  <div class="max-w-5xl w-full grid md:grid-cols-2 gap-8 p-6">
 
-            <div class="form-group">
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" name="email" placeholder="e.g. you@example.com" required>
-            </div>
+    <!-- LEFT PANEL -->
+    <div class="flex flex-col justify-center">
+      <img src="/static/login-form/images/GMMI_LOGO.png" alt="Logo" class="w-16 h-16 rounded-full mb-4" />
+      <h1 class="text-3xl font-bold leading-tight">Global Mandate Ministry International</h1>
+      <p class="mt-4 text-sm text-gray-300">
+        Support the kingdom assignment. Sow into revival. Give cheerfully, give intentionally.
+      </p>
 
-            <div class="form-group">
-                <label for="phone">Phone Number (Optional):</label>
-                <input type="text" id="phone" name="phone" placeholder="e.g. 08012345678">
-            </div>
+      <div class="mt-6 space-y-2 text-sm">
+        <h2 class="text-yellow-400 font-semibold">Bank Transfer Details</h2>
+        <p><strong>Bank:</strong> Guaranty Trust Bank Plc</p>
+        <p><strong>Acct Name:</strong> Eternity Network International</p>
+        <p><strong>NGN:</strong> 0113343316</p>
+        <p><strong>USD:</strong> 0459170230</p>
+        <p><strong>GBP:</strong> 0459170247</p>
+        <p><strong>EUR:</strong> 0459170089</p>
+        <p><strong>Swift:</strong> GTBINGLA</p>
+        <p><strong>Sort Code:</strong> 058118119</p>
+        <p><strong>Address:</strong> 13/15, Manchester Rd, GRA Zaria, Kaduna</p>
+      </div>
 
-            <div class="form-group">
-                <label for="amount">Amount (NGN):</label>
-                <input type="number" id="amount" name="amount" min="100" step="100" placeholder="Minimum ₦100" required>
-            </div>
-
-            <button type="submit" class="btn-submit">Proceed to Paystack</button>
-        </form>
+      <div class="mt-6 text-sm text-gray-400">
+        <p><strong>Email:</strong> gmmi@gmail.com</p>
+        <p><strong>Phone:</strong> 08022854677</p>
+      </div>
     </div>
+
+    <!-- RIGHT FORM -->
+    <div class="glass rounded-2xl p-8 shadow-lg border border-white/10">
+      <h2 class="text-2xl font-bold text-yellow-400 mb-6">Give Now</h2>
+
+      <form method="POST" action="{% url 'initiate_donation' %}" class="space-y-6">
+        {% csrf_token %}
+
+        <div class="floating-label relative">
+          <input type="text" name="name" placeholder=" " required
+            class="peer w-full px-4 py-3 bg-transparent border-b border-gray-400 focus:outline-none focus:border-yellow-400"/>
+          <label class="absolute left-4 top-3 text-sm transition-all duration-200 pointer-events-none text-gray-300">Full Name</label>
+        </div>
+
+        <div class="floating-label relative">
+          <input type="email" name="email" placeholder=" " required
+            class="peer w-full px-4 py-3 bg-transparent border-b border-gray-400 focus:outline-none focus:border-yellow-400"/>
+          <label class="absolute left-4 top-3 text-sm transition-all duration-200 pointer-events-none text-gray-300">Email Address</label>
+        </div>
+
+      <div class="relative">
+        <select name="currency" id="currency" required
+            class="w-full px-4 py-3 bg-transparent border-b border-gray-400 text-white appearance-none focus:outline-none focus:border-yellow-400">
+            <option value="" disabled selected hidden>Select Currency</option>
+            <option value="NGN">NGN (₦)</option>
+            <option value="USD">USD ($)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="EUR">EUR (€)</option>
+        </select>
+
+        <!-- Custom Dropdown Arrow (Optional but sleek) -->
+        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-yellow-400">
+            ▼
+        </div>
+        </div>
+
+
+        <div class="floating-label relative">
+          <input type="number" name="amount" min="100" step="100" placeholder=" "
+            class="peer w-full px-4 py-3 bg-transparent border-b border-gray-400 focus:outline-none focus:border-yellow-400" required/>
+          <label class="absolute left-4 top-3 text-sm text-gray-300">Amount</label>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-xl">
+          Donate Now
+        </button>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>
