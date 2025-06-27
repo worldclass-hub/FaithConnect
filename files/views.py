@@ -19,6 +19,9 @@ import os
 import re
 import uuid
 import requests
+from django.core.files.uploadedfile import SimpleUploadedFile
+from .upload_to_supabase import upload_file_to_supabase
+from .supabase_client import supabase  # assuming it's inside 'files' app
 
 
 # prayer/views.py
@@ -140,16 +143,6 @@ def signup_view(request):
 
 
 
-
-from django.core.files.uploadedfile import SimpleUploadedFile
-from .supabase_client import supabase
-from .upload_to_supabase import upload_file_to_supabase
-import os
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import FileUploadForm
-from .models import FileUpload
-from .supabase_client import supabase  # assuming it's inside 'files' app
 
 @login_required
 def home(request):
@@ -392,13 +385,6 @@ def never_show_modal(request):
 
 
 
-import os
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import PDFUploadForm
-from .models import PDFUpload
-from .supabase_client import supabase  # your existing Supabase client
-
 @login_required
 def upload_pdf(request):
     if request.method == 'POST':
@@ -610,13 +596,6 @@ def get_file_for_date(request, year, month, day):
 
 
 
-
-import os
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import GalleryUploadForm
-from .models import Gallery
-from .supabase_client import supabase
 
 @login_required
 def upload_image(request):
