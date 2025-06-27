@@ -141,22 +141,52 @@ def signup_view(request):
 
 
 
+from django.core.files.uploadedfile import SimpleUploadedFile
+from .supabase_client import supabase
+from .upload_to_supabase import upload_file_to_supabase
+import os
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import FileUploadForm
+from .models import FileUpload
+from .supabase_client import supabase  # assuming it's inside 'files' app
 
 @login_required
 def home(request):
     if request.method == "POST":
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('excel_page')  # Redirect to excel page after saving
+            instance = form.save(commit=False)
+            uploaded_file = request.FILES.get("uploaded_file")
+
+            if uploaded_file:
+                # Save file temporarily
+                temp_file_path = f"/tmp/{uploaded_file.name}"
+                with open(temp_file_path, "wb+") as temp_file:
+                    for chunk in uploaded_file.chunks():
+                        temp_file.write(chunk)
+
+                # Upload to Supabase storage
+                supabase.storage.from_("user-uploads").upload(
+                    f"uploads/{uploaded_file.name}",  # path in bucket
+                    temp_file_path,
+                    {"content-type": uploaded_file.content_type}
+                )
+
+                # Optionally store the URL or name in the model if needed
+                # instance.uploaded_file.name = f"uploads/{uploaded_file.name}"
+
+                # Clean up temporary file
+                os.remove(temp_file_path)
+
+            instance.save()
+            return redirect("excel_page")
         else:
-            print("Form errors:", form.errors)  # Print errors to debug
+            print("Form errors:", form.errors)
     else:
         form = FileUploadForm()
 
-    return render(request, 'files/home.html', {'form': form})
-
-
+    return render(request, "files/home.html", {"form": form})
 
 
 
@@ -362,38 +392,54 @@ def never_show_modal(request):
 
 
 
+import os
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import PDFUploadForm
+from .models import PDFUpload
+from .supabase_client import supabase  # your existing Supabase client
+
 @login_required
 def upload_pdf(request):
     if request.method == 'POST':
         form = PDFUploadForm(request.POST, request.FILES)
-        files = request.FILES.getlist('pdf_files')  # Extract multiple files
-        image = request.FILES.get('image', None)  # Get the uploaded image (if any)
+        files = request.FILES.getlist('pdf_files')  # Get multiple files
+        image = request.FILES.get('image', None)
 
         if form.is_valid():
-            info_id = form.cleaned_data.get('info_id', '')  # Will return '' if not provided
             for file in files:
-                if file.name.endswith('.pdf'):  # Ensure only PDFs are uploaded
-                    # If no image is provided, use the default image
-                    image_to_save = image if image else None
+                if file.name.endswith('.pdf'):
+                    # Save file temporarily
+                    temp_path = f"/tmp/{file.name}"
+                    with open(temp_path, "wb+") as temp_file:
+                        for chunk in file.chunks():
+                            temp_file.write(chunk)
+
+                    # Upload to Supabase
+                    supabase.storage.from_("user-uploads").upload(
+                        f"uploads/{file.name}",
+                        temp_path,
+                        {"content-type": file.content_type}
+                    )
+
+                    # Save to DB
                     PDFUpload.objects.create(
                         company_location=form.cleaned_data['company_location'],
-                        info_id=info_id,
-                        pdf_file=file,
+                        info_id=form.cleaned_data.get('info_id', ''),
+                        pdf_file=file,  # Save original file to your media
                         date=form.cleaned_data['date'],
                         time=form.cleaned_data['time'],
-                        image=image_to_save  # Save the image if provided, else default image
+                        image=image if image else None
                     )
-            return redirect('pdf_document')  # Redirect after successful upload
+
+                    # Delete temp file
+                    os.remove(temp_path)
+
+            return redirect('pdf_document')  # Replace with your correct redirect
     else:
         form = PDFUploadForm()
 
     return render(request, 'files/upload_pdf.html', {'form': form})
-
-
-
-
-
-
 
 
 
@@ -565,32 +611,50 @@ def get_file_for_date(request, year, month, day):
 
 
 
+import os
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import GalleryUploadForm
+from .models import Gallery
+from .supabase_client import supabase
 
 @login_required
 def upload_image(request):
     if request.method == 'POST':
         form = GalleryUploadForm(request.POST, request.FILES)
-        
         if form.is_valid():
-            files = request.FILES.getlist('uploaded_files')  # Get the list of uploaded files
             title = form.cleaned_data['title']
-            
-            # Save each file to the Gallery model
-            for file in files:
-                gallery_instance = Gallery(
-                    title=title,
-                    uploaded_file=file,  # Save the file to the 'uploaded_file' field of the Gallery model
-                )
-                gallery_instance.save()
+            files = request.FILES.getlist('uploaded_files')
 
-            return redirect('lookbook')  # Redirect to the 'LookBook' page (use the URL name for that page)
+            for file in files:
+                # Save to temporary location
+                temp_file_path = f"/tmp/{file.name}"
+                with open(temp_file_path, "wb+") as temp_file:
+                    for chunk in file.chunks():
+                        temp_file.write(chunk)
+
+                # Upload to Supabase Storage
+                supabase.storage.from_("user-uploads").upload(
+                    f"lookbook/{file.name}",  # Folder for LookBook
+                    temp_file_path,
+                    {"content-type": file.content_type}
+                )
+
+                # Save to DB
+                gallery_instance = Gallery.objects.create(
+                    title=title,
+                    uploaded_file=file
+                )
+
+                os.remove(temp_file_path)
+
+            return redirect('lookbook')  # Or wherever your LookBook display page is
         else:
-            print(form.errors)  # Debugging line: Check for any form errors
+            print(form.errors)
     else:
-        form = GalleryUploadForm()  # Show an empty form if it's a GET request
+        form = GalleryUploadForm()
 
     return render(request, 'files/gallery_upload.html', {'form': form})
-
 
 
 

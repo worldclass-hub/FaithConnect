@@ -36,10 +36,8 @@ class FileUpload(models.Model):
 
 
 
-
-        # PDF Uploading Lines of Code  
+# Validator to allow only PDFs
 def validate_pdf(value):
-    """Ensure only PDFs are uploaded."""
     if not value.name.endswith('.pdf'):
         raise ValidationError("Only PDF files are allowed.")
 
@@ -50,14 +48,13 @@ class PDFUpload(models.Model):
     date = models.DateField()
     time = models.TimeField()
     
-    # Adding an image field with default image path if not uploaded
+    # Optional image with a default
     image = models.ImageField(upload_to='images/', default='login-form/images/pdf_pics.png') 
 
     def __str__(self):
         return f"{self.company_location} - {self.info_id} - {self.pdf_file.name}"
 
     def file_extension(self):
-        """Returns the file extension in lowercase"""
         _, ext = os.path.splitext(self.pdf_file.name)
         return ext.lower()
 

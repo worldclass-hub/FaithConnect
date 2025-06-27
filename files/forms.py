@@ -26,18 +26,15 @@ class FileUploadForm(forms.ModelForm):
             raise forms.ValidationError("You must upload a file or provide a YouTube URL.")
 
 
+from django import forms
 
 class PDFUploadForm(forms.Form):
     company_location = forms.CharField(max_length=255)
     info_id = forms.CharField(max_length=255, required=False)
-    pdf_files = forms.FileField(  # Regular FileField (No FileInput widget)
-        required=True,
-    )
+    pdf_files = forms.FileField(required=True)  # Multiple files handled in view
     date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
-
-    # Add an image field to the form (Optional image upload)
-    image = forms.ImageField(required=False)  # Optional image upload field
+    image = forms.ImageField(required=False)
 
 
 
