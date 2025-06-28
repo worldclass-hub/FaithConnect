@@ -200,30 +200,20 @@ WSGI_APPLICATION = 'doxcela.wsgi.application'
 
 
 
-import os
+# ---------------------------
+# Database Configuration
+# ---------------------------
+
 import dj_database_url
-from decouple import config, UndefinedValueError
+from decouple import config
 
-# Read environment
-DEBUG = config('DEBUG', default=False, cast=bool)
-ENVIRONMENT = config('ENV', default='production')
+# If running on Railway, it will use DATABASE_URL_INTERNAL (postgres.railway.internal)
+# If running locally, it will fallback to DATABASE_URL (proxy.rlwy.net)
+DATABASE_URL = config('DATABASE_URL_INTERNAL', default=config('DATABASE_URL'))
 
-# Select correct database URL
-if ENVIRONMENT == 'production':
-    DATABASES = {
-        'default': dj_database_url.config(default=config('DATABASE_URL'))
-    }
-else:
-    # Try DATABASE_URL first (in case testing locally with full access)
-    try:
-        DATABASES = {
-            'default': dj_database_url.config(default=config('DATABASE_URL'))
-        }
-    except UndefinedValueError:
-        # If DATABASE_URL fails, use fallback to PUBLIC URL
-        DATABASES = {
-            'default': dj_database_url.config(default=config('DATABASE_PUBLIC_URL'))
-        }
+DATABASES = {
+    'default': dj_database_url.parse(DATABASE_URL)
+}
 
 
 # Password validation
