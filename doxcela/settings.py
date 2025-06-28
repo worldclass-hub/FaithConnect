@@ -309,7 +309,7 @@ SECRET_KEY = config('SECRET_KEY', default='unsafe-secret-key-for-dev')
 
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
-PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='http://127.0.0.1:8000')
+PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='web-production-ca20e.up.railway.app')
 
 
 # # NGROK for local testing (run `ngrok http 8000`)
