@@ -22,8 +22,8 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy project files
 COPY . .
 
-# Collect static files (optional)
-RUN python manage.py collectstatic --noinput
+# Optional collectstatic (don’t fail if it errors)
+RUN python manage.py collectstatic --noinput || echo "collectstatic failed, ignoring..."
 
 # Run app
 CMD gunicorn doxcela.wsgi:application --bind 0.0.0.0:$PORT
