@@ -200,12 +200,30 @@ WSGI_APPLICATION = 'doxcela.wsgi.application'
 
 
 
+import os
 import dj_database_url
-from decouple import config
+from decouple import config, UndefinedValueError
 
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-}
+# Read environment
+DEBUG = config('DEBUG', default=False, cast=bool)
+ENVIRONMENT = config('ENV', default='production')
+
+# Select correct database URL
+if ENVIRONMENT == 'production':
+    DATABASES = {
+        'default': dj_database_url.config(default=config('DATABASE_URL'))
+    }
+else:
+    # Try DATABASE_URL first (in case testing locally with full access)
+    try:
+        DATABASES = {
+            'default': dj_database_url.config(default=config('DATABASE_URL'))
+        }
+    except UndefinedValueError:
+        # If DATABASE_URL fails, use fallback to PUBLIC URL
+        DATABASES = {
+            'default': dj_database_url.config(default=config('DATABASE_PUBLIC_URL'))
+        }
 
 
 # Password validation
