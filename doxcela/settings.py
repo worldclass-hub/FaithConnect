@@ -33,10 +33,10 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.railway.app', 'web-production-ca20e.up.railway.app', 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000',
+    'https://web-production-ca20e.up.railway.app',
     'http://127.0.0.1:8000',
 ]
 
