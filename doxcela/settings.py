@@ -35,14 +35,13 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     '.railway.app',
-    'web-production-ca20e.up.railway.app',
+    'gmmi.up.railway.app',
     'localhost',
     '127.0.0.1'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-ca20e.up.railway.app',
-    'http://127.0.0.1:8000',
+    'https://gmmi.up.railway.app',
 ]
 
 
