@@ -31,7 +31,7 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = [
     '.railway.app',
@@ -40,8 +40,11 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
+
 CSRF_TRUSTED_ORIGINS = [
     'https://gmmi.up.railway.app',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
 
 
