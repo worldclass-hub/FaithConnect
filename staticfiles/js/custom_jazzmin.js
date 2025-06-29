@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const avatarContainer = document.querySelector("#user-tools");
         if (avatarContainer) {
             const avatarImage = document.createElement("img");
-            avatarImage.src = "/path/to/default-avatar.png"; // Replace with your default avatar path
+            avatarImage.src = "/static/img/doxcela2.png"; // Replace with your default avatar path
             avatarImage.alt = "User Avatar";
             avatarImage.style.width = "30px";
             avatarImage.style.height = "30px";

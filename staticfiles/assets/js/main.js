@@ -1034,7 +1034,7 @@
             e.preventDefault();
             $(".product-load-more .item:hidden").slice(0, 4).slideDown();
             if ($(".product-load-more .item:hidden").length == 0) {
-                $(".infinitpagin").html('<div class="btn loadMore">no more products</div>');
+                $(".infinitpagin").html('<div class="btn loadMore">no more files</div>');
             }
         });
     }

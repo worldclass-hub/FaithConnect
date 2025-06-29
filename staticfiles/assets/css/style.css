@@ -1038,7 +1038,6 @@ table { margin-bottom:15px; width:100%; border-collapse:collapse; border-spacing
 .password-table { display:table; height:100%; width:100%; }
 .password-cell { width:50%; display:table-cell; vertical-align:middle; text-align:center; position:relative; }
 .password-page { background:none !important; display:table; height:100%; width:100%; color:#555; background-color:#fff; background-size:cover; }
-.password-table .password-cell { background:url(../images/coming-soon.jpg); background-repeat:no-repeat; background-position:50% 50%; background-size:cover; }
 .password-header { position:absolute; right:0; }
 .password-main { width:100%; height:100%; margin:0 auto; display:table; vertical-align:middle; }
 .password-main__inner { display:table-cell; vertical-align: middle; padding:15px 30px; }
