@@ -206,17 +206,15 @@ WSGI_APPLICATION = 'doxcela.wsgi.application'
 # ---------------------------
 # Database Configuration
 # ---------------------------
-
 import dj_database_url
 from decouple import config
 
-# If running on Railway, it will use DATABASE_URL_INTERNAL (postgres.railway.internal)
-# If running locally, it will fallback to DATABASE_URL (proxy.rlwy.net)
-DATABASE_URL = config('DATABASE_URL_INTERNAL', default=config('DATABASE_URL'))
-
 DATABASES = {
-    'default': dj_database_url.parse(DATABASE_URL)
+    'default': dj_database_url.parse(
+        config('DATABASE_URL')
+    )
 }
+
 
 
 # Password validation
