@@ -1,11 +1,11 @@
-# Use official Python image
+# Use official Python slim image
 FROM python:3.9-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Set working directory
+# Set working directory inside container
 WORKDIR /app
 
 # Install system dependencies
@@ -19,11 +19,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy project files
+# Copy project files to container
 COPY . .
 
-# Optional collectstatic (don’t fail if it errors)
-RUN python manage.py collectstatic --noinput || echo "collectstatic failed, ignoring..."
-
-# Run app
-CMD gunicorn doxcela.wsgi:application --bind 0.0.0.0:$PORT
+# Run migrations, collect static files, and start Gunicorn on Railway-assigned $PORT
+CMD bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn doxcela.wsgi:application --bind 0.0.0.0:$PORT"

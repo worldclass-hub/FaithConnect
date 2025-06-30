@@ -206,15 +206,27 @@ WSGI_APPLICATION = 'doxcela.wsgi.application'
 # ---------------------------
 # Database Configuration
 # ---------------------------
-import dj_database_url
-from decouple import config
+import os
 
-DATABASES = {
-    'default': dj_database_url.parse(
-        config('DATABASE_URL')
-    )
-}
-
+if os.environ.get("ENV") == "production":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('PGDATABASE'),
+            'USER': os.environ.get('PGUSER'),
+            'PASSWORD': os.environ.get('PGPASSWORD'),
+            'HOST': os.environ.get('PGHOST'),
+            'PORT': os.environ.get('PGPORT', '5432'),
+        }
+    }
+else:
+    # Use SQLite locally
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
