@@ -1,5 +1,3 @@
-/Users/mac/Desktop/doxcela/doxcela/Dockerfile
-
 
 # Use official Python slim image
 FROM python:3.9-slim
