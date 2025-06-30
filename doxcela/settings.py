@@ -32,6 +32,7 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = config('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = ["*"]
@@ -202,8 +203,36 @@ WSGI_APPLICATION = 'doxcela.wsgi.application'
 # ---------------------------
 import os
 
-if os.environ.get("ENV") == "production":
-    DATABASES = {
+# if os.environ.get("ENV") == "production":
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': os.environ.get('PGDATABASE'),
+#             'USER': os.environ.get('PGUSER'),
+#             'PASSWORD': os.environ.get('PGPASSWORD'),
+#             'HOST': os.environ.get('PGHOST'),
+#             'PORT': os.environ.get('PGPORT', '5432'),
+#         }
+#     }
+# else:
+#     # Use SQLite locally
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+
+
+
+
+
+
+
+
+
+
+DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('PGDATABASE'),
@@ -213,15 +242,6 @@ if os.environ.get("ENV") == "production":
             'PORT': os.environ.get('PGPORT', '5432'),
         }
     }
-else:
-    # Use SQLite locally
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
