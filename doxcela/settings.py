@@ -34,16 +34,10 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = [
-    '.railway.app',
-    'gmmi.up.railway.app',
-    'localhost',
-    '127.0.0.1'
-]
+ALLOWED_HOSTS = ["*"]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://gmmi.up.railway.app',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
 ]
