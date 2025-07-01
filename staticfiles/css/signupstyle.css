@@ -11,7 +11,7 @@ body {
   justify-content: center;
   min-height: 100vh;
   overflow: hidden;
-  background: url("/static/img/wallpaperflare.com_wallpaper (1).jpg") no-repeat center center, -webkit-linear-gradient(bottom, #0250c5, #d43f8d);
+  background: no-repeat center center, -webkit-linear-gradient(bottom, #0250c5, #d43f8d);
   background-size: cover;  /* Ensures the image covers the entire viewport */
 }
 

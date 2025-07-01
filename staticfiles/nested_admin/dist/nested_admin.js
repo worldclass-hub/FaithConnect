@@ -7126,4 +7126,3 @@ _utils__WEBPACK_IMPORTED_MODULE_4__["default"].DjangoFormset = _jquery_djangofor
 window.DJNesting = __webpack_exports__;
 /******/ })()
 ;
-//# sourceMappingURL=nested_admin.js.map
