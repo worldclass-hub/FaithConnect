@@ -241,6 +241,7 @@
     <a href="#" class="block py-2 hover:text-yellow-400">About</a>
 
     <!-- Connect Dropdown (Mobile) -->
+    {% if user.is_authenticated and user.is_staff %}
     <div>
       <button class="w-full text-left py-2 hover:text-yellow-400" onclick="toggleSubMenu('connectDropdown')">Upload ⌄</button>
       <div id="connectDropdown" class="pl-4 hidden transition-all duration-300 ease-in-out">
@@ -250,10 +251,10 @@
         <a href="{% url 'send_newsletter' %}" class="block py-2 hover:text-yellow-400">Upload Newsletter</a>
       </div>
     </div>
+    {% endif %}
+
 
     <!-- Testimonies Dropdown (Mobile) -->
-        {% if user.is_authenticated and user.is_staff %}
-
     <div>
       <button class="w-full text-left py-2 hover:text-yellow-400" onclick="toggleSubMenu('testimonyDropdown')">Pages ⌄</button>
       <div id="testimonyDropdown" class="pl-4 hidden transition-all duration-300 ease-in-out">
@@ -266,7 +267,6 @@
         <a href="{% url 'coming_soon' %}" class="block py-2 hover:text-yellow-400"> Coming Soon</a>
       </div>
     </div>
-        {% endif %}
 
 
 
