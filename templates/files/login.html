@@ -51,6 +51,13 @@
     height: 48px;
     border-radius: 8px;
     font-weight: bold;
+    background-color: #fff !important;
+    color: #000 !important;           /* Force black text */
+  }
+
+  .form-control::placeholder {
+    color: #666 !important;
+    opacity: 1;
   }
 
   .icon-wrapper {
@@ -71,13 +78,7 @@
     cursor: pointer;
   }
 
-  .login-btn {
-    background: #0d6efd;
-    color: white;
-    font-weight: bold;
-    border-radius: 8px;
-    padding: 10px;
-  }
+  /* Removed .login-btn background-color from CSS to force inline style */
 
   .extra-links {
     margin-top: 1.5rem;
@@ -131,7 +132,9 @@
             </div>
 
             <div class="form-group">
-              <button type="submit" class="btn form-control login-btn">Get Started</button>
+              <button type="submit" class="btn form-control login-btn" style="background-color: #0d6efd !important; color: white !important; font-weight: bold; border-radius: 8px; border:none;">
+                Get Started
+              </button>
             </div>
           </form>
 
@@ -146,8 +149,5 @@
     </div>
   </div>
 </section>
-
-<!-- Password Toggle Script -->
-
 
 {% endblock %}
