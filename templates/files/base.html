@@ -357,7 +357,28 @@ body.modal-open, html.modal-open {
     text-align: left;
 }
 
-        
+        .dashed-input-wrapper {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 12px 20px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.dashed-input-wrapper input {
+    width: 100%;
+    max-width: 180px;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+    cursor: pointer;
+}
+
     </style>
 
 
@@ -981,6 +1002,9 @@ body.modal-open, html.modal-open {
         <span id="site-scroll"><i class="icon anm anm-angle-up-r"></i></span>
         <!--End Scoll Top-->
 
+
+
+
 <!-- Profile Form Popup -->
 <div class="newsletter-wrap" id="popup-container">
     <div id="popup-window">
@@ -1009,9 +1033,12 @@ body.modal-open, html.modal-open {
 
                         <!-- Date of Birth -->
                         <div class="input-group mb-3">
-                            <input type="date" class="input-group__field newsletter__input" name="dob"
-                                placeholder="Date of Birth" required>
+                            <label for="dob">Date of Birth</label>
+                            <div class="dashed-input-wrapper">
+                                <input type="date" name="dob" required>
+                            </div>
                         </div>
+
 
                         <!-- Profile Image Upload with Custom Design -->
                         <div class="input-group mb-3">
