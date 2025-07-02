@@ -1723,6 +1723,6 @@ def prayer_request_view(request):
 
 
 
-def testimony_view(request):
-    testimonies = Testimony.objects.all().order_by('-created_at')
-    return render(request, 'files/testimony.html', {'testimonies': testimonies})
+# def testimony_view(request):
+#     testimonies = Testimony.objects.all().order_by('-created_at')
+#     return render(request, 'files/testimony.html', {'testimonies': testimonies})
