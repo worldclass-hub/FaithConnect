@@ -269,7 +269,7 @@ def excel_page(request):
                 <h2 style="color: #1d3557;">Hello {name},</h2>
                 <p style="font-size: 16px; color: #333;">{reply_body_html}</p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="https://your-domain.com" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
+                    <a href="https://gmmi.up.railway.app" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
                         Visit Our Website
                     </a>
                 </div>
@@ -840,7 +840,7 @@ def contact(request):
                 <h2 style="color: #1d3557;">Hello {name},</h2>
                 <p style="font-size: 16px; color: #333;">{html_body}</p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="https://your-domain.com" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
+                    <a href="https://gmmi.up.railway.app" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
                         Visit Our Website
                     </a>
                 </div>
@@ -991,7 +991,7 @@ def submit_contact(request):
                 {reply_body_html}
             </p>
             <div style="text-align: center; margin: 30px 0;">
-                <a href="https://your-domain.com" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
+                <a href="https://gmmi.up.railway.app" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
                     Visit Our Website
                 </a>
             </div>
@@ -1081,7 +1081,7 @@ def about_view(request):
                 <h2 style="color: #1d3557;">Hello {name},</h2>
                 <p style="font-size: 16px; color: #333;">{reply_body_html}</p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="https://your-domain.com" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
+                    <a href="https://gmmi.up.railway.app" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
                         Visit Our Website
                     </a>
                 </div>
@@ -1189,7 +1189,7 @@ def coming_soon(request):
                 <h2 style="color: #1d3557;">Hello {name},</h2>
                 <p style="font-size: 16px; color: #333;">{html_body}</p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="https://your-domain.com" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
+                    <a href="https://gmmi.up.railway.app" style="background: #1d3557; color: white; text-decoration: none; padding: 12px 25px; border-radius: 30px; font-weight: bold;">
                         Visit Our Website
                     </a>
                 </div>
