@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title> Doxcela</title>
+  <title>Doxcela</title>
   <link rel="icon" href="{% static 'login-form/images/doxcela2.png' %}" type="image/png" />
 
   <!-- Bootstrap 5 -->
@@ -16,17 +16,20 @@
 
   <style>
     body {
-      height: 100vh;
-      display: grid;
-      place-items: center;
+      margin: 0;
+      height: 100dvh; /* responsive to keyboard */
+      overflow: hidden;
       background-image: url("{% static 'login-form/images/kym-mackinnon1.jpg' %}");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      margin: 0;
     }
 
     .form-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 90vw;
       max-width: 350px;
       background-color: white;
@@ -35,10 +38,6 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, .2);
       transition: width 0.3s ease, padding 0.3s ease;
       box-sizing: border-box;
-    }
-
-    .form-container:focus-within {
-      padding: 4rem 1.5rem;
     }
 
     .form-control {
