@@ -1574,6 +1574,12 @@ def send_newsletter(request):
 
 
 
+import uuid
+import requests
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from .models import Donation
 
 def donation_form(request):
     return render(request, "files/donation_form.html")
@@ -1609,11 +1615,14 @@ def initiate_donation(request):
         }
 
         callback_url = f"{settings.PAYSTACK_CALLBACK_URL}/paystack/verify/"
+        return_url = f"{settings.PAYSTACK_CALLBACK_URL}/thank-you/?ref={reference}"
+
         payload = {
             "email": email,
             "amount": int(amount_float * 100),
             "reference": reference,
-            "callback_url": callback_url
+            "callback_url": callback_url,
+            "return_url": return_url,
         }
 
         response = requests.post("https://api.paystack.co/transaction/initialize", json=payload, headers=headers)
@@ -1625,11 +1634,13 @@ def initiate_donation(request):
         else:
             return render(request, "files/error.html", {"message": "Paystack Error: Unable to initiate payment"})
 
-    return redirect("files/donation_form")
+    return redirect("donation_form")
 
 @csrf_exempt
 def verify_payment(request):
     reference = request.GET.get("reference")
+    if not reference:
+        return render(request, "files/error.html", {"message": "No reference provided for verification."})
 
     headers = {
         "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",
@@ -1652,11 +1663,14 @@ def verify_payment(request):
 
 def thank_you(request):
     ref = request.GET.get("ref")
-    try:
-        donation = Donation.objects.get(reference=ref)
-        return render(request, "files/thank_you.html", {"donation": donation})
-    except Donation.DoesNotExist:
-        return render(request, "files/thank_you.html", {"donation": None})
+    donation = None
+    if ref:
+        try:
+            donation = Donation.objects.get(reference=ref)
+        except Donation.DoesNotExist:
+            donation = None
+
+    return render(request, "files/thank_you.html", {"donation": donation})
 
 
 

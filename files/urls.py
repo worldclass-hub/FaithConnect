@@ -54,7 +54,6 @@ urlpatterns = [
     path('send-newsletter/', views.send_newsletter, name='send_newsletter'),
     path('signup/', views.signup_view, name='signup'),
 
-
     path("donate/", views.donation_form, name="donation_form"),
     path("donate/initiate/", views.initiate_donation, name="initiate_donation"),
     path("paystack/verify/", views.verify_payment, name="verify_payment"),

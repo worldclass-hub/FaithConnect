@@ -40,6 +40,7 @@ ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://gmmi.up.railway.app',
+    # 'https://9eb1-197-211-59-86.ngrok-free.app',
     'http://127.0.0.1:8000',
 ]
 
@@ -343,10 +344,11 @@ ADMIN_EMAIL = 'doxcela@gmail.com'              # Can be same or different from s
 
 SECRET_KEY = config('SECRET_KEY', default='unsafe-secret-key-for-dev')
 
-
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
-PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='https://gmmi.up.railway.app')
+
+# For local testing, use ngrok URL or localhost
+PAYSTACK_CALLBACK_URL = config('PAYSTACK_CALLBACK_URL', default='http://localhost:8000')
 
 
 # # NGROK for local testing (run `ngrok http 8000`)
