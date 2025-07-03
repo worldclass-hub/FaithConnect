@@ -1678,27 +1678,80 @@ def thank_you(request):
 
 
 
+from .models import ChildrenMinistryPhoto
+
 def children_ministry(request):
-    return render(request, 'files/children_ministry.html')
+    photos = ChildrenMinistryPhoto.objects.all()
+    return render(request, 'files/children_ministry.html', {'photos': photos})
+
+
+
+
+
+
+from django.shortcuts import render
+from .models import WomenMinistryLeader
 
 def women_ministry(request):
-    return render(request, 'files/women_ministry.html')
+    leaders = WomenMinistryLeader.objects.all()
+    return render(request, 'files/women_ministry.html', {'leaders': leaders})
+
+
+
+
+
+from .models import EvangelismMinistryLeader
 
 def evangelism_ministry(request):
-    return render(request, 'files/evangelism_ministry.html')
+    leaders = EvangelismMinistryLeader.objects.all()
+    return render(request, 'files/evangelism_ministry.html', {'leaders': leaders})
+
+
+
+
+
+
+from .models import YouthMinistryLeader
 
 def youth_ministry(request):
-    return render(request, 'files/youth_ministry.html')
+    leaders = YouthMinistryLeader.objects.all()
+    return render(request, 'files/youth_ministry.html', {'leaders': leaders})
+
+
+
+
+
+
+
+from .models import WorshipMinistryLeader
 
 def worship_ministry(request):
-    return render(request, 'files/worship_ministry.html')
+    leaders = WorshipMinistryLeader.objects.all()
+    return render(request, 'files/worship_ministry.html', {'leaders': leaders})
+
+
+
+
+
+
+
+from .models import MenMinistryLeader
 
 def men_ministry(request):
-    return render(request, 'files/men_ministry.html')
+    leaders = MenMinistryLeader.objects.all()
+    return render(request, 'files/men_ministry.html', {'leaders': leaders})
 
+
+
+
+
+
+
+from .models import GMSOMSlide
 
 def overview(request):
-    return render(request, 'files/overview.html')
+    slides = GMSOMSlide.objects.all()
+    return render(request, 'files/overview.html', {'slides': slides})
 
 
 

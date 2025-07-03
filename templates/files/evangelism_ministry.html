@@ -91,28 +91,22 @@
 </section>
 
 
-
 <!-- Leadership -->
 <section class="bg-red-100 py-16 px-6">
   <h2 class="text-3xl text-red-900 font-semibold text-center mb-10">Evangelism Leadership</h2>
   <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-
-    <!-- Leader 1 -->
+    {% for leader in leaders %}
     <div>
-      <img src="{% static 'login-form/images/Menleader1.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="Pastor Peter Ayoola" />
-      <h3 class="font-bold text-lg text-red-800">Pastor Peter Ayoola</h3>
-      <p class="text-sm text-gray-600">Evangelism Ministry Coordinator</p>
+      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
+      <h3 class="font-bold text-lg text-red-800">{{ leader.name }}</h3>
+      <p class="text-sm text-gray-600">{{ leader.title }}</p>
     </div>
-
-    <!-- Leader 2 -->
-    <div>
-      <img src="{% static 'login-form/images/Menleader2.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="Sis. Blessing Okonkwo" />
-      <h3 class="font-bold text-lg text-red-800">Sis. Blessing Okonkwo</h3>
-      <p class="text-sm text-gray-600">Outreach Director</p>
-    </div>
-
+    {% empty %}
+    <p class="text-center col-span-full text-gray-500">No evangelism leaders added yet.</p>
+    {% endfor %}
   </div>
 </section>
+
 
 
 

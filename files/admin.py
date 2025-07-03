@@ -854,6 +854,96 @@ class PrayerRequestAdmin(admin.ModelAdmin):
 
 
 
+
+
+from django.contrib import admin
+from .models import WomenMinistryLeader
+
+@admin.register(WomenMinistryLeader)
+class WomenMinistryLeaderAdmin(admin.ModelAdmin):
+    list_display = ['name', 'title']
+
+
+
+
+
+
+from .models import MenMinistryLeader
+
+@admin.register(MenMinistryLeader)
+class MenMinistryLeaderAdmin(admin.ModelAdmin):
+    list_display = ['name', 'title']
+
+
+
+
+
+
+from .models import YouthMinistryLeader
+
+@admin.register(YouthMinistryLeader)
+class YouthMinistryLeaderAdmin(admin.ModelAdmin):
+    list_display = ['name', 'title']
+
+
+
+
+
+from .models import EvangelismMinistryLeader
+
+@admin.register(EvangelismMinistryLeader)
+class EvangelismMinistryLeaderAdmin(admin.ModelAdmin):
+    list_display = ['name', 'title']
+
+
+
+
+
+from .models import WorshipMinistryLeader
+
+@admin.register(WorshipMinistryLeader)
+class WorshipMinistryLeaderAdmin(admin.ModelAdmin):
+    list_display = ['name', 'title']
+
+
+
+from .models import ChildrenMinistryPhoto
+
+@admin.register(ChildrenMinistryPhoto)
+class ChildrenMinistryPhotoAdmin(admin.ModelAdmin):
+    list_display = ['caption', 'image']
+
+
+
+
+
+from .models import GMSOMSlide
+
+@admin.register(GMSOMSlide)
+class GMSOMSlideAdmin(admin.ModelAdmin):
+    list_display = ['caption', 'image']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # from .models import Testimony
 
 

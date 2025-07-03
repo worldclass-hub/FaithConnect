@@ -105,18 +105,16 @@
   <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
     
     <!-- Leader 1 -->
+       {% for leader in leaders %}
     <div>
-      <img src="{% static 'login-form/images/Youthleader1.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="Pastor David Olu" />
-      <h3 class="font-bold text-lg text-blue-800">Pastor David Olu</h3>
-      <p class="text-sm text-gray-600">Youth Ministry Lead Pastor</p>
+      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
+      <h3 class="font-bold text-lg text-blue-800">{{ leader.name }}</h3>
+      <p class="text-sm text-gray-600">{{ leader.title }}</p>
     </div>
-    
-    <!-- Leader 2 -->
-    <div>
-      <img src="{% static 'login-form/images/Youthleader2.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="Sis. Joy Umoru" />
-      <h3 class="font-bold text-lg text-blue-800">Sis. Joy Umoru</h3>
-      <p class="text-sm text-gray-600">Campus Coordinator</p>
-    </div>
+    {% empty %}
+    <p class="text-center text-gray-500 col-span-full">No youth leaders added yet.</p>
+    {% endfor %}
+
 
   </div>
 </section>

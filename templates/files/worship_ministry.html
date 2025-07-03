@@ -95,22 +95,21 @@
   </div>
 </section>
 
-  <!-- Leadership -->
-  <section class="bg-purple-100 py-16 px-6">
-    <h2 class="text-3xl text-purple-900 font-semibold text-center mb-10">Worship Leadership</h2>
-    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-      <div>
-        <img src="{% static 'login-form/images/Worshipleader1.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" />
-        <h3 class="font-bold text-lg text-purple-800">Minister Grace Adeoye</h3>
-        <p class="text-sm text-gray-600">Worship Director</p>
-      </div>
-      <div>
-        <img src="{% static 'login-form/images/Worshipleader2.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" />
-        <h3 class="font-bold text-lg text-purple-800">Brother Tobi Olayemi</h3>
-        <p class="text-sm text-gray-600">Music Coordinator</p>
-      </div>
+<!-- Leadership -->
+<section class="bg-purple-100 py-16 px-6">
+  <h2 class="text-3xl text-purple-900 font-semibold text-center mb-10">Worship Leadership</h2>
+  <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
+    {% for leader in leaders %}
+    <div>
+      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}">
+      <h3 class="font-bold text-lg text-purple-800">{{ leader.name }}</h3>
+      <p class="text-sm text-gray-600">{{ leader.title }}</p>
     </div>
-  </section>
+    {% empty %}
+    <p class="text-center col-span-full text-gray-500">No worship leaders added yet.</p>
+    {% endfor %}
+  </div>
+</section>
 
   <!-- Contact -->
   <section id="contact" class="py-16 px-6 bg-white text-center">

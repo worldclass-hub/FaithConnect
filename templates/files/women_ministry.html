@@ -115,19 +115,15 @@
   <h2 class="text-3xl text-pink-800 font-semibold text-center mb-10">Meet Our Leaders</h2>
   <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
     
-    <!-- Leader 1 -->
+    {% for leader in leaders %}
     <div>
-      <img src="{% static 'login-form/images/WomanBisi.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="Pastor Grace Eze" />
-      <h3 class="font-bold text-lg text-pink-800">Pastor Grace Eze</h3>
-      <p class="text-sm text-gray-600">Women’s Ministry Coordinator</p>
+      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
+      <h3 class="font-bold text-lg text-pink-800">{{ leader.name }}</h3>
+      <p class="text-sm text-gray-600">{{ leader.title }}</p>
     </div>
-    
-    <!-- Leader 2 -->
-    <div>
-      <img src="{% static 'login-form/images/Womanleader2.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="Sis. Faith Nwosu" />
-      <h3 class="font-bold text-lg text-pink-800">Sis. Faith Nwosu</h3>
-      <p class="text-sm text-gray-600">Outreach & Discipleship Lead</p>
-    </div>
+    {% empty %}
+    <p class="text-center col-span-full text-gray-500">No leaders added yet.</p>
+    {% endfor %}
 
   </div>
 </section>

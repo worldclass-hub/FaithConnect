@@ -624,6 +624,112 @@ class PrayerRequest(models.Model):
 
 
 
+
+from django.db import models
+
+class WomenMinistryLeader(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    photo = models.ImageField(upload_to='leaders/women/')  # this goes to MEDIA folder
+
+    class Meta:
+        verbose_name = "Women Ministry Leader"
+        verbose_name_plural = "Women Ministry Leaders"
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+class MenMinistryLeader(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    photo = models.ImageField(upload_to='leaders/men/')
+
+    class Meta:
+        verbose_name = "Men Ministry Leader"
+        verbose_name_plural = "Men Ministry Leaders"
+
+    def __str__(self):
+        return self.name
+
+
+
+class YouthMinistryLeader(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    photo = models.ImageField(upload_to='leaders/youth/')
+
+    class Meta:
+        verbose_name = "Youth Ministry Leader"
+        verbose_name_plural = "Youth Ministry Leaders"
+
+    def __str__(self):
+        return self.name
+
+
+
+
+class EvangelismMinistryLeader(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    photo = models.ImageField(upload_to='leaders/evangelism/')
+
+    class Meta:
+        verbose_name = "Evangelism Ministry Leader"
+        verbose_name_plural = "Evangelism Ministry Leaders"
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+class WorshipMinistryLeader(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    photo = models.ImageField(upload_to='leaders/worship/')
+
+    class Meta:
+        verbose_name = "Worship Ministry Leader"
+        verbose_name_plural = "Worship Ministry Leaders"
+
+    def __str__(self):
+        return self.name
+
+
+
+
+class ChildrenMinistryPhoto(models.Model):
+    image = models.ImageField(upload_to='children/photos/')
+    caption = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        verbose_name = "Children Ministry Photo"
+        verbose_name_plural = "Children Ministry Photos"
+
+    def __str__(self):
+        return self.caption or f"Photo {self.id}"
+
+
+
+
+class GMSOMSlide(models.Model):
+    image = models.ImageField(upload_to='gmsom/slides/')
+    caption = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        verbose_name = "GMSOM Slide Image"
+        verbose_name_plural = "GMSOM Slide Images"
+
+    def __str__(self):
+        return self.caption or f"Slide {self.id}"
+
+
+
 # class Testimony(models.Model):
 #     emoji = models.CharField(max_length=5, default="🔥")
 #     quote = models.TextField()

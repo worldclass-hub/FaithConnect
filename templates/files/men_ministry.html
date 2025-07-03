@@ -98,16 +98,17 @@
   <section class="bg-blue-100 py-16 px-6">
     <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Meet the Leaders</h2>
     <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-      <div>
-        <img src="{% static 'login-form/images/Mensection1.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" />
-        <h3 class="font-bold text-lg text-blue-800">Deacon Samuel Ibe</h3>
-        <p class="text-sm text-gray-600">Men’s Ministry Leader</p>
-      </div>
-      <div>
-        <img src="{% static 'login-form/images/Mensection2.png' %}" class="w-28 h-28 mx-auto rounded-full mb-3" />
-        <h3 class="font-bold text-lg text-blue-800">Brother Caleb Moses</h3>
-        <p class="text-sm text-gray-600">Mentorship Coordinator</p>
-      </div>
+         {% for leader in leaders %}
+    <div>
+      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
+      <h3 class="font-bold text-lg text-blue-800">{{ leader.name }}</h3>
+      <p class="text-sm text-gray-600">{{ leader.title }}</p>
+    </div>
+    {% empty %}
+    <p class="text-center text-gray-500 col-span-full">No leaders added yet.</p>
+    {% endfor %}
+
+
     </div>
   </section>
 

@@ -141,12 +141,14 @@
 <section class="py-16 px-6 md:px-20 bg-white">
   <h2 class="text-3xl font-bold text-center text-pink-600 mb-10">Photo Highlights</h2>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <img src="{% static 'login-form/images/childrensundayschool4.png' %}" class="rounded-lg shadow-md hover:scale-105 transition" alt="children worshipping">
-    <img src="{% static 'login-form/images/childrensundayschool1.png' %}" class="rounded-lg shadow-md hover:scale-105 transition" alt="children doing crafts">
-    <img src="{% static 'login-form/images/childrensundayschool3.png' %}" class="rounded-lg shadow-md hover:scale-105 transition" alt="kids playing game">
-    <img src="{% static 'login-form/images/childrensundayschool2.png' %}" class="rounded-lg shadow-md hover:scale-105 transition" alt="bible lesson for kids">
+    {% for photo in photos %}
+      <img src="{{ photo.image.url }}" alt="{{ photo.caption }}" class="rounded-lg shadow-md hover:scale-105 transition" />
+    {% empty %}
+      <p class="col-span-full text-center text-gray-500">No photos added yet.</p>
+    {% endfor %}
   </div>
 </section>
+
 
 
 
