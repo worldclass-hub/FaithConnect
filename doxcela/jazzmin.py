@@ -7,10 +7,10 @@ JAZZMIN_SETTINGS = {
     "site_title": "Ecommerce Admin",
 
     # Title on the login screen (19 chars max)
-    "site_header": "Doxcela",
+    "site_header": "GMMI",
 
     # Title on the brand (19 chars max)
-    "site_brand": "Doxcela",
+    "site_brand": "GMMI",
 
     # Logo to use for your site, must be present in static files
     "site_logo": "/img/GMMI_LOGO.png",
@@ -31,11 +31,11 @@ JAZZMIN_SETTINGS = {
     "site_logo_classes": "img-circle",
 
     # Welcome text on the login screen
-    "welcome_sign": "Welcome to the Doxcela",
+    "welcome_sign": "Welcome to the GMMI",
     
 
     # Copyright on the footer
-    "copyright": "Doxcela Coorperation",
+    "copyright": "GMMI Coorperation",
     
     
     
