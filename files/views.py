@@ -476,19 +476,14 @@ def user_logout(request):
 
 
 
-
 def extract_youtube_id(url):
-    """
-    Extract the YouTube video ID from a URL, including shorts URLs.
-    """
     try:
         parsed_url = urlparse(url)
         netloc = parsed_url.netloc.lower()
 
         if 'youtube.com' in netloc:
-            # Handle normal and shorts URLs
             if parsed_url.path.startswith('/shorts/'):
-                return parsed_url.path.split('/')[2]  # Shorts ID after /shorts/
+                return parsed_url.path.split('/')[2]
             else:
                 query = parse_qs(parsed_url.query)
                 return query.get('v', [None])[0]
@@ -501,14 +496,10 @@ def extract_youtube_id(url):
 
     return None
 
-
 def get_file_for_date(request, year, month, day):
     selected_date = date(year, month, day)
-
-    # Fetch files for the selected date
     files = FileUpload.objects.filter(date=selected_date).order_by('-date', '-time')
     pdf_files = PDFUpload.objects.filter(date=selected_date).order_by('-date', '-time')
-
     all_files = list(files) + list(pdf_files)
 
     file_data = []
@@ -519,15 +510,14 @@ def get_file_for_date(request, year, month, day):
         file_extension = ''
 
         if isinstance(file, FileUpload):
-            if file.uploaded_file:
-                file_url = file.uploaded_file.url
-                # Get extension WITHOUT leading dot
-                file_extension = file_url.split('.')[-1].lower()
+            if file.file_url:
+                file_url = file.file_url
+                file_extension = file.file_extension()
             elif file.youtube_url:
                 youtube_url = file.youtube_url
                 youtube_id = extract_youtube_id(youtube_url)
                 file_extension = 'youtube'
-        else:  # PDFUpload
+        else:
             file_url = file.pdf_file.url if file.pdf_file else ''
             file_extension = file_url.split('.')[-1].lower()
 
@@ -1215,11 +1205,11 @@ def never_show_modal(request):
 
 
 
+# --- SEARCH BOYS ---
 def search_api(request):
     query = request.GET.get('q', '').strip()
     results = []
 
-    # Handle AJAX profile form submission
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         if request.user.is_authenticated:
             if UserProfile.objects.filter(user=request.user).exists():
@@ -1236,7 +1226,6 @@ def search_api(request):
         else:
             return JsonResponse({'status': 'error', 'message': "You must be logged in."}, status=400)
 
-    # Search Logic
     if query:
         pdf_results = PDFUpload.objects.filter(
             Q(company_location__icontains=query) |
@@ -1250,11 +1239,7 @@ def search_api(request):
             Q(youtube_url__icontains=query)
         )
 
-        hymn_models = [
-            Hymn, HausaHymn, IgboHymn, YorubaHymn,
-            FrenchHymn, ChineseHymn, GermanHymn
-        ]
-
+        hymn_models = [Hymn, HausaHymn, IgboHymn, YorubaHymn, FrenchHymn, ChineseHymn, GermanHymn]
         for model in hymn_models:
             hymn_results = model.objects.filter(
                 Q(title__icontains=query) |
@@ -1262,10 +1247,9 @@ def search_api(request):
                 Q(description__icontains=query)
             )
             for hymn in hymn_results:
-                hymn_title = hymn.title if hymn.title else "No Title"
                 results.append({
                     "id": hymn.id,
-                    "title": hymn_title,
+                    "title": hymn.title or "No Title",
                     "description": hymn.description[:100] + "..." if hymn.description else "",
                     "language": model.__name__.replace('Hymn', '') or 'English',
                     "url": f"/hymn/{hymn.id}/"
@@ -1280,27 +1264,16 @@ def search_api(request):
             })
 
         for file in file_results:
-            if file.youtube_url:
-                title = file.company_location or "YouTube Video"
-                results.append({
-                    "id": file.id,
-                    "name": title,
-                    "company_location": file.company_location,
-                    "youtube_url": file.youtube_url,
-                    "url": f"/file-view/{file.id}/"
-                })
-            else:
-                results.append({
-                    "id": file.id,
-                    "name": file.uploaded_file.name,
-                    "company_location": file.company_location,
-                    "url": f"/file-view/{file.id}/"
-                })
+            title = file.company_location or "File"
+            results.append({
+                "id": file.id,
+                "name": title,
+                "company_location": file.company_location,
+                "youtube_url": file.youtube_url,
+                "url": f"/file-view/{file.id}/"
+            })
 
-    user_has_profile = False
-    if request.user.is_authenticated:
-        user_has_profile = UserProfile.objects.filter(user=request.user).exists()
-
+    user_has_profile = request.user.is_authenticated and UserProfile.objects.filter(user=request.user).exists()
     updates = list(NewUpdate.objects.all().order_by('-upload_date').values('id', 'title', 'upload_date'))
 
     return JsonResponse({

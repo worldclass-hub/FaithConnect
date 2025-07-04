@@ -248,7 +248,7 @@
   <div class="upload-container">
     <h3>Upload Files or Submit YouTube Link</h3>
 
-  <form method="POST" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data" id="uploadForm">
       {% csrf_token %}
 
       <div class="drop-area" onclick="document.getElementById('fileInput').click()">

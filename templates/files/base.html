@@ -1258,87 +1258,68 @@ background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justif
 
     </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("searchInput");
-        const searchResults = document.getElementById("searchResults");
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
 
-        // Input listener for live search
-        searchInput.addEventListener("input", function () {
-            const query = searchInput.value.trim();
+    let debounceTimeout;
 
-            // If the query length is less than 2, hide search results
-            if (query.length < 2) {
-                searchResults.style.display = "none";
-                return;
-            }
+    searchInput.addEventListener("input", function () {
+        const query = searchInput.value.trim();
 
-            // Fetch search results from the API
+        clearTimeout(debounceTimeout);  // Clear previous timeout
+
+        if (query.length < 2) {
+            searchResults.style.display = "none";
+            return;
+        }
+
+        debounceTimeout = setTimeout(() => {
             fetch(`/search-api/?q=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Clear previous search results
                     searchResults.innerHTML = "";
 
-                    // Check if results were found
-                    if (data.results.length === 0) {
+                    if (!data.results || data.results.length === 0) {
                         searchResults.innerHTML = "<li>No results found</li>";
                     } else {
-                        // Loop through results and display them
                         data.results.forEach(result => {
                             const li = document.createElement("li");
                             const language = result.language ? result.language.charAt(0).toUpperCase() + result.language.slice(1) : "English";
 
-                            // If it's a hymn with lyrics
-                            if (result.lyrics) {
+                            if (result.url?.includes("/hymn/")) {
                                 li.innerHTML = `
-                                    <a href="/search-results/?q=${query}&id=${result.id}&language=${result.language.toLowerCase()}#hymn-${result.id}" class="search-result-item">
-                                        <strong>🎵 ${result.title || 'Untitled Hymn'} - (${language})</strong><br>
-                                        <small>${result.lyrics}</small>
+                                    <a href="${result.url}" class="search-result-item">
+                                        <strong>🎵 ${result.title || 'Untitled Hymn'} (${language})</strong><br>
+                                        <small>${result.description || ''}</small>
                                     </a>
                                 `;
-                            }
-                            // If it's a hymn with description
-                            else if (result.description) {
+                            } else if (result.youtube_url) {
                                 li.innerHTML = `
-                                    <a href="/search-results/?q=${query}&id=${result.id}&language=${result.language.toLowerCase()}#hymn-${result.id}" class="search-result-item">
-                                        <strong>🎵 ${result.title || 'Untitled Hymn'} - (${language})</strong><br>
-                                        <small>${result.description}</small>
-                                    </a>
-                                `;
-                            }
-                            // If it's a YouTube video
-                            else if (result.youtube_url) {
-                                li.innerHTML = `
-                                    <a href="/search-results/?q=${query}#file-${result.id}" class="search-result-item">
+                                    <a href="${result.url}" class="search-result-item">
                                         <strong>🎥 YouTube Video</strong><br>
-                                        <small>${result.name || 'YouTube Video'}</small>
+                                        <small>${result.name || 'Untitled Video'}</small>
                                     </a>
                                 `;
-                            }
-                            // If it's a file or PDF with a name
-                            else if (result.name) {
+                            } else if (result.name) {
                                 li.innerHTML = `
-                                    <a href="/search-results/?q=${query}#file-${result.id}" class="search-result-item">
-                                        <strong>${result.name || 'Untitled File'}</strong><br>
-                                        <small>${result.company_location || 'No location available'}</small>
+                                    <a href="${result.url}" class="search-result-item">
+                                        <strong>${result.name}</strong><br>
+                                        <small>${result.company_location || 'No location'}</small>
                                     </a>
                                 `;
-                            }
-                            // Default fallback
-                            else {
+                            } else {
                                 li.innerHTML = `
-                                    <a href="/search-results/?q=${query}#hymn-${result.id}" class="search-result-item">
-                                        No relevant info
+                                    <a href="${result.url}" class="search-result-item">
+                                        <strong>Unknown</strong><br><small>No info available</small>
                                     </a>
                                 `;
                             }
 
-                            // Append the result item to the search results list
                             searchResults.appendChild(li);
                         });
                     }
 
-                    // Show the search results
                     searchResults.style.display = "block";
                 })
                 .catch(error => {
@@ -1346,22 +1327,21 @@ background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justif
                     searchResults.innerHTML = "<li>Something went wrong</li>";
                     searchResults.style.display = "block";
                 });
-        });
-
-        // Hide results when 'Enter' is pressed
-        searchInput.addEventListener("keydown", function (e) {
-            if (e.key === "Enter") {
-                searchResults.style.display = "none"; // Optional UX cleanup
-            }
-        });
-
-        // Hide results when clicking outside of search input or search results
-        document.addEventListener("click", function (e) {
-            if (!searchResults.contains(e.target) && !searchInput.contains(e.target)) {
-                searchResults.style.display = "none";
-            }
-        });
+        }, 300); // Wait 300ms after user stops typing
     });
+
+    // Hide on Enter
+    searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") searchResults.style.display = "none";
+    });
+
+    // Hide on outside click
+    document.addEventListener("click", function (e) {
+        if (!searchResults.contains(e.target) && !searchInput.contains(e.target)) {
+            searchResults.style.display = "none";
+        }
+    });
+});
 </script>
 
    

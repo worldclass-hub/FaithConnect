@@ -666,54 +666,54 @@
         
     </div>
     <!--End Body Content-->
-    
     <script>
-// This takes the page back to login page after it senses that there are no activities going on on the page
+// ✅ LOAD MORE FILES
 document.addEventListener("DOMContentLoaded", function () {
-    let items = document.querySelectorAll("#itemsContainer .item");
-    let loadMoreBtn = document.getElementById("loadMoreBtn");
+    const items = document.querySelectorAll("#itemsContainer .item");
+    const loadMoreBtn = document.getElementById("loadMoreBtn");
     let itemsPerClick = 6;
     let currentIndex = 6;
 
-    loadMoreBtn.addEventListener("click", function () {
-        for (let i = currentIndex; i < currentIndex + itemsPerClick; i++) {
-            if (items[i]) {
-                items[i].style.display = "block";
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener("click", function () {
+            for (let i = currentIndex; i < currentIndex + itemsPerClick; i++) {
+                if (items[i]) items[i].style.display = "block";
             }
-        }
-        currentIndex += itemsPerClick;
 
-        if (currentIndex >= items.length) {
-            loadMoreBtn.textContent = "No more files"; // Change button text
-            loadMoreBtn.disabled = true; // Disable button
-            loadMoreBtn.classList.add("disabled"); // Optional: Add a disabled style
-        }
-    });
+            currentIndex += itemsPerClick;
+            if (currentIndex >= items.length) {
+                loadMoreBtn.textContent = "No more files";
+                loadMoreBtn.disabled = true;
+                loadMoreBtn.classList.add("disabled");
+            }
+        });
+    }
 });
 
-    
-    
+// ✅ AUDIO TOGGLE
+function toggleAudio(button) {
+    const audio = button.nextElementSibling;
+    const isPlaying = !audio.paused;
+    const allAudios = document.querySelectorAll(".audio-player");
 
-// This is the code that helps pauses/play the Audio Files
-      function toggleAudio(button) {
-        let audio = button.nextElementSibling;
-        if (audio.paused) {
-            audio.play();
-            button.innerHTML = '<i class="fas fa-pause"></i>';
-        } else {
-            audio.pause();
-            button.innerHTML = '<i class="fas fa-play"></i>';
-        }
+    allAudios.forEach(a => {
+        a.pause();
+        a.previousElementSibling.innerHTML = '<i class="fas fa-play"></i>';
+    });
+
+    if (!isPlaying) {
+        audio.play();
+        button.innerHTML = '<i class="fas fa-pause"></i>';
     }
-    
+}
 
-    
+// ✅ CALENDAR LOGIC
 function loadCalendar() {
     const monthSelect = document.getElementById('month');
     const yearInput = document.getElementById('year');
 
-    const month = parseInt(monthSelect.value, 10) - 1;
-    const year = parseInt(yearInput.value, 10);
+    const month = parseInt(monthSelect.value) - 1;
+    const year = parseInt(yearInput.value);
 
     const daysContainer = document.querySelector('.calendar-days');
     daysContainer.innerHTML = '';
@@ -721,183 +721,118 @@ function loadCalendar() {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const totalDays = lastDay.getDate();
-    const startDay = firstDay.getDay();
-    const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
+    const adjustedStartDay = (firstDay.getDay() + 6) % 7;
 
     for (let i = 0; i < adjustedStartDay; i++) {
-        const blankDay = document.createElement('div');
-        blankDay.classList.add('blank-day');
-        daysContainer.appendChild(blankDay);
+        const blank = document.createElement('div');
+        blank.classList.add('blank-day');
+        daysContainer.appendChild(blank);
     }
 
     for (let day = 1; day <= totalDays; day++) {
-        const dayElement = document.createElement('div');
-        dayElement.textContent = day;
-        dayElement.classList.add('day');
+        const el = document.createElement('div');
+        el.textContent = day;
+        el.classList.add('day');
 
         const today = new Date();
         if (today.getDate() === day && today.getMonth() === month && today.getFullYear() === year) {
-            dayElement.classList.add('today');
+            el.classList.add('today');
         }
 
-        dayElement.addEventListener('click', function () {
-            const allDays = document.querySelectorAll('.calendar-days .day');
-            allDays.forEach(day => day.classList.remove('selected'));
-
-            dayElement.classList.add('selected');
+        el.addEventListener('click', () => {
+            document.querySelectorAll('.calendar-days .day').forEach(d => d.classList.remove('selected'));
+            el.classList.add('selected');
 
             fetch(`/get_file_for_date/${year}/${month + 1}/${day}/`)
-            .then(response => response.json())
-            .then(data => {
-                const resultContainer = document.querySelector('.result-container');
-                resultContainer.innerHTML = '';
+                .then(res => res.json())
+                .then(data => {
+                    const resultContainer = document.querySelector('.result-container');
+                    const allFilesContainer = document.querySelector('.all-files-container');
+                    const loadMoreContainer = document.querySelector('.infinitpaginOuter');
+                    const divider = document.getElementById('divider');
+                    const showAllUploads = document.getElementById('show-all-uploads-container');
 
-                const allFilesContainer = document.querySelector('.all-files-container');
-                if (allFilesContainer) allFilesContainer.style.display = 'none';
+                    if (resultContainer) resultContainer.innerHTML = '';
+                    if (allFilesContainer) allFilesContainer.style.display = 'none';
+                    if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+                    if (divider) divider.style.display = 'none';
+                    if (showAllUploads) showAllUploads.style.display = 'block';
 
-                const loadMoreButtonContainer = document.querySelector('.infinitpaginOuter');
-                if (loadMoreButtonContainer) loadMoreButtonContainer.style.display = 'none';
+                    const filtered = data.files?.filter(f => f.file_extension !== 'pdf') || [];
 
-                const divider = document.getElementById('divider');
-                if (divider) divider.style.display = 'none';
+                    if (filtered.length > 0) {
+                        let html = `<div class="grid-products grid--view-items" id="itemsContainer"><div class="row">`;
 
-                const showAllUploadsContainer = document.getElementById('show-all-uploads-container');
-                if (showAllUploadsContainer) showAllUploadsContainer.style.display = 'block';
+                        filtered.forEach(f => {
+                            html += `<div class="col-6 col-sm-6 col-md-4 col-lg-2 item">
+                                        <div class="product-image position-relative file-container">`;
 
-                const filteredFiles = data.files.filter(file => file.file_extension !== 'pdf');
+                            if (f.file_extension === 'youtube' && f.youtube_id) {
+                                html += `<iframe class="rounded-video" src="https://www.youtube.com/embed/${f.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
+                            } else if (['jpg','jpeg','png','gif'].includes(f.file_extension)) {
+                                html += `<img src="${f.uploaded_file_url}" class="file-icon">`;
+                            } else if (['mp4','webm','ogg'].includes(f.file_extension)) {
+                                html += `<video controls class="file-icon"><source src="${f.uploaded_file_url}" type="video/${f.file_extension}"></video>`;
+                            } else if (['mp3','wav','aac'].includes(f.file_extension)) {
+                                html += `<div class="audio-wrapper">
+                                            <img src="/static/login-form/images/audowhite.jpeg" class="audio-image">
+                                            <button class="audio-play-button" onclick="toggleAudio(this)"><i class="fas fa-play"></i></button>
+                                            <audio class="audio-player">
+                                                <source src="${f.uploaded_file_url}" type="audio/${f.file_extension}">
+                                            </audio>
+                                         </div>`;
+                            } else if (['doc','docx'].includes(f.file_extension)) {
+                                html += `<a href="${f.uploaded_file_url}" target="_blank">
+                                            <img src="/static/login-form/images/Word_image.jpeg" class="file-icon">
+                                         </a>`;
+                            } else if (['ppt','pptx'].includes(f.file_extension)) {
+                                html += `<a href="${f.uploaded_file_url}" target="_blank">
+                                            <img src="/static/login-form/images/PPT.jpeg" class="file-icon">
+                                         </a>`;
+                            } else if (['xls','xlsx'].includes(f.file_extension)) {
+                                html += `<a href="${f.uploaded_file_url}" target="_blank">
+                                            <img src="/static/login-form/images/Excel_image.jpeg" class="file-icon">
+                                         </a>`;
+                            } else if (['zip','rar'].includes(f.file_extension)) {
+                                html += `<a href="${f.uploaded_file_url}" target="_blank">
+                                            <img src="/static/login-form/images/ZIP.jpeg" class="file-icon">
+                                         </a>`;
+                            } else {
+                                html += `<a href="${f.uploaded_file_url}" target="_blank">Unknown File</a>`;
+                            }
 
-                if (filteredFiles.length > 0) {
-                    let fileContent = `
-                        <div class="grid-products grid--view-items" id="itemsContainer">
-                            <div class="row">
-                    `;
+                            html += `<p class="company-name"><strong>${f.company_location}</strong></p>
+                                     <p class="text-muted date-time"><i class="fas fa-calendar-alt"></i> ${f.date} - <i class="fas fa-clock"></i> ${f.time}</p>
+                                     </div></div>`;
+                        });
 
-                    filteredFiles.forEach(file => {
-                        let fileHTML = `
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-2 item">
-                                <div class="product-image position-relative file-container">
-                        `;
-
-                        if (file.file_extension === 'youtube' && file.youtube_id) {
-                            fileHTML += `
-                                <div class="video-container">
-                                    <iframe class="rounded-video"
-                                            src="https://www.youtube.com/embed/${file.youtube_id}" 
-                                            frameborder="0" allowfullscreen>
-                                    </iframe>
-                                </div>
-                            `;
-                        } else if (['jpg', 'jpeg', 'png', 'gif'].includes(file.file_extension)) {
-                            fileHTML += `<img src="${file.uploaded_file_url}" alt="Image" class="file-icon blur-up lazyload"><br>`;
-                        } else if (['mp4', 'webm', 'ogg'].includes(file.file_extension)) {
-                            fileHTML += `
-                                <div class="video-container">
-                                    <video width="100%" height="240" controls class="file-icon blur-up lazyload">
-                                        <source src="${file.uploaded_file_url}" type="video/${file.file_extension}">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div>
-                            `;
-                        } else if (['mp3', 'wav', 'aac'].includes(file.file_extension)) {
-                            fileHTML += `
-                                <div class="audio-wrapper">
-                                    <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="audio-image blur-up lazyload">
-                                    <button class="audio-play-button" onclick="toggleAudio(this)">
-                                        <i class="fas fa-play"></i>
-                                    </button>
-                                    <audio class="audio-player">
-                                        <source src="${file.uploaded_file_url}" type="audio/${file.file_extension}">
-                                        Your browser does not support the audio element.
-                                    </audio>
-                                </div>
-                            `;
-                        } else if (['doc', 'docx'].includes(file.file_extension)) {
-                            fileHTML += `
-                                <a href="${file.uploaded_file_url}" target="_blank">
-                                    <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" width="100%" class="file-icon blur-up lazyload">
-                                    View Document
-                                </a>
-                            `;
-                        } else if (['ppt', 'pptx'].includes(file.file_extension)) {
-                            fileHTML += `
-                                <a href="${file.uploaded_file_url}" target="_blank">
-                                    <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint" width="100%" class="file-icon blur-up lazyload">
-                                    View Presentation
-                                </a>
-                            `;
-                        } else if (['xls', 'xlsx'].includes(file.file_extension)) {
-                            fileHTML += `
-                                <a href="${file.uploaded_file_url}" target="_blank">
-                                    <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel" width="100%" class="file-icon blur-up lazyload">
-                                    View Excel File
-                                </a>
-                            `;
-                        } else if (file.file_extension === 'zip') {
-                            fileHTML += `
-                                <a href="${file.uploaded_file_url}" target="_blank">
-                                    <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%" class="file-icon blur-up lazyload">
-                                    Download ZIP File
-                                </a>
-                            `;
-                        } else {
-                            fileHTML += `<p>Unknown file type: ${file.file_extension}</p>`;
-                        }
-
-                        // Removed the download icon as requested
-
-                        fileHTML += `
-                            <br>
-                            <p class="company-name"><strong>${file.company_location}</strong></p>
-                            <p class="text-muted date-time">
-                                <i class="fas fa-calendar-alt"></i> ${file.date} -  
-                                <i class="fas fa-clock"></i> ${file.time}
-                            </p>
-                            </div>
-                        </div>
-                        `;
-
-                        fileContent += fileHTML;
-                    });
-
-                    fileContent += `</div></div>`;
-                    resultContainer.innerHTML = fileContent;
-
-                    if (divider) divider.style.display = 'block';
-                } else {
-                    resultContainer.innerHTML = `<p>No file on this selected day</p>`;
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching file:', error);
-                const resultContainer = document.querySelector('.result-container');
-                resultContainer.innerHTML = `<p>No file on this selected day</p>`;
-            });
-
+                        html += `</div></div>`;
+                        resultContainer.innerHTML = html;
+                        if (divider) divider.style.display = 'block';
+                    } else {
+                        resultContainer.innerHTML = `<p>No file on this selected day.</p>`;
+                    }
+                })
+                .catch(err => {
+                    document.querySelector('.result-container').innerHTML = `<p>Error loading files.</p>`;
+                    console.error(err);
+                });
         });
 
-        daysContainer.appendChild(dayElement);
+        daysContainer.appendChild(el);
     }
 }
 
-// Initialize calendar with current month/year
 function initializeCalendar() {
     const today = new Date();
-    const currentMonth = today.getMonth() + 1;
-    const currentYear = today.getFullYear();
-
-    document.getElementById('month').value = currentMonth;
-    document.getElementById('year').value = currentYear;
-
+    document.getElementById('month').value = today.getMonth() + 1;
+    document.getElementById('year').value = today.getFullYear();
     loadCalendar();
 }
 
 document.getElementById('month').addEventListener('change', loadCalendar);
 document.getElementById('year').addEventListener('change', loadCalendar);
-
-// Start calendar
 initializeCalendar();
-
 </script>
-
 
 {% endblock %}
