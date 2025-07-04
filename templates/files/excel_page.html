@@ -404,87 +404,90 @@
 <h2>{% trans "Recently Files" %}</h2>
 </div>
 <div class="widget-content">
-    <div class="list list-sidebar-products">
-        <div class="grid">
-            {% for file in files %}
-                <div class="grid__item item" {% if forloop.counter > 6 %}style="display: none;"{% endif %}>
-                    <div class="mini-list-item">
-                        <div class="mini-view_image blur-up lazyload"> 
-                            {% if file.uploaded_file|has_file %}
-                                <a class="grid-view-item__link" href="{{ file.uploaded_file.url }}" target="_blank">
-                                    {% if file.file_extension|in_list:".jpg,.jpeg,.png,.gif" %}
-                                        <img class="grid-view-item__image" src="{{ file.uploaded_file.url }}" alt="Image File" />
-                                    
-                                    {% elif file.file_extension|in_list:".mp4,.webm,.ogg" %}
-                                        <img class="grid-view-item__image" src="{% static 'login-form/images/VIDEO.jpeg' %}" alt="Video File" />
-                                    
-                                    {% elif file.file_extension|in_list:".mp3,.wav,.aac" %}
-                                        <div class="audio-wrapper">
-                                            <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="grid-view-item__image">
-                                            <button class="audio-play-button" onclick="toggleAudio(this)">
-                                                <i class="fas fa-play"></i>
-                                            </button>
-                                            <audio class="audio-player">
-                                                <source src="{{ file.uploaded_file.url }}" type="audio/{{ file.file_extension|slice:'1:' }}">
-                                                Your browser does not support the audio tag.
-                                            </audio>
-                                        </div>
+  <div class="list list-sidebar-products">
+    <div class="grid">
+      {% for file in files %}
+        <div class="grid__item item" {% if forloop.counter > 6 %}style="display: none;"{% endif %}>
+          <div class="mini-list-item">
+            <div class="mini-view_image blur-up lazyload"> 
+              {% if file.file_url %}
+                <a class="grid-view-item__link" href="{{ file.file_url }}" target="_blank">
+                  {% if file.file_extension|in_list:".jpg,.jpeg,.png,.gif" %}
+                    <img class="grid-view-item__image" src="{{ file.file_url }}" alt="Image File" />
 
-                                    {% elif file.file_extension == '.pdf' %}
-                                        <img class="grid-view-item__image" src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF File" />
+                  {% elif file.file_extension|in_list:".mp4,.webm,.ogg" %}
+                    <img class="grid-view-item__image" src="{% static 'login-form/images/VIDEO.jpeg' %}" alt="Video File" />
 
-                                    {% elif file.file_extension|in_list:".doc,.docx" %}
-                                        <img class="grid-view-item__image" src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" />
-
-                                    {% elif file.file_extension|in_list:".ppt,.pptx" %}
-                                        <img class="grid-view-item__image" src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint File" />
-
-                                    {% elif file.file_extension|in_list:".xls,.xlsx" %}
-                                        <img class="grid-view-item__image" src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel File" />
-
-                                    {% elif file.file_extension|in_list:".zip,.rar" %}
-                                        <img class="grid-view-item__image" src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP File" />
-
-                                    {% else %}
-                                        <img class="grid-view-item__image" src="{% static 'login-form/images/default-file.png' %}" alt="Generic File" />
-                                    {% endif %}
-                                </a>
-                            {% elif file.youtube_url %}
-                                <a class="grid-view-item__link" href="https://youtube.com/watch?v={{ file.youtube_url }}" target="_blank">
-                                    <img class="grid-view-item__image" src="https://img.youtube.com/vi/{{ file.youtube_url|youtube_id }}/mqdefault.jpg" alt="YouTube Video" />
-                                </a>
-                            {% else %}
-                                <img class="grid-view-item__image" src="{% static 'login-form/images/default-file.png' %}" alt="No File or URL" />
-                            {% endif %}
-                        </div>
-
-                        <div class="details"> 
-                            {% if file.uploaded_file|has_file %}
-                                <a class="grid-view-item__title" href="{{ file.uploaded_file.url }}" target="_blank" style="color:Darker;">
-                                    {{ file.company_location }}
-                                </a>
-                            {% elif file.youtube_url %}
-                                <a class="grid-view-item__title" href="https://youtube.com/watch?v={{ file.youtube_url }}" target="_blank" style="color:Darker;">
-                                    {{ file.company_location }}
-                                </a>
-                            {% else %}
-                                <span class="grid-view-item__title" style="color:Darker;">
-                                    {{ file.company_location }}
-                                </span>
-                            {% endif %}
-                            <div class="grid-view-item__meta">
-                                <span class="product-price__price">
-                                    <span class="money" style="color:grey;">{{ file.date }} - {{ file.time }}</span>
-                                </span>
-                            </div>
-                        </div>
+                  {% elif file.file_extension|in_list:".mp3,.wav,.aac" %}
+                    <div class="audio-wrapper">
+                      <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="grid-view-item__image">
+                      <button class="audio-play-button" onclick="toggleAudio(this)">
+                        <i class="fas fa-play"></i>
+                      </button>
+                      <audio class="audio-player">
+                        <source src="{{ file.file_url }}" type="audio/{{ file.file_extension|slice:'1:' }}">
+                        Your browser does not support the audio tag.
+                      </audio>
                     </div>
-                </div> 
-                {% empty %}
-                <p style="margin-left: 35px;">{% trans "No files uploaded yet." %}</p>
-            {% endfor %}
-        </div>
+
+                  {% elif file.file_extension == '.pdf' %}
+                    <img class="grid-view-item__image" src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF File" />
+
+                  {% elif file.file_extension|in_list:".doc,.docx" %}
+                    <img class="grid-view-item__image" src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" />
+
+                  {% elif file.file_extension|in_list:".ppt,.pptx" %}
+                    <img class="grid-view-item__image" src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint File" />
+
+                  {% elif file.file_extension|in_list:".xls,.xlsx" %}
+                    <img class="grid-view-item__image" src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel File" />
+
+                  {% elif file.file_extension|in_list:".zip,.rar" %}
+                    <img class="grid-view-item__image" src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP File" />
+
+                  {% else %}
+                    <img class="grid-view-item__image" src="{% static 'login-form/images/default-file.png' %}" alt="Generic File" />
+                  {% endif %}
+                </a>
+
+              {% elif file.youtube_url %}
+                <a class="grid-view-item__link" href="https://youtube.com/watch?v={{ file.youtube_url }}" target="_blank">
+                  <img class="grid-view-item__image" src="https://img.youtube.com/vi/{{ file.youtube_url|youtube_id }}/mqdefault.jpg" alt="YouTube Video" />
+                </a>
+
+              {% else %}
+                <img class="grid-view-item__image" src="{% static 'login-form/images/default-file.png' %}" alt="No File or URL" />
+              {% endif %}
+            </div>
+
+            <div class="details"> 
+              {% if file.file_url %}
+                <a class="grid-view-item__title" href="{{ file.file_url }}" target="_blank" style="color:Dark;">
+                  {{ file.company_location }}
+                </a>
+              {% elif file.youtube_url %}
+                <a class="grid-view-item__title" href="https://youtube.com/watch?v={{ file.youtube_url }}" target="_blank" style="color:Dark;">
+                  {{ file.company_location }}
+                </a>
+              {% else %}
+                <span class="grid-view-item__title" style="color:Dark;">
+                  {{ file.company_location }}
+                </span>
+              {% endif %}
+
+              <div class="grid-view-item__meta">
+                <span class="product-price__price">
+                  <span class="money" style="color:grey;">{{ file.date }} - {{ file.time }}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div> 
+      {% empty %}
+        <p style="margin-left: 35px;">{% trans "No files uploaded yet." %}</p>
+      {% endfor %}
     </div>
+  </div>
 </div>
 </div>
 
