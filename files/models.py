@@ -5,9 +5,8 @@ from django.core.exceptions import ValidationError
 from datetime import date, datetime
 from ckeditor.fields import RichTextField
 
-
 class FileUpload(models.Model):
-    uploaded_file = models.FileField(upload_to='uploads/', blank=True, null=True)
+    file_url = models.URLField(blank=True, null=True)  # Supabase file URL
     youtube_url = models.URLField(blank=True, null=True)
     date = models.DateField()
     time = models.TimeField()
@@ -18,21 +17,27 @@ class FileUpload(models.Model):
 
     def file_extension(self):
         """Returns the file extension in lowercase"""
-        if self.uploaded_file:
-            _, ext = os.path.splitext(self.uploaded_file.name)
+        if self.file_url:
+            _, ext = os.path.splitext(self.file_url)
             return ext.lower()
         return ''
 
     def clean(self):
-        """Ensure PDF files are not allowed and at least one input is provided"""
-        if not self.uploaded_file and not self.youtube_url:
+        """Ensure at least one input is provided and PDFs are not uploaded"""
+        if not self.file_url and not self.youtube_url:
             raise ValidationError("You must upload a file or provide a YouTube URL.")
-        if self.uploaded_file and self.file_extension() == '.pdf':
+        if self.file_url and self.file_extension() == '.pdf':
             raise ValidationError("PDF files are not allowed.")
         super().clean()
 
 
+
         
+
+
+
+
+
 
 
 
@@ -44,24 +49,34 @@ def validate_pdf(value):
 class PDFUpload(models.Model):
     company_location = models.CharField(max_length=255)
     info_id = models.CharField(max_length=255, blank=True, null=True)
-    pdf_file = models.FileField(upload_to='pdfs/', validators=[validate_pdf])
-    date = models.DateField()
-    time = models.TimeField()
-    
-    # Optional image with a default
-    image = models.ImageField(upload_to='images/', default='login-form/images/pdf_pics.png') 
+    pdf_url = models.URLField(null=True)  # Supabase PDF URL
+    date = models.DateField(null=True)
+    time = models.TimeField(null=True)
+
+    # Optional image URL (used as cover)
+    image_url = models.URLField(
+        blank=True,
+        null=True,
+        default='https://cdn-icons-png.flaticon.com/512/337/337946.png'
+    )
 
     def __str__(self):
-        return f"{self.company_location} - {self.info_id} - {self.pdf_file.name}"
+        return f"{self.company_location} - {self.info_id} - {self.pdf_url}"
 
     def file_extension(self):
-        _, ext = os.path.splitext(self.pdf_file.name)
+        _, ext = os.path.splitext(self.pdf_url)
         return ext.lower()
+    
+
+
+
+
+
 
 
 
 class Gallery(models.Model):
-    uploaded_file = models.ImageField(upload_to='gallery/')
+    image_url = models.URLField(null=True)  # Supabase image URL
     title = models.CharField(max_length=255)
 
     def __str__(self):

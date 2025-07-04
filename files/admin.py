@@ -65,17 +65,23 @@ from .models import (
 
 
 
+from django.contrib import admin
+from django.utils.html import format_html
+from django.templatetags.static import static
+import os
+from .models import FileUpload, PDFUpload, Gallery
+
 
 @admin.register(FileUpload)
 class FileUploadAdmin(admin.ModelAdmin):
-    # Ensure the 'file_icon' method is included in list_display
-    list_display = ('date', 'time', 'company_location', 'file_icon', 'uploaded_file')
+    list_display = ('date', 'time', 'company_location', 'file_icon', 'file_url')
 
     def file_icon(self, obj):
-        """Show a file icon based on the file extension (excluding PDF)"""
-        ext = os.path.splitext(obj.uploaded_file.name)[1].lower()  # Get the file extension
-        
-        # Check for common file types and return appropriate icons
+        """Show an icon based on file extension (excluding PDF)"""
+        if not obj.file_url:
+            return "-"
+        ext = os.path.splitext(obj.file_url)[1].lower()
+
         if ext in ['.jpg', '.jpeg', '.png', '.gif']:
             icon = 'image-icon.png'
         elif ext == '.txt':
@@ -83,53 +89,29 @@ class FileUploadAdmin(admin.ModelAdmin):
         elif ext == '.zip':
             icon = 'zip-icon.png'
         else:
-            icon = 'default-file-icon.png'  # Fallback for unsupported file types
+            icon = 'default-file-icon.png'
 
-        # Return the icon HTML, ensure it's being pulled from static path correctly
         icon_url = static(f'login-form/images/{icon}')
         return format_html('<img src="{}" width="30" style="object-fit: contain;" />', icon_url)
 
-    file_icon.short_description = 'File Icon'  # Change column name in the admin panel
-
-
-
-
-
-
-
-
-
-
-
-
-
+    file_icon.short_description = 'File Icon'
 
 
 @admin.register(PDFUpload)
 class PDFUploadAdmin(admin.ModelAdmin):
-    list_display = ('company_location', 'info_id', 'pdf_file', 'date', 'time')
-
-
-
-
-
-
-
-
-
+    list_display = ('company_location', 'info_id', 'pdf_url', 'date', 'time')
 
 
 class GalleryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'image_display')  # Custom method to display image
+    list_display = ('title', 'image_display')
 
     def image_display(self, obj):
-        return format_html('<img src="{}" style="width: 100px; height: auto;" />', obj.uploaded_file.url)
+        return format_html('<img src="{}" style="width: 100px; height: auto;" />', obj.image_url)
+
     image_display.short_description = 'Image'
 
+
 admin.site.register(Gallery, GalleryAdmin)
-
-
-
 
 
 

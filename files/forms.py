@@ -5,17 +5,22 @@ from .models import Hymn, FrenchHymn, Hymn_Content
 from django import forms
 
 
+from django import forms
 
-class FileUploadForm(forms.ModelForm):
-    youtube_url = forms.URLField(  # rename this from youtube_link to youtube_url
+
+# ============================
+# File Upload Form
+# ============================
+class FileUploadForm(forms.Form):
+    uploaded_file = forms.FileField(required=False)
+    youtube_url = forms.URLField(
         required=False,
         label="YouTube URL",
         widget=forms.URLInput(attrs={'placeholder': 'Enter YouTube video URL (optional)'})
     )
-
-    class Meta:
-        model = FileUpload
-        fields = ['uploaded_file', 'youtube_url', 'date', 'time', 'company_location']
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    company_location = forms.CharField(max_length=255)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -26,24 +31,35 @@ class FileUploadForm(forms.ModelForm):
             raise forms.ValidationError("You must upload a file or provide a YouTube URL.")
 
 
+# ============================
+# PDF Upload Form
+# ============================
 from django import forms
+
+# ✅ Custom widget
+class MultiFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
 
 class PDFUploadForm(forms.Form):
     company_location = forms.CharField(max_length=255)
     info_id = forms.CharField(max_length=255, required=False)
-    pdf_files = forms.FileField(required=True)  # Multiple files handled in view
+    pdf_files = forms.FileField(
+        required=True,
+        widget=MultiFileInput(attrs={'multiple': True})
+    )
     date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
     image = forms.ImageField(required=False)
 
-
-
-
+# ============================
+# Gallery Upload Form
+# ============================
 class GalleryUploadForm(forms.Form):
-    uploaded_files = forms.FileField(required=False)
+    uploaded_files = forms.FileField(
+        required=True,
+        widget=MultiFileInput(attrs={'multiple': True})
+    )
     title = forms.CharField(max_length=255)
-
-
 
 
 

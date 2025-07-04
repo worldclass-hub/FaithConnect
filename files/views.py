@@ -142,8 +142,6 @@ def signup_view(request):
 
 
 
-
-
 @login_required
 def home(request):
     if request.method == "POST":
@@ -153,35 +151,21 @@ def home(request):
             uploaded_file = request.FILES.get("uploaded_file")
 
             if uploaded_file:
-                # Save file temporarily
-                temp_file_path = f"/tmp/{uploaded_file.name}"
-                with open(temp_file_path, "wb+") as temp_file:
+                temp_path = f"/tmp/{uploaded_file.name}"
+                with open(temp_path, "wb+") as temp_file:
                     for chunk in uploaded_file.chunks():
                         temp_file.write(chunk)
 
-                # Upload to Supabase storage
-                supabase.storage.from_("user-uploads").upload(
-                    f"uploads/{uploaded_file.name}",  # path in bucket
-                    temp_file_path,
-                    {"content-type": uploaded_file.content_type}
-                )
-
-                # Optionally store the URL or name in the model if needed
-                # instance.uploaded_file.name = f"uploads/{uploaded_file.name}"
-
-                # Clean up temporary file
-                os.remove(temp_file_path)
+                supabase_url = upload_file_to_supabase(temp_path, "user-uploads")
+                instance.uploaded_file = supabase_url
+                os.remove(temp_path)
 
             instance.save()
             return redirect("excel_page")
-        else:
-            print("Form errors:", form.errors)
     else:
         form = FileUploadForm()
 
     return render(request, "files/home.html", {"form": form})
-
-
 
 
 
@@ -383,45 +367,48 @@ def never_show_modal(request):
 
 
 
-
+from .upload_to_supabase import upload_file_to_supabase
 
 @login_required
 def upload_pdf(request):
     if request.method == 'POST':
         form = PDFUploadForm(request.POST, request.FILES)
-        files = request.FILES.getlist('pdf_files')  # Get multiple files
+        files = request.FILES.getlist('pdf_files')
         image = request.FILES.get('image', None)
 
         if form.is_valid():
             for file in files:
                 if file.name.endswith('.pdf'):
-                    # Save file temporarily
                     temp_path = f"/tmp/{file.name}"
                     with open(temp_path, "wb+") as temp_file:
                         for chunk in file.chunks():
                             temp_file.write(chunk)
 
-                    # Upload to Supabase
-                    supabase.storage.from_("user-uploads").upload(
-                        f"uploads/{file.name}",
-                        temp_path,
-                        {"content-type": file.content_type}
-                    )
+                    # Upload PDF to Supabase and get public URL
+                    supabase_url = upload_file_to_supabase(temp_path, "user-uploads")
 
-                    # Save to DB
+                    # Upload image to Supabase too (optional)
+                    image_url = None
+                    if image:
+                        image_path = f"/tmp/{image.name}"
+                        with open(image_path, "wb+") as img_file:
+                            for chunk in image.chunks():
+                                img_file.write(chunk)
+                        image_url = upload_file_to_supabase(image_path, "user-uploads")
+                        os.remove(image_path)
+
                     PDFUpload.objects.create(
                         company_location=form.cleaned_data['company_location'],
                         info_id=form.cleaned_data.get('info_id', ''),
-                        pdf_file=file,  # Save original file to your media
+                        pdf_file=supabase_url,
                         date=form.cleaned_data['date'],
                         time=form.cleaned_data['time'],
-                        image=image if image else None
+                        image=image_url or 'login-form/images/pdf_pics.png'
                     )
 
-                    # Delete temp file
                     os.remove(temp_path)
 
-            return redirect('pdf_document')  # Replace with your correct redirect
+            return redirect('pdf_document')
     else:
         form = PDFUploadForm()
 
@@ -596,7 +583,6 @@ def get_file_for_date(request, year, month, day):
 
 
 
-
 @login_required
 def upload_image(request):
     if request.method == 'POST':
@@ -606,30 +592,21 @@ def upload_image(request):
             files = request.FILES.getlist('uploaded_files')
 
             for file in files:
-                # Save to temporary location
-                temp_file_path = f"/tmp/{file.name}"
-                with open(temp_file_path, "wb+") as temp_file:
+                temp_path = f"/tmp/{file.name}"
+                with open(temp_path, "wb+") as temp_file:
                     for chunk in file.chunks():
                         temp_file.write(chunk)
 
-                # Upload to Supabase Storage
-                supabase.storage.from_("user-uploads").upload(
-                    f"lookbook/{file.name}",  # Folder for LookBook
-                    temp_file_path,
-                    {"content-type": file.content_type}
-                )
+                image_url = upload_file_to_supabase(temp_path, "user-uploads")
 
-                # Save to DB
-                gallery_instance = Gallery.objects.create(
+                Gallery.objects.create(
                     title=title,
-                    uploaded_file=file
+                    uploaded_file=image_url
                 )
 
-                os.remove(temp_file_path)
+                os.remove(temp_path)
 
-            return redirect('lookbook')  # Or wherever your LookBook display page is
-        else:
-            print(form.errors)
+            return redirect('lookbook')
     else:
         form = GalleryUploadForm()
 
