@@ -7,20 +7,17 @@ from django import forms
 
 from django import forms
 
+class FileUploadForm(forms.ModelForm):
+    class Meta:
+        model = FileUpload
+        fields = ['date', 'time', 'company_location']  # exclude fields handled manually (e.g. file_url, youtube_url)
 
-# ============================
-# File Upload Form
-# ============================
-class FileUploadForm(forms.Form):
     uploaded_file = forms.FileField(required=False)
     youtube_url = forms.URLField(
         required=False,
         label="YouTube URL",
         widget=forms.URLInput(attrs={'placeholder': 'Enter YouTube video URL (optional)'})
     )
-    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
-    company_location = forms.CharField(max_length=255)
 
     def clean(self):
         cleaned_data = super().clean()
