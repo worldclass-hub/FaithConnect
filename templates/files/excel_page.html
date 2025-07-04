@@ -536,101 +536,101 @@
                             <!-- Files will be shown here -->
                         </div>
                         
-                {% load static %}
-                {% load my_filters %}
+              {% load static %}
+{% load my_filters %}
 
-                <div class="grid-products grid--view-items all-files-container" id="itemsContainer">
-                <h3>{% trans "All Uploaded Files" %}</h3>
-                    <br>
-                    <div class="row">
-                        {% for file in files %}
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-2 item" {% if forloop.counter > 6 %} style="display:none;" {% endif %}>
-                                <div class="product-image position-relative file-container blur-up lazyload">
+<div class="grid-products grid--view-items all-files-container" id="itemsContainer">
+  <h3>{% trans "All Uploaded Files" %}</h3>
+  <br>
+  <div class="row">
+    {% for file in files %}
+      <div class="col-6 col-sm-6 col-md-4 col-lg-2 item" {% if forloop.counter > 6 %} style="display:none;" {% endif %}>
+        <div class="product-image position-relative file-container blur-up lazyload">
 
-                                    {% if file.uploaded_file %}
-                                        {% if file.file_extension|in_list:".jpg,.jpeg,.png,.gif" %}
-                                            <img src="{{ file.uploaded_file.url }}" alt="Image" class="file-icon">
+          {% if file.file_url %}
+            {% if file.file_extension|in_list:".jpg,.jpeg,.png,.gif" %}
+              <img src="{{ file.file_url }}" alt="Image" class="file-icon">
 
-                                        {% elif file.file_extension|in_list:".mp4,.webm,.ogg" %}
-                                            <video width="100%" height="240" controls class="file-icon">
-                                                <source src="{{ file.uploaded_file.url }}" type="video/{{ file.file_extension|slice:'1:' }}">
-                                                Your browser does not support the video tag.
-                                            </video>
+            {% elif file.file_extension|in_list:".mp4,.webm,.ogg" %}
+              <video width="100%" height="240" controls class="file-icon">
+                <source src="{{ file.file_url }}" type="video/{{ file.file_extension|slice:'1:' }}">
+                Your browser does not support the video tag.
+              </video>
 
-                                        {% elif file.file_extension|in_list:".mp3,.wav,.aac" %}
-                                            <div class="audio-wrapper">
-                                                <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="audio-image">
-                                                <button class="audio-play-button" onclick="toggleAudio(this)">
-                                                    <i class="fas fa-play"></i>
-                                                </button>
-                                                <audio class="audio-player">
-                                                    <source src="{{ file.uploaded_file.url }}" type="audio/{{ file.file_extension|slice:'1:' }}">
-                                                    Your browser does not support the audio tag.
-                                                </audio>
-                                            </div>
+            {% elif file.file_extension|in_list:".mp3,.wav,.aac" %}
+              <div class="audio-wrapper">
+                <img src="{% static 'login-form/images/audowhite.jpeg' %}" alt="Audio Thumbnail" class="audio-image">
+                <button class="audio-play-button" onclick="toggleAudio(this)">
+                  <i class="fas fa-play"></i>
+                </button>
+                <audio class="audio-player">
+                  <source src="{{ file.file_url }}" type="audio/{{ file.file_extension|slice:'1:' }}">
+                  Your browser does not support the audio tag.
+                </audio>
+              </div>
 
-                                        {% elif file.file_extension == '.pdf' %}
-                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                                <img src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF" width="100%" class="file-icon">
-                                                View PDF
-                                            </a>
+            {% elif file.file_extension == '.pdf' %}
+              <a href="{{ file.file_url }}" target="_blank">
+                <img src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF" width="100%" class="file-icon">
+                View PDF
+              </a>
 
-                                        {% elif file.file_extension|in_list:".doc,.docx" %}
-                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                                <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" width="100%" class="file-icon">
-                                                View Document
-                                            </a>
+            {% elif file.file_extension|in_list:".doc,.docx" %}
+              <a href="{{ file.file_url }}" target="_blank">
+                <img src="{% static 'login-form/images/Word_image.jpeg' %}" alt="Word Document" width="100%" class="file-icon">
+                View Document
+              </a>
 
-                                        {% elif file.file_extension|in_list:".ppt,.pptx" %}
-                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                                <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint" width="100%" class="file-icon">
-                                                View Presentation
-                                            </a>
+            {% elif file.file_extension|in_list:".ppt,.pptx" %}
+              <a href="{{ file.file_url }}" target="_blank">
+                <img src="{% static 'login-form/images/PPT.jpeg' %}" alt="PowerPoint" width="100%" class="file-icon">
+                View Presentation
+              </a>
 
-                                        {% elif file.file_extension|in_list:".xls,.xlsx" %}
-                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                                <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel" width="100%" class="file-icon">
-                                                View Spreadsheet
-                                            </a>
+            {% elif file.file_extension|in_list:".xls,.xlsx" %}
+              <a href="{{ file.file_url }}" target="_blank">
+                <img src="{% static 'login-form/images/Excel_image.jpeg' %}" alt="Excel" width="100%" class="file-icon">
+                View Spreadsheet
+              </a>
 
-                                        {% elif file.file_extension|in_list:".zip,.rar" %}
-                                            <a href="{{ file.uploaded_file.url }}" download>
-                                                <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%" class="file-icon">
-                                                Download File
-                                            </a>
+            {% elif file.file_extension|in_list:".zip,.rar" %}
+              <a href="{{ file.file_url }}" download>
+                <img src="{% static 'login-form/images/ZIP.jpeg' %}" alt="ZIP" width="100%" class="file-icon">
+                Download File
+              </a>
 
-                                        {% else %}
-                                            <a href="{{ file.uploaded_file.url }}" target="_blank">
-                                                <img src="{{ file.uploaded_file.url }}" alt="Uploaded File" width="100%" class="file-icon">
-                                                View File
-                                            </a>
-                                        {% endif %}
+            {% else %}
+              <a href="{{ file.file_url }}" target="_blank">
+                <img src="{{ file.file_url }}" alt="Uploaded Fileiii" width="100%" class="file-icon">
+                View File
+              </a>
+            {% endif %}
 
-                                        <a href="{{ file.uploaded_file.url }}" class="download-icon" download>
-                                            <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
-                                        </a>
+            <a href="{{ file.file_url }}" class="download-icon" download>
+              <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
+            </a>
 
-                                {% elif file.youtube_url %}
-                                    <iframe class="rounded-video" 
-                                            src="https://www.youtube.com/embed/{{ file.youtube_url|youtube_id }}" 
-                                            frameborder="0" allowfullscreen>
-                                    </iframe>
+          {% elif file.youtube_url %}
+            <iframe class="rounded-video"
+              src="https://www.youtube.com/embed/{{ file.youtube_url|youtube_id }}"
+              frameborder="0" allowfullscreen>
+            </iframe>
 
-                                    {% else %}
-                                        <p>No file or video uploaded.</p>
-                                    {% endif %}
+          {% else %}
+            <p>No file or video uploaded.</p>
+          {% endif %}
 
-                                </div>
+        </div>
 
-                                <p class="company-name"><strong>{{ file.company_location }}</strong></p>
-                                <p class="text-muted date-time">
-                                    <i class="fas fa-calendar-alt"></i> {{ file.date }} -
-                                    <i class="fas fa-clock"></i> {{ file.time }}
-                                </p>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
+        <p class="company-name"><strong>{{ file.company_location }}</strong></p>
+        <p class="text-muted date-time">
+          <i class="fas fa-calendar-alt"></i> {{ file.date }} -
+          <i class="fas fa-clock"></i> {{ file.time }}
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 
 
                         

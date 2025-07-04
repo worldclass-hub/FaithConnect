@@ -5,8 +5,11 @@ from django.core.exceptions import ValidationError
 from datetime import date, datetime
 from ckeditor.fields import RichTextField
 
+
+
+
 class FileUpload(models.Model):
-    file_url = models.URLField(blank=True, null=True)  # Supabase file URL
+    file_url = models.URLField(blank=True, null=True)
     youtube_url = models.URLField(blank=True, null=True)
     date = models.DateField()
     time = models.TimeField()
@@ -16,19 +19,13 @@ class FileUpload(models.Model):
         return f"{self.company_location} - {self.date} {self.time}"
 
     def file_extension(self):
-        """Returns the file extension in lowercase"""
+        """Returns the file extension from file_url even with query params"""
         if self.file_url:
-            _, ext = os.path.splitext(self.file_url)
-            return ext.lower()
+            path = self.file_url.split('?')[0]
+            _, ext = os.path.splitext(path)
+            return ext.lower().strip()
         return ''
 
-    def clean(self):
-        """Ensure at least one input is provided and PDFs are not uploaded"""
-        if not self.file_url and not self.youtube_url:
-            raise ValidationError("You must upload a file or provide a YouTube URL.")
-        if self.file_url and self.file_extension() == '.pdf':
-            raise ValidationError("PDF files are not allowed.")
-        super().clean()
 
 
 
@@ -81,6 +78,7 @@ class Gallery(models.Model):
 
     def __str__(self):
         return self.title
+
 
 
 

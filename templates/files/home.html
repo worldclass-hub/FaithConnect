@@ -239,11 +239,16 @@
   </style>
 </head>
 <body>
+{% if error %}
+  <div style="background: #ffdddd; color: red; padding: 10px; margin-bottom: 10px; border: 1px solid red;">
+    {{ error }}
+  </div>
+{% endif %}
 
   <div class="upload-container">
     <h3>Upload Files or Submit YouTube Link</h3>
 
-    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+  <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
 
       <div class="drop-area" onclick="document.getElementById('fileInput').click()">
@@ -255,7 +260,6 @@
         type="file"
         id="fileInput"
         name="uploaded_file"
-        multiple
         style="display: none;"
         accept=".jpg,.jpeg,.png,.gif,.mp4,.webm,.ogg,.mp3,.wav,.aac,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip"
         onchange="handleFiles(event)"

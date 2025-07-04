@@ -4,29 +4,26 @@ from ckeditor.fields import RichTextField
 from .models import Hymn, FrenchHymn, Hymn_Content
 from django import forms
 
-
+# ============================
+# File Upload Form
+# ============================
 from django import forms
+from .models import FileUpload
 
 class FileUploadForm(forms.ModelForm):
+    uploaded_file = forms.FileField(required=False)
+
     class Meta:
         model = FileUpload
-        fields = ['date', 'time', 'company_location']  # exclude fields handled manually (e.g. file_url, youtube_url)
-
-    uploaded_file = forms.FileField(required=False)
-    youtube_url = forms.URLField(
-        required=False,
-        label="YouTube URL",
-        widget=forms.URLInput(attrs={'placeholder': 'Enter YouTube video URL (optional)'})
-    )
+        fields = ['youtube_url', 'date', 'time', 'company_location']
 
     def clean(self):
         cleaned_data = super().clean()
-        uploaded_file = cleaned_data.get('uploaded_file')
+        uploaded_file = self.files.get('uploaded_file')
         youtube_url = cleaned_data.get('youtube_url')
 
         if not uploaded_file and not youtube_url:
             raise forms.ValidationError("You must upload a file or provide a YouTube URL.")
-
 
 # ============================
 # PDF Upload Form
@@ -57,7 +54,6 @@ class GalleryUploadForm(forms.Form):
         widget=MultiFileInput(attrs={'multiple': True})
     )
     title = forms.CharField(max_length=255)
-
 
 
 class HymnForm(forms.ModelForm):
