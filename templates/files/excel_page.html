@@ -666,6 +666,7 @@
         
     </div>
     <!--End Body Content-->
+
     <script>
 // ✅ LOAD MORE FILES
 document.addEventListener("DOMContentLoaded", function () {
@@ -770,35 +771,35 @@ function loadCalendar() {
                             if (f.file_extension === 'youtube' && f.youtube_id) {
                                 html += `<iframe class="rounded-video" src="https://www.youtube.com/embed/${f.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
                             } else if (['jpg','jpeg','png','gif'].includes(f.file_extension)) {
-                                html += `<img src="${f.uploaded_file_url}" class="file-icon">`;
+                                html += `<img src="${f.file_url}" class="file-icon">`;
                             } else if (['mp4','webm','ogg'].includes(f.file_extension)) {
-                                html += `<video controls class="file-icon"><source src="${f.uploaded_file_url}" type="video/${f.file_extension}"></video>`;
+                                html += `<video controls class="file-icon"><source src="${f.file_url}" type="video/${f.file_extension}"></video>`;
                             } else if (['mp3','wav','aac'].includes(f.file_extension)) {
                                 html += `<div class="audio-wrapper">
                                             <img src="/static/login-form/images/audowhite.jpeg" class="audio-image">
                                             <button class="audio-play-button" onclick="toggleAudio(this)"><i class="fas fa-play"></i></button>
                                             <audio class="audio-player">
-                                                <source src="${f.uploaded_file_url}" type="audio/${f.file_extension}">
+                                                <source src="${f.file_url}" type="audio/${f.file_extension}">
                                             </audio>
                                          </div>`;
                             } else if (['doc','docx'].includes(f.file_extension)) {
-                                html += `<a href="${f.uploaded_file_url}" target="_blank">
+                                html += `<a href="${f.file_url}" target="_blank">
                                             <img src="/static/login-form/images/Word_image.jpeg" class="file-icon">
                                          </a>`;
                             } else if (['ppt','pptx'].includes(f.file_extension)) {
-                                html += `<a href="${f.uploaded_file_url}" target="_blank">
+                                html += `<a href="${f.file_url}" target="_blank">
                                             <img src="/static/login-form/images/PPT.jpeg" class="file-icon">
                                          </a>`;
                             } else if (['xls','xlsx'].includes(f.file_extension)) {
-                                html += `<a href="${f.uploaded_file_url}" target="_blank">
+                                html += `<a href="${f.file_url}" target="_blank">
                                             <img src="/static/login-form/images/Excel_image.jpeg" class="file-icon">
                                          </a>`;
                             } else if (['zip','rar'].includes(f.file_extension)) {
-                                html += `<a href="${f.uploaded_file_url}" target="_blank">
+                                html += `<a href="${f.file_url}" target="_blank">
                                             <img src="/static/login-form/images/ZIP.jpeg" class="file-icon">
                                          </a>`;
                             } else {
-                                html += `<a href="${f.uploaded_file_url}" target="_blank">Unknown File</a>`;
+                                html += `<a href="${f.file_url}" target="_blank">Unknown File</a>`;
                             }
 
                             html += `<p class="company-name"><strong>${f.company_location}</strong></p>
