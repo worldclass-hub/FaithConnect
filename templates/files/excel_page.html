@@ -666,8 +666,16 @@
         
     </div>
     <!--End Body Content-->
+<script>
+const STATIC_IMAGES = {
+    audio: "/static/login-form/images/audowhite.jpeg",
+    word: "/static/login-form/images/Word_image.jpeg",
+    ppt: "/static/login-form/images/PPT.jpeg",
+    excel: "/static/login-form/images/Excel_image.jpeg",
+    zip: "/static/login-form/images/ZIP.jpeg",
+    default: "/static/login-form/images/default-file.png"
+};
 
-    <script>
 // ✅ LOAD MORE FILES
 document.addEventListener("DOMContentLoaded", function () {
     const items = document.querySelectorAll("#itemsContainer .item");
@@ -680,7 +688,6 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = currentIndex; i < currentIndex + itemsPerClick; i++) {
                 if (items[i]) items[i].style.display = "block";
             }
-
             currentIndex += itemsPerClick;
             if (currentIndex >= items.length) {
                 loadMoreBtn.textContent = "No more files";
@@ -694,7 +701,6 @@ document.addEventListener("DOMContentLoaded", function () {
 // ✅ AUDIO TOGGLE
 function toggleAudio(button) {
     const audio = button.nextElementSibling;
-    const isPlaying = !audio.paused;
     const allAudios = document.querySelectorAll(".audio-player");
 
     allAudios.forEach(a => {
@@ -702,9 +708,12 @@ function toggleAudio(button) {
         a.previousElementSibling.innerHTML = '<i class="fas fa-play"></i>';
     });
 
-    if (!isPlaying) {
+    if (audio.paused) {
         audio.play();
         button.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+        audio.pause();
+        button.innerHTML = '<i class="fas fa-play"></i>';
     }
 }
 
@@ -712,7 +721,6 @@ function toggleAudio(button) {
 function loadCalendar() {
     const monthSelect = document.getElementById('month');
     const yearInput = document.getElementById('year');
-
     const month = parseInt(monthSelect.value) - 1;
     const year = parseInt(yearInput.value);
 
@@ -765,41 +773,34 @@ function loadCalendar() {
                         let html = `<div class="grid-products grid--view-items" id="itemsContainer"><div class="row">`;
 
                         filtered.forEach(f => {
-                            html += `<div class="col-6 col-sm-6 col-md-4 col-lg-2 item">
-                                        <div class="product-image position-relative file-container">`;
+                            html += `<div class="col-6 col-sm-6 col-md-4 col-lg-2 item"><div class="product-image position-relative file-container">`;
 
                             if (f.file_extension === 'youtube' && f.youtube_id) {
                                 html += `<iframe class="rounded-video" src="https://www.youtube.com/embed/${f.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
                             } else if (['jpg','jpeg','png','gif'].includes(f.file_extension)) {
-                                html += `<img src="${f.file_url}" class="file-icon">`;
+                                html += `<img src="${f.uploaded_file_url}" class="file-icon">`;
                             } else if (['mp4','webm','ogg'].includes(f.file_extension)) {
-                                html += `<video controls class="file-icon"><source src="${f.file_url}" type="video/${f.file_extension}"></video>`;
+                                html += `<video controls class="file-icon"><source src="${f.uploaded_file_url}" type="video/${f.file_extension}"></video>`;
                             } else if (['mp3','wav','aac'].includes(f.file_extension)) {
                                 html += `<div class="audio-wrapper">
-                                            <img src="/static/login-form/images/audowhite.jpeg" class="audio-image">
-                                            <button class="audio-play-button" onclick="toggleAudio(this)"><i class="fas fa-play"></i></button>
+                                            <img src="${STATIC_IMAGES.audio}" class="audio-image">
+                                            <button class="audio-play-button" onclick="toggleAudio(this)">
+                                                <i class="fas fa-play"></i>
+                                            </button>
                                             <audio class="audio-player">
-                                                <source src="${f.file_url}" type="audio/${f.file_extension}">
+                                                <source src="${f.uploaded_file_url}" type="audio/${f.file_extension}">
                                             </audio>
                                          </div>`;
                             } else if (['doc','docx'].includes(f.file_extension)) {
-                                html += `<a href="${f.file_url}" target="_blank">
-                                            <img src="/static/login-form/images/Word_image.jpeg" class="file-icon">
-                                         </a>`;
+                                html += `<a href="${f.uploaded_file_url}" target="_blank"><img src="${STATIC_IMAGES.word}" class="file-icon"></a>`;
                             } else if (['ppt','pptx'].includes(f.file_extension)) {
-                                html += `<a href="${f.file_url}" target="_blank">
-                                            <img src="/static/login-form/images/PPT.jpeg" class="file-icon">
-                                         </a>`;
+                                html += `<a href="${f.uploaded_file_url}" target="_blank"><img src="${STATIC_IMAGES.ppt}" class="file-icon"></a>`;
                             } else if (['xls','xlsx'].includes(f.file_extension)) {
-                                html += `<a href="${f.file_url}" target="_blank">
-                                            <img src="/static/login-form/images/Excel_image.jpeg" class="file-icon">
-                                         </a>`;
+                                html += `<a href="${f.uploaded_file_url}" target="_blank"><img src="${STATIC_IMAGES.excel}" class="file-icon"></a>`;
                             } else if (['zip','rar'].includes(f.file_extension)) {
-                                html += `<a href="${f.file_url}" target="_blank">
-                                            <img src="/static/login-form/images/ZIP.jpeg" class="file-icon">
-                                         </a>`;
+                                html += `<a href="${f.uploaded_file_url}" target="_blank"><img src="${STATIC_IMAGES.zip}" class="file-icon"></a>`;
                             } else {
-                                html += `<a href="${f.file_url}" target="_blank">Unknown File</a>`;
+                                html += `<a href="${f.uploaded_file_url}" target="_blank"><img src="${STATIC_IMAGES.default}" class="file-icon"></a>`;
                             }
 
                             html += `<p class="company-name"><strong>${f.company_location}</strong></p>
