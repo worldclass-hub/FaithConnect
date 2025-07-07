@@ -475,6 +475,7 @@ def user_logout(request):
 
 
 
+
 def extract_youtube_id(url):
     try:
         parsed_url = urlparse(url)
