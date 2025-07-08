@@ -475,7 +475,6 @@ def user_logout(request):
 
 
 
-
 def extract_youtube_id(url):
     try:
         parsed_url = urlparse(url)
@@ -487,13 +486,10 @@ def extract_youtube_id(url):
             else:
                 query = parse_qs(parsed_url.query)
                 return query.get('v', [None])[0]
-
         elif 'youtu.be' in netloc:
             return parsed_url.path.lstrip('/')
-
     except Exception:
         return None
-
     return None
 
 def get_file_for_date(request, year, month, day):
@@ -512,35 +508,33 @@ def get_file_for_date(request, year, month, day):
         if isinstance(file, FileUpload):
             if file.file_url:
                 file_url = file.file_url
-                file_extension = file.file_extension()
+                ext = file.file_extension()
+                file_extension = ext.lstrip(".") if ext else ''
             elif file.youtube_url:
                 youtube_url = file.youtube_url
                 youtube_id = extract_youtube_id(youtube_url)
                 file_extension = 'youtube'
-        else:
+        else:  # PDFUpload
             file_url = file.pdf_file.url if file.pdf_file else ''
-            file_extension = file_url.split('.')[-1].lower()
+            file_extension = file_url.split('.')[-1].lower().lstrip(".")
 
-        image_url = file.image.url if getattr(file, 'image', None) else None
+        # Safely get image/info_id if they exist
+        image_url = file.image.url if hasattr(file, 'image') and file.image else None
         info_id = getattr(file, 'info_id', None)
 
         file_data.append({
-            "uploaded_file_url": file_url,
+            "file_url": file_url,
             "file_extension": file_extension,
             "company_location": file.company_location,
             "date": file.date.strftime("%Y-%m-%d"),
             "time": file.time.strftime("%I:%M %p"),
             "image_url": image_url,
-            "info_id": info_id if info_id else "No Info ID",
+            "info_id": info_id or "No Info ID",
             "youtube_url": youtube_url,
-            "youtube_id": youtube_id
+            "youtube_id": youtube_id,
         })
 
-    if file_data:
-        return JsonResponse({"files": file_data})
-    else:
-        return JsonResponse({"message": "No file on this selected day."})
-
+    return JsonResponse({"files": file_data}) if file_data else JsonResponse({"message": "No file on this selected day."})
 
 
 
@@ -1204,7 +1198,6 @@ def never_show_modal(request):
 
 
 
-
 # --- SEARCH BOYS ---
 def search_api(request):
     query = request.GET.get('q', '').strip()
@@ -1252,7 +1245,7 @@ def search_api(request):
                     "title": hymn.title or "No Title",
                     "description": hymn.description[:100] + "..." if hymn.description else "",
                     "language": model.__name__.replace('Hymn', '') or 'English',
-                    "url": f"/hymn/{hymn.id}/"
+                    "url": f"/search-results/?q={query}&id={hymn.id}&language={model.__name__.replace('Hymn','').lower()}#hymn-{hymn.id}"
                 })
 
         for pdf in pdf_results:
@@ -1260,7 +1253,7 @@ def search_api(request):
                 "id": pdf.id,
                 "name": pdf.pdf_file.name,
                 "company_location": pdf.company_location,
-                "url": f"/pdf-view/{pdf.id}/"
+                "url": f"/search-results/?q={query}#file-{pdf.id}"
             })
 
         for file in file_results:
@@ -1270,7 +1263,7 @@ def search_api(request):
                 "name": title,
                 "company_location": file.company_location,
                 "youtube_url": file.youtube_url,
-                "url": f"/file-view/{file.id}/"
+                "url": f"/search-results/?q={query}#file-{file.id}"
             })
 
     user_has_profile = request.user.is_authenticated and UserProfile.objects.filter(user=request.user).exists()
@@ -1282,106 +1275,37 @@ def search_api(request):
         "updates": updates
     })
 
+
 def search_results(request):
     query = request.GET.get('q', '').strip()
-    highlight_id = None
-    highlight_language = None
+    highlight_id = request.GET.get('id')
+    highlight_language = request.GET.get('language')
 
-    if query:
-        pdf_results = PDFUpload.objects.filter(
-            Q(company_location__icontains=query) |
-            Q(info_id__icontains=query) |
-            Q(date__icontains=query)
-        )
+    pdf_results = PDFUpload.objects.filter(
+        Q(company_location__icontains=query) |
+        Q(info_id__icontains=query) |
+        Q(date__icontains=query)
+    ) if query else PDFUpload.objects.none()
 
-        file_results = FileUpload.objects.filter(
-            Q(company_location__icontains=query) |
-            Q(date__icontains=query)
-        )
+    file_results = FileUpload.objects.filter(
+        Q(company_location__icontains=query) |
+        Q(date__icontains=query) |
+        Q(youtube_url__icontains=query)
+    ) if query else FileUpload.objects.none()
 
-        hymn_results = Hymn.objects.filter(
-            Q(title__icontains=query) |
-            Q(hymn_type__icontains=query) |
-            Q(description__icontains=query) |
-            Q(lyrics__icontains=query)
-        )
+    hymn_models = {
+        'english': Hymn,
+        'hausa': HausaHymn,
+        'igbo': IgboHymn,
+        'yoruba': YorubaHymn,
+        'french': FrenchHymn,
+        'chinese': ChineseHymn,
+        'german': GermanHymn,
+    }
 
-        french_hymn_results = FrenchHymn.objects.filter(
-            Q(title__icontains=query) |
-            Q(hymn_type__icontains=query) |
-            Q(description__icontains=query) |
-            Q(lyrics__icontains=query)
-        )
-
-        yoruba_hymn_results = YorubaHymn.objects.filter(
-            Q(title__icontains=query) |
-            Q(hymn_type__icontains=query) |
-            Q(description__icontains=query) |
-            Q(lyrics__icontains=query)
-        )
-
-        igbo_hymn_results = IgboHymn.objects.filter(
-            Q(title__icontains=query) |
-            Q(hymn_type__icontains=query) |
-            Q(description__icontains=query) |
-            Q(lyrics__icontains=query)
-        )
-
-        hausa_hymn_results = HausaHymn.objects.filter(
-            Q(title__icontains=query) |
-            Q(hymn_type__icontains=query) |
-            Q(description__icontains=query) |
-            Q(lyrics__icontains=query)
-        )
-
-        chinese_hymn_results = ChineseHymn.objects.filter(
-            Q(title__icontains=query) |
-            Q(hymn_type__icontains=query) |
-            Q(description__icontains=query) |
-            Q(lyrics__icontains=query)
-        )
-
-        german_hymn_results = GermanHymn.objects.filter(
-            Q(title__icontains=query) |
-            Q(hymn_type__icontains=query) |
-            Q(description__icontains=query) |
-            Q(lyrics__icontains=query)
-        )
-
-        if chinese_hymn_results.exists():
-            highlight_id = chinese_hymn_results.first().id
-            highlight_language = 'chinese'
-        elif german_hymn_results.exists():
-            highlight_id = german_hymn_results.first().id
-            highlight_language = 'german'
-        elif yoruba_hymn_results.exists():
-            highlight_id = yoruba_hymn_results.first().id
-            highlight_language = 'yoruba'
-        elif hymn_results.exists():
-            highlight_id = hymn_results.first().id
-            highlight_language = 'english'
-        elif french_hymn_results.exists():
-            highlight_id = french_hymn_results.first().id
-            highlight_language = 'french'
-        elif igbo_hymn_results.exists():
-            highlight_id = igbo_hymn_results.first().id
-            highlight_language = 'igbo'
-        elif hausa_hymn_results.exists():
-            highlight_id = hausa_hymn_results.first().id
-            highlight_language = 'hausa'
-
-        if highlight_id and highlight_language and not request.GET.get('id'):
-            return redirect(f"{request.path}?q={query}&id={highlight_id}&language={highlight_language}")
-    else:
-        pdf_results = PDFUpload.objects.none()
-        file_results = FileUpload.objects.none()
-        hymn_results = Hymn.objects.none()
-        french_hymn_results = FrenchHymn.objects.none()
-        yoruba_hymn_results = YorubaHymn.objects.none()
-        igbo_hymn_results = IgboHymn.objects.none()
-        hausa_hymn_results = HausaHymn.objects.none()
-        chinese_hymn_results = ChineseHymn.objects.none()
-        german_hymn_results = GermanHymn.objects.none()
+    highlighted_hymns = None
+    if highlight_id and highlight_language in hymn_models:
+        highlighted_hymns = hymn_models[highlight_language].objects.filter(id=highlight_id)
 
     user_has_profile = request.user.is_authenticated and UserProfile.objects.filter(user=request.user).exists()
 
@@ -1408,21 +1332,13 @@ def search_results(request):
         "query": query,
         "pdf_results": pdf_results_with_images,
         "file_results": file_results,
-        "hymn_results": hymn_results,
-        "french_hymn_results": french_hymn_results,
-        "yoruba_hymn_results": yoruba_hymn_results,
-        "igbo_hymn_results": igbo_hymn_results,
-        "hausa_hymn_results": hausa_hymn_results,
-        "chinese_hymn_results": chinese_hymn_results,
-        "german_hymn_results": german_hymn_results,
+        "highlighted_hymns": highlighted_hymns,
+        "highlight_language": highlight_language,
         "recent_files": recent_files,
         "recent_pdfs": recent_pdfs,
         "user_has_profile": user_has_profile,
         "updates": updates
     })
-
-
-
 
 
 

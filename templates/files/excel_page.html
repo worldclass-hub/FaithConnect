@@ -667,7 +667,11 @@
     </div>
     <!--End Body Content-->
 
-    <script>
+
+
+
+    
+<script>
 // ✅ LOAD MORE FILES
 document.addEventListener("DOMContentLoaded", function () {
     const items = document.querySelectorAll("#itemsContainer .item");
@@ -765,45 +769,61 @@ function loadCalendar() {
                         let html = `<div class="grid-products grid--view-items" id="itemsContainer"><div class="row">`;
 
                         filtered.forEach(f => {
+                            const safeURL = encodeURI(f.file_url || '');
                             html += `<div class="col-6 col-sm-6 col-md-4 col-lg-2 item">
                                         <div class="product-image position-relative file-container">`;
 
                             if (f.file_extension === 'youtube' && f.youtube_id) {
                                 html += `<iframe class="rounded-video" src="https://www.youtube.com/embed/${f.youtube_id}" frameborder="0" allowfullscreen></iframe>`;
                             } else if (['jpg','jpeg','png','gif'].includes(f.file_extension)) {
-                                html += `<img src="${f.file_url}" class="file-icon">`;
+                                html += `<img src="${safeURL}" onerror="this.src='/static/login-form/images/default-file.png'" class="file-icon">`;
                             } else if (['mp4','webm','ogg'].includes(f.file_extension)) {
-                                html += `<video controls class="file-icon"><source src="${f.file_url}" type="video/${f.file_extension}"></video>`;
+                                html += `<video controls class="file-icon">
+                                            <source src="${safeURL}" type="video/${f.file_extension}">
+                                         </video>`;
                             } else if (['mp3','wav','aac'].includes(f.file_extension)) {
-                                html += `<div class="audio-wrapper">
+                                html += `<div class="audio-wrapper" style="position:relative; text-align:center;">
                                             <img src="/static/login-form/images/audowhite.jpeg" class="audio-image">
-                                            <button class="audio-play-button" onclick="toggleAudio(this)"><i class="fas fa-play"></i></button>
-                                            <audio class="audio-player">
-                                                <source src="${f.file_url}" type="audio/${f.file_extension}">
+                                            <button class="audio-play-button" onclick="toggleAudio(this)">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                            <audio class="audio-player" style="display:none;">
+                                                <source src="${safeURL}" type="audio/${f.file_extension}">
                                             </audio>
                                          </div>`;
                             } else if (['doc','docx'].includes(f.file_extension)) {
-                                html += `<a href="${f.file_url}" target="_blank">
+                                html += `<a href="${safeURL}" target="_blank">
                                             <img src="/static/login-form/images/Word_image.jpeg" class="file-icon">
                                          </a>`;
                             } else if (['ppt','pptx'].includes(f.file_extension)) {
-                                html += `<a href="${f.file_url}" target="_blank">
+                                html += `<a href="${safeURL}" target="_blank">
                                             <img src="/static/login-form/images/PPT.jpeg" class="file-icon">
                                          </a>`;
                             } else if (['xls','xlsx'].includes(f.file_extension)) {
-                                html += `<a href="${f.file_url}" target="_blank">
+                                html += `<a href="${safeURL}" target="_blank">
                                             <img src="/static/login-form/images/Excel_image.jpeg" class="file-icon">
                                          </a>`;
                             } else if (['zip','rar'].includes(f.file_extension)) {
-                                html += `<a href="${f.file_url}" target="_blank">
+                                html += `<a href="${safeURL}" target="_blank">
                                             <img src="/static/login-form/images/ZIP.jpeg" class="file-icon">
                                          </a>`;
                             } else {
-                                html += `<a href="${f.file_url}" target="_blank">Unknown File</a>`;
+                                html += `<a href="${safeURL}" target="_blank">
+                                            <img src="/static/login-form/images/default-file.png" class="file-icon">
+                                            View File
+                                         </a>`;
                             }
 
+                            // ✅ Universal download icon
+                            html += `<a href="${safeURL}" download class="download-icon" style="position:absolute; top:5px; right:10px;">
+                                        <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
+                                     </a>`;
+
                             html += `<p class="company-name"><strong>${f.company_location}</strong></p>
-                                     <p class="text-muted date-time"><i class="fas fa-calendar-alt"></i> ${f.date} - <i class="fas fa-clock"></i> ${f.time}</p>
+                                     <p class="text-muted date-time">
+                                        <i class="fas fa-calendar-alt"></i> ${f.date} - 
+                                        <i class="fas fa-clock"></i> ${f.time}
+                                     </p>
                                      </div></div>`;
                         });
 
@@ -835,5 +855,6 @@ document.getElementById('month').addEventListener('change', loadCalendar);
 document.getElementById('year').addEventListener('change', loadCalendar);
 initializeCalendar();
 </script>
+
 
 {% endblock %}
