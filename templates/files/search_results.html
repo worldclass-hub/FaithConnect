@@ -560,37 +560,35 @@
   <p style="margin-left: 35px;">{% trans "No recent files available." %}</p>
 {% endfor %}
 
+<!-- Loop through recent PDFs -->
+{% for pdf in recent_pdfs %}
+    <div class="grid__item item" {% if forloop.counter > 6 %}style="display: none;"{% endif %}>
+        <div class="mini-list-item">
+            <div class="mini-view_image blur-up lazyload">
+                <a class="grid-view-item__link" href="{{ pdf.pdf_url }}" target="_blank">
+                    <img class="grid-view-item__image"
+                         src="{{ pdf.image_url|default:'https://cdn-icons-png.flaticon.com/512/337/337946.png' }}"
+                         alt="PDF Thumbnail" />
+                </a>
+            </div>
 
-                <!-- Loop through recent PDFs -->
-                {% for pdf in recent_pdfs %}
-                    <div class="grid__item item" {% if forloop.counter > 6 %}style="display: none;"{% endif %}>
-                        <div class="mini-list-item">
-                            <div class="mini-view_image blur-up lazyload">
-                                <a class="grid-view-item__link" href="{{ pdf.pdf_file.url }}" target="_blank">
-                                    {% if pdf.image %}
-                                        <img class="grid-view-item__image" src="{{ pdf.image.url }}" alt="PDF Thumbnail" />
-                                    {% else %}
-                                        <img class="grid-view-item__image" src="{% static 'login-form/images/PDF_image.jpeg' %}" alt="PDF" />
-                                    {% endif %}
-                                </a>
-                            </div>
+            <div class="details">
+                <a class="grid-view-item__title" href="{{ pdf.pdf_url }}" target="_blank">
+                    {{ pdf.company_location }}
+                </a>
+                <div class="grid-view-item__meta">
+                    <span class="product-price__price">
+                        <span class="money" style="font-size:10px;">{{ pdf.date }} - {{ pdf.time }}</span>
+                    </span>
+                </div>
+                <p style="font-size:9px;">Filename: {{ pdf.pdf_url|default:''|cut:'https://supabase.storage.url/'|slice:":30" }}</p>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <p style="margin-left: 35px;">{% trans "No recent PDFs available." %}</p>
+{% endfor %}
 
-                            <div class="details">
-                                <a class="grid-view-item__title" href="{{ pdf.pdf_file.url }}" target="_blank">
-                                    {{ pdf.company_location }}
-                                </a>
-                                <div class="grid-view-item__meta">
-                                    <span class="product-price__price">
-                                        <span class="money" style="font-size:10px;">{{ pdf.date }} - {{ pdf.time }}</span>
-                                    </span>
-                                </div>
-                                <p style="font-size:9px;">Filename: {{ pdf.pdf_file.name|cut:"pdfs/" }}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% empty %}
-                    <p style="margin-left: 35px;">{% trans "No recent PDFs available." %}</p>
-                {% endfor %}
             </div>
         </div>
     </div>
@@ -651,26 +649,28 @@
                                 <h2>Search Results for "{{ query }}"</h2>
                                 <div class="row">
 
-                                    <!-- PDF Results -->
-                                    {% for pdf in pdf_results %}
-                                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 item blur-up lazyload" id="file-{{ pdf.id }}">
-                                        <div class="product-image position-relative file-container">
-                                            <a href="{{ pdf.pdf_file.url }}" target="_blank">
-                                                <img src="{{ pdf.image }}" alt="PDF" width="100%" class="file-icon">
-                                                View PDF
-                                            </a>
-                                            <br>
-                                            <a href="{{ pdf.pdf_file.url }}" class="download-icon" download>
-                                                <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
-                                            </a>
-                                            <p class="company-name"><strong>{{ pdf.company_location }}</strong></p>
-                                            <p class="text-muted date-time">
-                                                <i class="fas fa-calendar-alt"></i> {{ pdf.date }} -
-                                                <i class="fas fa-clock"></i> {{ pdf.time }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
+                                  <!-- PDF Results -->
+{% for pdf in pdf_results %}
+<div class="col-6 col-sm-6 col-md-4 col-lg-2 item blur-up lazyload" id="file-{{ pdf.id }}">
+    <div class="product-image position-relative file-container">
+        <a href="{{ pdf.pdf_file }}" target="_blank">
+            <img src="{{ pdf.image|default:'https://cdn-icons-png.flaticon.com/512/337/337946.png' }}" 
+                 alt="PDF Thumbnail" width="100%" class="file-icon">
+            View PDF
+        </a>
+        <br>
+        <a href="{{ pdf.pdf_file }}" class="download-icon" download>
+            <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
+        </a>
+        <p class="company-name"><strong>{{ pdf.company_location }}</strong></p>
+        <p class="text-muted date-time">
+            <i class="fas fa-calendar-alt"></i> {{ pdf.date }} -
+            <i class="fas fa-clock"></i> {{ pdf.time }}
+        </p>
+    </div>
+</div>
+{% endfor %}
+
 
                                     <!-- File Results (Files & YouTube) -->
 {% for file in file_results %}
@@ -974,31 +974,26 @@
 
 
 
-
 <script>
 function toggleAudio(button) {
     let audio = button.nextElementSibling;
     const allAudios = document.querySelectorAll(".audio-player");
 
     if (audio.paused) {
-        // Pause all other audios and reset their buttons
         allAudios.forEach(a => {
             a.pause();
             if (a.previousElementSibling) {
                 a.previousElementSibling.innerHTML = '<i class="fas fa-play"></i>';
             }
         });
-        // Play clicked audio and set button to pause icon
         audio.play();
         button.innerHTML = '<i class="fas fa-pause"></i>';
     } else {
-        // Pause clicked audio and set button to play icon
         audio.pause();
         button.innerHTML = '<i class="fas fa-play"></i>';
     }
 }
 
-// Script Code for the Calendar
 function loadCalendar() {
     const monthSelect = document.getElementById('month');
     const yearInput = document.getElementById('year');
@@ -1015,7 +1010,6 @@ function loadCalendar() {
     const startDay = firstDay.getDay();
     const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
 
-    // Fill blank days before first day of month
     for (let i = 0; i < adjustedStartDay; i++) {
         const blankDay = document.createElement('div');
         blankDay.classList.add('blank-day');
@@ -1052,7 +1046,7 @@ function loadCalendar() {
                         let fileContent = `<div class="grid-products grid--view-items" id="itemsContainer"><div class="row">`;
 
                         data.files.forEach(file => {
-                            const fileUrl = file.file_url;
+                            const fileUrl = file.uploaded_file_url;
                             const ext = file.file_extension.toLowerCase();
                             let fileHTML = `<div class="col-6 col-sm-6 col-md-4 col-lg-2 item"><div class="product-image position-relative file-container">`;
 
@@ -1152,6 +1146,7 @@ document.getElementById('month').addEventListener('change', loadCalendar);
 document.getElementById('year').addEventListener('change', loadCalendar);
 initializeCalendar();
 </script>
+
 
 
 <script>

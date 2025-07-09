@@ -669,8 +669,6 @@
 
 
 
-
-    
 <script>
 // ✅ LOAD MORE FILES
 document.addEventListener("DOMContentLoaded", function () {
@@ -814,7 +812,6 @@ function loadCalendar() {
                                          </a>`;
                             }
 
-                            // ✅ Universal download icon
                             html += `<a href="${safeURL}" download class="download-icon" style="position:absolute; top:5px; right:10px;">
                                         <i class="fa fa-download" style="color: white; font-size: 16px;"></i>
                                      </a>`;
@@ -855,6 +852,7 @@ document.getElementById('month').addEventListener('change', loadCalendar);
 document.getElementById('year').addEventListener('change', loadCalendar);
 initializeCalendar();
 </script>
+
 
 
 {% endblock %}

@@ -488,8 +488,6 @@ def user_logout(request):
 
 
 
-
-
 from django.http import JsonResponse
 from datetime import date
 from urllib.parse import urlparse, parse_qs
@@ -541,7 +539,8 @@ def get_file_for_date(request, year, month, day):
             file_extension = file.file_extension().lstrip(".") if file.file_extension() else ''
 
         file_data.append({
-            "uploaded_file_url": file_url,
+            "file_url": file_url,  # ✅ For Excel calendar
+            "uploaded_file_url": file_url,  # ✅ For Search calendar
             "file_extension": file_extension,
             "company_location": file.company_location,
             "date": file.date.strftime("%Y-%m-%d"),
@@ -553,7 +552,6 @@ def get_file_for_date(request, year, month, day):
         })
 
     return JsonResponse({"files": file_data})
-
 
 
 
@@ -1212,9 +1210,17 @@ def never_show_modal(request):
 
 
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.db.models import Q
+from django.templatetags.static import static
 
-
-
+from .models import (
+    FileUpload, PDFUpload, Hymn, HausaHymn, IgboHymn,
+    YorubaHymn, FrenchHymn, ChineseHymn, GermanHymn,
+    NewUpdate, UserProfile
+)
+from .forms import UserProfileForm
 
 # --- SEARCH BOYS ---
 def search_api(request):
@@ -1269,8 +1275,10 @@ def search_api(request):
         for pdf in pdf_results:
             results.append({
                 "id": pdf.id,
-                "name": pdf.pdf_file.name,
+                "name": pdf.pdf_url.split('/')[-1] if pdf.pdf_url else "No Name",
                 "company_location": pdf.company_location,
+                "pdf_url": pdf.pdf_url,
+                "image_url": pdf.image_url or 'https://cdn-icons-png.flaticon.com/512/337/337946.png',
                 "url": f"/search-results/?q={query}#file-{pdf.id}"
             })
 
@@ -1329,14 +1337,14 @@ def search_results(request):
 
     pdf_results_with_images = []
     for pdf in pdf_results:
-        image_url = pdf.image.url if pdf.image else static('login-form/images/PDF_image.jpeg')
+        image_url = pdf.image_url if pdf.image_url else static('login-form/images/PDF_image.jpeg')
         pdf_results_with_images.append({
             "id": pdf.id,
-            "name": pdf.pdf_file.name,
+            "name": pdf.pdf_url.split('/')[-1] if pdf.pdf_url else "No Name",
             "company_location": pdf.company_location,
-            "url": f"/pdf-view/{pdf.id}/",
+            "url": pdf.pdf_url,
             "image": image_url,
-            "pdf_file": pdf.pdf_file,
+            "pdf_file": pdf.pdf_url,
             "date": pdf.date,
             "time": pdf.time,
             "info_id": pdf.info_id
@@ -1357,7 +1365,6 @@ def search_results(request):
         "user_has_profile": user_has_profile,
         "updates": updates
     })
-
 
 
 

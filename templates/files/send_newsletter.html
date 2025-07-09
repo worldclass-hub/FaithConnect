@@ -40,31 +40,33 @@
             width: 100%;
         }
 
-        .container {
-            width: 90%;
-            max-width: 600px;
-            min-height: 400px;
-            height: auto;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: move;
-            z-index: 100;
-            overflow-y: auto;
-            max-height: 80%;
-        }
+       .container {
+    width: 80%;
+    max-width: 1200px;
+    min-height: 500px;
+    height: auto;
+    margin: auto;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: move;
+    z-index: 100;
+    overflow-y: auto;
+    max-height: 85%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
 
-        @media (max-width: 480px) {
-            .container {
-                width: 98%;
-                padding: 20px;
-            }
-        }
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+}
+
 
         .subscribers-box {
             background: #f1f1f1;
