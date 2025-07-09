@@ -1572,18 +1572,6 @@ def youth_ministry(request):
 
 
 
-from .models import WorshipMinistryLeader
-
-def worship_ministry(request):
-    leaders = WorshipMinistryLeader.objects.all()
-    return render(request, 'files/worship_ministry.html', {'leaders': leaders})
-
-
-
-
-
-
-
 from .models import MenMinistryLeader
 
 def men_ministry(request):

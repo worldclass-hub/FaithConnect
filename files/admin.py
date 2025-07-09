@@ -881,11 +881,6 @@ class EvangelismMinistryLeaderAdmin(admin.ModelAdmin):
 
 
 
-from .models import WorshipMinistryLeader
-
-@admin.register(WorshipMinistryLeader)
-class WorshipMinistryLeaderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'title']
 
 
 

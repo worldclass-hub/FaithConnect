@@ -66,7 +66,6 @@ urlpatterns = [
     path('women-ministry/', views.women_ministry, name='women_ministry'),
     path('evangelism-ministry/', views.evangelism_ministry, name='evangelism_ministry'),
     path('youth-ministry/', views.youth_ministry, name='youth_ministry'),
-    path('worship-ministry/', views.worship_ministry, name='worship_ministry'),
     path('men-ministry/', views.men_ministry, name='men_ministry'),
     path('overview/', views.overview, name='overview'),
     path('prayer/', views.prayer_request_view, name='prayer-request'),
