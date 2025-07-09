@@ -419,56 +419,52 @@
 
 
 
-
-                    <!--Recently PDF_Files-->
-                    <div class="sidebar_widget">
-                        <div class="widget-title">
-                            <br>
-                            <br>
-                        <h2>{% trans "Recently Files" %}</h2>
+<!--Recently PDF_Files-->
+<div class="sidebar_widget">
+    <div class="widget-title">
+        <br><br>
+        <h2>{% trans "Recently Files" %}</h2>
+    </div>
+    <div class="widget-content">
+        <div class="list list-sidebar-products">
+            <div class="grid">
+                {% for pdf in recent_pdfs %}
+                <div class="grid__item">
+                    <div class="mini-list-item">
+                        <div class="mini-view_image">
+                            <a class="grid-view-item__link" href="{{ pdf.pdf_url }}" target="_blank">
+                                <img class="grid-view-item__image blur-up lazyload"
+                                    src="{% if pdf.image_url %}{{ pdf.image_url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
+                                    alt="PDF" />
+                            </a>
                         </div>
-                        <div class="widget-content">
-                            <div class="list list-sidebar-products">
-                                <div class="grid">
-                                    {% for pdf in recent_pdfs %}
-                                    <div class="grid__item">
-                                        <div class="mini-list-item">
-                                            <div class="mini-view_image">
-                                                <a class="grid-view-item__link" href="{{ pdf.pdf_file.url }}"
-                                                    target="_blank">
-                                                    <img class="grid-view-item__image blur-up lazyload"
-                                                        src="{% if pdf.image %}{{ pdf.image.url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
-                                                        alt="PDF" />
-                                                </a>
-                                            </div>
-                                            <div class="details">
-                                                <a class="grid-view-item__title" href="{{ pdf.pdf_file.url }}"
-                                                    target="_blank" style="color:grey;">
-                                                    {{ pdf.date }} - {{ pdf.time }}
-                                                </a>
+                        <div class="details">
+                            <a class="grid-view-item__title" href="{{ pdf.pdf_url }}" target="_blank" style="color:grey;">
+                                {{ pdf.date }} - {{ pdf.time }}
+                            </a>
 
-                                                <div class="grid-view-item__meta">
-                                                    <span class="product-price__price" style="font-size: 11px">
-                                                        <span class="money">
-                                                            <strong style="color:darkgreen;">Company/Location:</strong>
-                                                            {{ pdf.company_location }}
-                                                        </span>
-                                                    </span>
-                                                    <p><strong style="color:red;">ID:</strong>
-                                                        {{ pdf.info_id|default:"No Info ID" }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% empty %}
-                                    <p style="margin-left: 35px;">{% trans "No PDFs uploaded yet." %}</p>
-                                    {% endfor %}
-
-                                </div>
+                            <div class="grid-view-item__meta">
+                                <span class="product-price__price" style="font-size: 11px">
+                                    <span class="money">
+                                        <strong style="color:darkgreen;">Company/Location:</strong>
+                                        {{ pdf.company_location }}
+                                    </span>
+                                </span>
+                                <p><strong style="color:red;">ID:</strong>
+                                    {{ pdf.info_id|default:"No Info ID" }}
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <!-- End Of Recentfile-->
+                </div>
+                {% empty %}
+                <p style="margin-left: 35px;">{% trans "No PDFs uploaded yet." %}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Of Recentfile-->
 
                     <!--Banner-->
                     <div class="sidebar_widget static-banner">
@@ -508,48 +504,43 @@
                     <div class="result-container">
                         <!-- Files will be shown here -->
                     </div>
+<!-- List View Items (PDFs) -->
+<div class="list-view-items grid--view-items all-files-container" id="itemsContainer">
+    {% for pdf in page_obj %}
+    <div class="list-product list-view-item">
+        <div class="list-view-item__image-column">
+            <div class="list-view-item__image-wrapper">
+                <a href="{{ pdf.pdf_url }}" target="_blank">
+                    <img class="list-view-item__image blur-up lazyload image-height"
+                        data-src="{% if pdf.image_url %}{{ pdf.image_url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
+                        src="{% if pdf.image_url %}{{ pdf.image_url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
+                        alt="PDF" title="PDF">
+                </a>
+            </div>
+        </div>
+        <div class="list-view-item__title-column">
+            <div class="h4 grid-view-item__title">
+                <a href="{{ pdf.pdf_url }}" target="_blank">{{ pdf.date }} - {{ pdf.time }}</a>
+            </div>
+            <p>{{ pdf.company_location|slice:":24" }}</p>
+            <p class="product-price grid-view-item__meta">
+                <span class="product-price__price product-price__sale">
+                    <span class="money">{{ pdf.info_id|default:"No Info ID" }}</span>
+                </span>
+            </p>
+            <p>Filename: {{ pdf.pdf_url|cut:"https://ncctazjcffmpuniwctkz.supabase.co/storage/v1/object/public/user-uploads/"|slice:":30" }}</p>
 
-                    <!-- List View Items (PDFs) -->
-                    <div class="list-view-items grid--view-items all-files-container" id="itemsContainer">
-                        {% for pdf in page_obj %}
-                        <div class="list-product list-view-item">
-                            <div class="list-view-item__image-column">
-                                <div class="list-view-item__image-wrapper">
-                                    <a href="{{ pdf.pdf_file.url }}" target="_blank">
-                                        <img class="list-view-item__image blur-up lazyload image-height"
-                                            data-src="{% if pdf.image %}{{ pdf.image.url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
-                                            src="{% if pdf.image %}{{ pdf.image.url }}{% else %}{% static 'login-form/images/pdf_pics.png' %}{% endif %}"
-                                            alt="PDF" title="PDF">
-
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="list-view-item__title-column">
-                                <div class="h4 grid-view-item__title">
-                                    <a href="{{ pdf.pdf_file.url }}" target="_blank">{{ pdf.date }} - {{ pdf.time }}</a>
-                                </div>
-                                <p>{{ pdf.company_location|slice:":24" }}</p>
-                                <p class="product-price grid-view-item__meta">
-                                    <span class="product-price__price product-price__sale">
-                                        <span class="money">{{ pdf.info_id|default:"No Info ID" }}</span>
-                                    </span>
-                                </p>
-                                <!-- PDF Original Filename -->
-                                <p>Filename: {{ pdf.pdf_file.name|cut:"pdfs/"|slice:":19" }}</p>
-
-                                <form class="variants" action="#">
-                                    <a href="{{ pdf.pdf_file.url }}" download>
-                                        <button class="btn btn--small" type="button">Download</button>
-                                    </a>
-                                </form>
-                            </div>
-                        </div>
-                        {% empty %}
-                        <p>{% trans "No PDFs uploaded yet." %}</p>
-                        
-                        {% endfor %}
-                    </div>
-
+            <form class="variants" action="#">
+                <a href="{{ pdf.pdf_url }}" download>
+                    <button class="btn btn--small" type="button">Download</button>
+                </a>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <p>{% trans "No PDFs uploaded yet." %}</p>
+    {% endfor %}
+</div>
 
 
 
@@ -613,10 +604,13 @@
         });
     });
     // End of the Load More of the PDF Page 
+</script>
 
 
 
-
+<script>
+    // ✅ Define fallback image as a plain JS string
+    const fallbackImage = "/static/login-form/images/pdf_pics.png";
 
     function loadCalendar() {
         const monthSelect = document.getElementById('month');
@@ -658,10 +652,13 @@
 
                 const selectedDate =
                     `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                console.log("📆 Selected Date:", selectedDate);
 
                 fetch(`/get_file_for_date/${year}/${month + 1}/${day}/`)
                     .then(response => response.json())
                     .then(data => {
+                        console.log("📦 Calendar fetch response:", data);
+
                         const resultContainer = document.querySelector('.result-container');
                         resultContainer.innerHTML = '';
 
@@ -680,30 +677,31 @@
                             divider.style.display = 'none';
                         }
 
-                        const showAllUploadsContainer = document.getElementById(
-                            'show-all-uploads-container');
+                        const showAllUploadsContainer = document.getElementById('show-all-uploads-container');
                         if (showAllUploadsContainer) {
                             showAllUploadsContainer.style.display = 'block';
                         }
 
                         if (data.files && data.files.length > 0) {
                             let fileContent = `
-                            <div class="list-view-items grid--view-items all-files-container" id="itemsContainer">
-                        `;
+                                <div class="list-view-items grid--view-items all-files-container" id="itemsContainer">
+                            `;
 
-                            let hasPdf = false; // Track if there is a PDF
+                            let hasPdf = false;
 
                             data.files.forEach(file => {
                                 if (file.file_extension === 'pdf') {
-                                    hasPdf = true; // Mark that a PDF file exists
+                                    hasPdf = true;
+
+                                    const imageToUse = file.image_url || fallbackImage;
+
                                     fileContent += `
                                     <div class="list-product list-view-item">
                                         <div class="list-view-item__image-column">
                                             <div class="list-view-item__image-wrapper">
                                                 <a href="${file.uploaded_file_url}" target="_blank">
                                                     <img class="list-view-item__image blur-up lazyload image-height" 
-                                                         data-src="${file.image_url || '{% static 'login-form/images/pdf_pics.png' %}'}" 
-                                                         src="${file.image_url || '{% static 'login-form/images/pdf_pics.png' %}'}" 
+                                                         src="${imageToUse}" 
                                                          alt="PDF" title="PDF">
                                                 </a>
                                             </div>
@@ -712,22 +710,20 @@
                                             <div class="h4 grid-view-item__title">
                                                 <a href="${file.uploaded_file_url}" target="_blank">${file.date} - ${file.time}</a>
                                             </div>
-                                            <p>${file.company_location.slice(0, 24)}</p> <!-- Slice company_location -->
+                                            <p>${file.company_location.slice(0, 24)}</p>
                                             <p class="product-price grid-view-item__meta">
                                                 <span class="product-price__price product-price__sale">
                                                     <span class="money">${file.info_id || "No Info ID"}</span>
                                                 </span>
                                             </p>
-                                            <p>Filename: ${file.uploaded_file_url.split('/').pop().slice(0, 24)}</p> <!-- Slice filename -->
-
+                                            <p>Filename: ${file.uploaded_file_url.split('/').pop().slice(0, 24)}</p>
                                             <form class="variants" action="#">
                                                 <a href="${file.uploaded_file_url}" download>
                                                     <button class="btn btn--small" type="button">Download</button>
                                                 </a>
                                             </form>
                                         </div>
-                                    </div>
-                                `;
+                                    </div>`;
                                 }
                             });
 
@@ -735,7 +731,6 @@
                             resultContainer.innerHTML = fileContent;
 
                             if (!hasPdf) {
-                                // If no PDF file is found, display the message
                                 resultContainer.innerHTML = `<p>No file on this selected day</p>`;
                             }
 
@@ -747,7 +742,7 @@
                         }
                     })
                     .catch(error => {
-                        console.error('Error fetching file:', error);
+                        console.error('❌ Error fetching file:', error);
                     });
             });
 
@@ -755,7 +750,6 @@
         }
     }
 
-    // Initialize calendar
     function initializeCalendar() {
         const today = new Date();
         const currentMonth = today.getMonth() + 1;

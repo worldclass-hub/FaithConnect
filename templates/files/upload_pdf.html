@@ -249,14 +249,14 @@
 
   <div class="upload-container">
     <h3>Upload PDF Files</h3>
-    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+<form method="POST" enctype="multipart/form-data" id="uploadForm">
       {% csrf_token %}
 
       <div class="drop-area" onclick="document.getElementById('fileInput').click()">
         Drop files here <br> Or <br> <button type="button">Browse</button>
       </div>
 
-      <input type="file" id="fileInput" name="pdf_files" multiple accept=".pdf" style="display: none;" onchange="handleFiles(event)">
+<input type="file" id="fileInput" name="pdf_files" multiple accept=".pdf" style="display: none;" onchange="handleFiles(event)">
       <div id="fileList"></div>
 
       <!-- Company/Location -->

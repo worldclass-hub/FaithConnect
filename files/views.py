@@ -351,52 +351,68 @@ def never_show_modal(request):
 
 
 from .upload_to_supabase import upload_file_to_supabase
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import PDFUploadForm
+from .models import PDFUpload
+from .upload_to_supabase import upload_file_to_supabase
+import os
 
 @login_required
 def upload_pdf(request):
     if request.method == 'POST':
         form = PDFUploadForm(request.POST, request.FILES)
-        files = request.FILES.getlist('pdf_files')
-        image = request.FILES.get('image', None)
+        files = request.FILES.getlist("pdf_files")  # ✅ MULTIPLE files manually
+
+        print("📥 REQUEST.FILES:", request.FILES)
+        print("📦 getlist(pdf_files):", files)
+
+        if not files:
+            form.add_error(None, "No PDF files were submitted.")
+            return render(request, 'files/upload_pdf.html', {'form': form})
 
         if form.is_valid():
+            image = request.FILES.get('image', None)
+
             for file in files:
-                if file.name.endswith('.pdf'):
-                    temp_path = f"/tmp/{file.name}"
-                    with open(temp_path, "wb+") as temp_file:
-                        for chunk in file.chunks():
-                            temp_file.write(chunk)
+                if not file.name.lower().endswith(".pdf"):
+                    print("❌ Not a PDF:", file.name)
+                    continue
 
-                    # Upload PDF to Supabase and get public URL
-                    supabase_url = upload_file_to_supabase(temp_path, "user-uploads")
+                temp_path = f"/tmp/{file.name}"
+                with open(temp_path, "wb+") as temp_file:
+                    for chunk in file.chunks():
+                        temp_file.write(chunk)
 
-                    # Upload image to Supabase too (optional)
-                    image_url = None
-                    if image:
-                        image_path = f"/tmp/{image.name}"
-                        with open(image_path, "wb+") as img_file:
-                            for chunk in image.chunks():
-                                img_file.write(chunk)
-                        image_url = upload_file_to_supabase(image_path, "user-uploads")
-                        os.remove(image_path)
+                pdf_url = upload_file_to_supabase(temp_path, "user-uploads")
 
-                    PDFUpload.objects.create(
-                        company_location=form.cleaned_data['company_location'],
-                        info_id=form.cleaned_data.get('info_id', ''),
-                        pdf_file=supabase_url,
-                        date=form.cleaned_data['date'],
-                        time=form.cleaned_data['time'],
-                        image=image_url or 'login-form/images/pdf_pics.png'
-                    )
+                image_url = None
+                if image:
+                    image_path = f"/tmp/{image.name}"
+                    with open(image_path, "wb+") as img_file:
+                        for chunk in image.chunks():
+                            img_file.write(chunk)
+                    image_url = upload_file_to_supabase(image_path, "user-uploads")
+                    os.remove(image_path)
 
-                    os.remove(temp_path)
+                PDFUpload.objects.create(
+                    company_location=form.cleaned_data['company_location'],
+                    info_id=form.cleaned_data.get('info_id', ''),
+                    pdf_url=pdf_url,
+                    date=form.cleaned_data['date'],
+                    time=form.cleaned_data['time'],
+                    image_url=image_url or 'https://cdn-icons-png.flaticon.com/512/337/337946.png'
+                )
+
+                os.remove(temp_path)
 
             return redirect('pdf_document')
+        else:
+            print("❌ Form Errors:", form.errors)
     else:
         form = PDFUploadForm()
 
     return render(request, 'files/upload_pdf.html', {'form': form})
-
 
 
 
@@ -474,6 +490,11 @@ def user_logout(request):
 
 
 
+from django.http import JsonResponse
+from datetime import date
+from urllib.parse import urlparse, parse_qs
+from .models import FileUpload, PDFUpload
+
 
 def extract_youtube_id(url):
     try:
@@ -492,6 +513,7 @@ def extract_youtube_id(url):
         return None
     return None
 
+
 def get_file_for_date(request, year, month, day):
     selected_date = date(year, month, day)
     files = FileUpload.objects.filter(date=selected_date).order_by('-date', '-time')
@@ -499,42 +521,38 @@ def get_file_for_date(request, year, month, day):
     all_files = list(files) + list(pdf_files)
 
     file_data = []
+
     for file in all_files:
         file_url = ''
-        youtube_id = None
-        youtube_url = None
         file_extension = ''
+        youtube_url = None
+        youtube_id = None
 
         if isinstance(file, FileUpload):
             if file.file_url:
                 file_url = file.file_url
-                ext = file.file_extension()
-                file_extension = ext.lstrip(".") if ext else ''
+                file_extension = file.file_extension().lstrip(".") if file.file_extension() else ''
             elif file.youtube_url:
                 youtube_url = file.youtube_url
                 youtube_id = extract_youtube_id(youtube_url)
                 file_extension = 'youtube'
-        else:  # PDFUpload
-            file_url = file.pdf_file.url if file.pdf_file else ''
-            file_extension = file_url.split('.')[-1].lower().lstrip(".")
-
-        # Safely get image/info_id if they exist
-        image_url = file.image.url if hasattr(file, 'image') and file.image else None
-        info_id = getattr(file, 'info_id', None)
+        elif isinstance(file, PDFUpload):
+            file_url = file.pdf_url or ''
+            file_extension = file.file_extension().lstrip(".") if file.file_extension() else ''
 
         file_data.append({
-            "file_url": file_url,
+            "uploaded_file_url": file_url,
             "file_extension": file_extension,
             "company_location": file.company_location,
             "date": file.date.strftime("%Y-%m-%d"),
             "time": file.time.strftime("%I:%M %p"),
-            "image_url": image_url,
-            "info_id": info_id or "No Info ID",
+            "image_url": getattr(file, 'image_url', None),
+            "info_id": getattr(file, 'info_id', "No Info ID"),
             "youtube_url": youtube_url,
             "youtube_id": youtube_id,
         })
 
-    return JsonResponse({"files": file_data}) if file_data else JsonResponse({"message": "No file on this selected day."})
+    return JsonResponse({"files": file_data})
 
 
 

@@ -33,16 +33,13 @@ from django import forms
 # ✅ Custom widget
 class MultiFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
+from django import forms
 
 class PDFUploadForm(forms.Form):
-    company_location = forms.CharField(max_length=255)
+    company_location = forms.CharField(max_length=255, required=True)
     info_id = forms.CharField(max_length=255, required=False)
-    pdf_files = forms.FileField(
-        required=True,
-        widget=MultiFileInput(attrs={'multiple': True})
-    )
-    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=True)
+    time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=True)
     image = forms.ImageField(required=False)
 
 # ============================

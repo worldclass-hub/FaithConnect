@@ -37,33 +37,37 @@ class FileUpload(models.Model):
 
 
 
-
-# Validator to allow only PDFs
-def validate_pdf(value):
-    if not value.name.endswith('.pdf'):
-        raise ValidationError("Only PDF files are allowed.")
-
 class PDFUpload(models.Model):
     company_location = models.CharField(max_length=255)
     info_id = models.CharField(max_length=255, blank=True, null=True)
-    pdf_url = models.URLField(null=True)  # Supabase PDF URL
-    date = models.DateField(null=True)
-    time = models.TimeField(null=True)
-
-    # Optional image URL (used as cover)
+    
+    # This holds the public URL from Supabase
+    pdf_url = models.URLField(null=True)
+    
+    # Optional cover image
     image_url = models.URLField(
         blank=True,
         null=True,
         default='https://cdn-icons-png.flaticon.com/512/337/337946.png'
     )
 
+    date = models.DateField(null=True)
+    time = models.TimeField(null=True)
+
     def __str__(self):
         return f"{self.company_location} - {self.info_id} - {self.pdf_url}"
 
     def file_extension(self):
-        _, ext = os.path.splitext(self.pdf_url)
-        return ext.lower()
-    
+        if self.pdf_url:
+            return os.path.splitext(self.pdf_url.split('?')[0])[1].lower()
+        return ''
+
+
+# ✅ Validator if ever needed in a FileField or custom form field
+def validate_pdf(value):
+    if not value.name.lower().endswith('.pdf'):
+        raise ValidationError("Only PDF files are allowed.")
+
 
 
 
