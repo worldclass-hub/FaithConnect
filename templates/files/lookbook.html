@@ -20,21 +20,19 @@
             <div class="grid-sizer"></div>
 
             {% for image in page_obj %}
-                <div class="grid-lookbook grid-item blur-up lazyload">
-                    <!-- Display uploaded image -->
-                    <img src="{{ image.uploaded_file.url }}" alt="{{ image.title }}">
-                    <div class="caption">
-                        <!-- Display title of the image -->
-                        <h2>{{ image.title }}</h2>
-                        <!-- Download link -->
-                        <a class="btn" href="{{ image.uploaded_file.url }}" download>{% trans "Download" %}</a>
-                    </div>
-                </div>
-            {% empty %}
-                <div class="no-images">
-                    <p>{% trans "No images available at the moment. Please check back later." %}</p>
-                </div>
-            {% endfor %}
+    <div class="grid-lookbook grid-item blur-up lazyload">
+        <img src="{{ image.image_url }}" alt="{{ image.title }}">
+        <div class="caption">
+            <h2>{{ image.title }}</h2>
+            <a class="btn" href="{{ image.image_url }}" download>{% trans "Download" %}</a>
+        </div>
+    </div>
+{% empty %}
+    <div class="no-images">
+        <p>{% trans "No images available at the moment. Please check back later." %}</p>
+    </div>
+{% endfor %}
+
         </div>
 
         <!-- Pagination Buttons -->

@@ -2,330 +2,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GMMI Gallery Upload</title>
-    <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GMMI Gallery Upload</title>
+  <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png" />
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            position: relative;
-            background: url("{% static 'login-form/images/wallpaper2.jpg' %}") no-repeat center center fixed;
-            background-size: cover;
-            margin: 0;
-            padding: 15px;
-            overflow: hidden;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url("{% static 'login-form/images/wallpaper2.jpg' %}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+    }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: inherit;
-            z-index: -1;
-        }
+    .upload-container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
 
-        .upload-container {
-            width: 100%;
-            max-width: 500px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-height: 500px;
-            overflow-y: auto;
-        }
+    .drop-area {
+      border: 2px dashed #6c5ce7;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      cursor: pointer;
+    }
 
-        .drop-area {
-            border: 2px dashed #6c5ce7;
-            padding: 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
+    .drop-area:hover {
+      background: #f9f9f9;
+    }
 
-        .drop-area:hover {
-            background: #f1f1f1;
-        }
+    input[type="file"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            background: #f1f1f1;
-            margin-top: 5px;
-            border-radius: 5px;
-        }
+    .send-btn {
+      background: #6c5ce7;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-        .date-time-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 12px;
-        }
+    .send-btn:hover {
+      background: #4b44c6;
+    }
 
-        .input-container {
-            width: 48%;
-            text-align: left;
-        }
+    .error-msg {
+      color: red;
+      margin-bottom: 15px;
+    }
 
-        input[type="date"], input[type="time"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
+    #fileList {
+      text-align: left;
+      margin-bottom: 10px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
 
-        .location-container {
-            text-align: left;
-            margin-top: 12px;
-        }
+    .file-item {
+      background: #f1f1f1;
+      padding: 6px;
+      margin: 5px 0;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
 
-        .location-container label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+    .home-text {
+      background-color: #7bed9f;
+      color: black;
+      padding: 12px 24px;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 20px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-        .location-container input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
+    .home-text:hover {
+      background-color: #6c5ce7;
+      color: white;
+    }
 
-        .send-btn {
-            background: #6c5ce7;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
+    .home-text a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-        .send-btn:hover {
-            background: #4b44c6;
-        }
+    @media (max-width: 700px) {
+      .upload-container {
+        width: 100%;
+        max-width: 90%;
+        padding: 20px;
+      }
+    }
 
-        .home-text {
-            display: inline-block;
-            background-color: #7bed9f;
-            color: black;
-            padding: 12px 24px;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            margin-top: 30px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+    /* Preloader */
+    #crazyLoaderOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
 
-        .home-text:hover {
-            background-color: #6c5ce7;
-            color: white;
-        }
+    .crazy-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
 
-        .home-text:active {
-            background-color: #2ed573;
-        }
+    .balls {
+      display: flex;
+      gap: 12px;
+    }
 
-        .home-text a {
-            text-decoration: none;
-            color: inherit;
-        }
+    .balls div {
+      width: 20px;
+      height: 20px;
+      background: #6c5ce7;
+      border-radius: 50%;
+      animation-timing-function: cubic-bezier(0, 1, 1, 0);
+      animation-duration: 0.7s;
+      animation-iteration-count: infinite;
+    }
 
-        @media (max-width: 700px) {
-            .upload-container {
-                width: 100%;
-                max-width: 90%;
-                padding: 20px;
-            }
+    .balls div:nth-child(1) { animation-name: bounce1; animation-delay: 0s; }
+    .balls div:nth-child(2) { animation-name: bounce2; animation-delay: 0.15s; }
+    .balls div:nth-child(3) { animation-name: bounce3; animation-delay: 0.3s; }
+    .balls div:nth-child(4) { animation-name: bounce4; animation-delay: 0.45s; }
 
-            .date-time-container {
-                flex-direction: column;
-                gap: 8px;
-            }
+    @keyframes bounce1 {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-30px) rotate(45deg); background: #ff4757; }
+    }
 
-            .input-container {
-                width: 100%;
-            }
-        }
+    @keyframes bounce2 {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-40px) rotate(-45deg); background: #ffa502; }
+    }
 
-        #fileList {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 15px;
-        }
+    @keyframes bounce3 {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-35px) rotate(90deg); background: #1e90ff; }
+    }
 
-        /* --- Crazy Loader Overlay CSS --- */
-        #crazyLoaderOverlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.75);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
+    @keyframes bounce4 {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-25px) rotate(-90deg); background: #2ed573; }
+    }
 
-        .crazy-loader {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 5px solid #6c5ce7;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
 
-        .balls {
-            display: flex;
-            gap: 12px;
-        }
-
-        .balls div {
-            width: 20px;
-            height: 20px;
-            background: #6c5ce7;
-            border-radius: 50%;
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-            animation-duration: 0.7s;
-            animation-iteration-count: infinite;
-        }
-
-        .balls div:nth-child(1) { animation-name: bounce1; animation-delay: 0s; }
-        .balls div:nth-child(2) { animation-name: bounce2; animation-delay: 0.15s; }
-        .balls div:nth-child(3) { animation-name: bounce3; animation-delay: 0.3s; }
-        .balls div:nth-child(4) { animation-name: bounce4; animation-delay: 0.45s; }
-
-        @keyframes bounce1 {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-30px) rotate(45deg); background: #ff4757; }
-        }
-
-        @keyframes bounce2 {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-40px) rotate(-45deg); background: #ffa502; }
-        }
-
-        @keyframes bounce3 {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-35px) rotate(90deg); background: #1e90ff; }
-        }
-
-        @keyframes bounce4 {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-25px) rotate(-90deg); background: #2ed573; }
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 5px solid #6c5ce7;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- 🔄 Preloader Overlay -->
-    <div id="crazyLoaderOverlay">
-        <div class="crazy-loader">
-            <div class="balls">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <div class="spinner"></div>
-        </div>
+  <!-- Preloader Overlay -->
+  <div id="crazyLoaderOverlay">
+    <div class="crazy-loader">
+      <div class="balls">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="spinner"></div>
     </div>
+  </div>
 
-    <div class="upload-container">
-        <h3>Upload Image</h3>
-        <form id="uploadForm" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+  <!-- Upload Card -->
+  <div class="upload-container">
+    <h2>Upload Image to Gallery</h2>
 
-            <div class="drop-area" onclick="document.getElementById('fileInput').click()">
-                Drop files here <br> Or <br> <button type="button">Browse</button>
-            </div>
+    {% if error %}
+      <div class="error-msg">{{ error }}</div>
+    {% endif %}
 
-            <input type="file" id="fileInput" name="uploaded_files" style="display: none;" accept="image/*,video/*,.docx,.xlsx" onchange="handleFiles(event)" multiple>
+    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="drop-area" onclick="document.getElementById('fileInput').click()">
+        Drop files here or <strong>click to browse</strong>
+      </div>
+      <input type="file" id="fileInput" name="uploaded_files" multiple accept="image/*" style="display: none;" onchange="handleFiles(event)">
+      <div id="fileList"></div>
+      <input type="text" name="title" placeholder="Enter image title" required />
+      <button type="submit" id="submitBtn" class="send-btn">Upload</button>
+    </form>
+  </div>
 
-            <div id="fileList"></div>
+  <!-- LookBook Button BELOW Card -->
+  <div class="home-text">
+    <a href="{% url 'lookbook' %}">View LookBook</a>
+  </div>
 
-            <div class="location-container">
-                <label for="title"><strong>Title:</strong></label>
-                <input type="text" id="title" name="title" placeholder="Enter title of the image" required>
-            </div>
+  <!-- JS -->
+  <script>
+    function handleFiles(event) {
+      const fileList = document.getElementById("fileList");
+      fileList.innerHTML = "";
 
-            <button type="submit" id="submitBtn" class="send-btn">Upload Image</button>
-        </form>
-    </div>
+      Array.from(event.target.files).forEach(file => {
+        const item = document.createElement("div");
+        item.classList.add("file-item");
+        item.innerHTML = `<span>${file.name}</span><span style="cursor:pointer;" onclick="this.parentElement.remove()">✕</span>`;
+        fileList.appendChild(item);
+      });
+    }
 
-    <div class="home-text">
-        <a href="{% url 'lookbook' %}">LookBook</a>
-    </div>
-
-    <script>
-        function handleFiles(event) {
-            const fileList = document.getElementById("fileList");
-            fileList.innerHTML = "";
-
-            Array.from(event.target.files).forEach(file => {
-                const fileItem = document.createElement("div");
-                fileItem.classList.add("file-item");
-
-                const fileName = document.createElement("span");
-                fileName.textContent = file.name;
-
-                const removeButton = document.createElement("span");
-                removeButton.textContent = "✕";
-                removeButton.style.cursor = "pointer";
-                removeButton.onclick = () => fileItem.remove();
-
-                fileItem.appendChild(fileName);
-                fileItem.appendChild(removeButton);
-
-                fileList.appendChild(fileItem);
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const form = document.getElementById("uploadForm");
-            const overlay = document.getElementById("crazyLoaderOverlay");
-            const submitBtn = document.getElementById("submitBtn");
-
-            if (form && overlay && submitBtn) {
-                form.addEventListener("submit", function () {
-                    overlay.style.display = "flex";
-                    submitBtn.disabled = true;
-                });
-            }
-        });
-    </script>
+    document.getElementById("uploadForm").addEventListener("submit", function () {
+      document.getElementById("crazyLoaderOverlay").style.display = "flex";
+      document.getElementById("submitBtn").disabled = true;
+    });
+  </script>
 </body>
 </html>

@@ -562,40 +562,60 @@ def get_file_for_date(request, year, month, day):
 
 
 
-
-
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Gallery
+from .upload_to_supabase import upload_file_to_supabase
+import os
 
 @login_required
 def upload_image(request):
     if request.method == 'POST':
-        form = GalleryUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            title = form.cleaned_data['title']
-            files = request.FILES.getlist('uploaded_files')
+        title = request.POST.get('title')
+        files = request.FILES.getlist('uploaded_files')
 
-            for file in files:
+        print("📥 POST title:", title)
+        print("📦 Uploaded files:", files)
+
+        if not title:
+            print("❌ Missing title")
+            return render(request, 'files/gallery_upload.html', {
+                'error': 'Please enter a title.'
+            })
+
+        if not files:
+            print("❌ No files submitted")
+            return render(request, 'files/gallery_upload.html', {
+                'error': 'Please select at least one image.'
+            })
+
+        for file in files:
+            try:
+                # Save temporarily
                 temp_path = f"/tmp/{file.name}"
                 with open(temp_path, "wb+") as temp_file:
                     for chunk in file.chunks():
                         temp_file.write(chunk)
 
-                # ✅ Upload to Supabase and get URL
+                # Upload to Supabase
                 image_url = upload_file_to_supabase(temp_path, "user-uploads")
 
-                # ✅ Save correctly to the image_url field
-                Gallery.objects.create(
-                    title=title,
-                    image_url=image_url
-                )
+                # Save to DB
+                Gallery.objects.create(title=title, image_url=image_url)
+                print("✅ Uploaded and saved:", file.name)
 
+                # Delete temp file
                 os.remove(temp_path)
 
-            return redirect('lookbook')
-    else:
-        form = GalleryUploadForm()
+            except Exception as e:
+                print(f"🔥 Error uploading {file.name}: {e}")
+                return render(request, 'files/gallery_upload.html', {
+                    'error': f'Error uploading {file.name}. Try again.'
+                })
 
-    return render(request, 'files/gallery_upload.html', {'form': form})
+        return redirect('lookbook')
 
+    return render(request, 'files/gallery_upload.html')
 
 
 

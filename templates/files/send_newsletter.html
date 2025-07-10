@@ -2,260 +2,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Send Newsletter</title>
-    <script src="//cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
-    
-    <!-- Font Awesome for the Home Icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png">
+  <meta charset="UTF-8" />
+  <title>Send Newsletter</title>
+  <script src="//cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png" />
 
-
-    <style>
-        .full-width-input {
-            width: 100%;
-            min-width: 200px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        body.noscroll {
-            overflow: hidden;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: url("{% static 'login-form/images/wall7.jpg' %}") no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 600px;
-            min-height: 400px;
-            height: auto;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: move;
-            z-index: 100;
-            overflow-y: auto;
-            max-height: 80%;
-        }
-
-@media (max-width: 480px) {
-    .container {
-        width: 95%;
-        padding: 20px;
-        min-height: 800px; /* Make it tall for small screens */
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        position: fixed;
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: url("{% static 'login-form/images/wall7.jpg' %}") no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
     }
-}
 
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 0;
+    }
 
-        .subscribers-box {
-            background: #f1f1f1;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 6px;
-            max-height: 150px;
-            overflow-y: auto;
-            font-size: 14px;
-        }
+    .container {
+      width: 92%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3),
+                  0 10px 15px rgba(0, 0, 0, 0.1) inset;
+      color: #fff;
+      z-index: 10;
+      overflow-y: auto;
+      max-height: 90vh;
+      box-sizing: border-box;
+      position: relative;
+      animation: slideUp 0.7s ease forwards;
+    }
 
-        textarea {
-            width: 100%;
-        }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
 
-        button {
-            padding: 10px 20px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+    h2.header-with-icon {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
 
-        #preloader {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            text-align: center;
-        }
+    h2 .fas {
+      font-size: 1.3rem;
+      color: #ffffffb0;
+      transition: 0.3s ease;
+    }
 
-        .loader {
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #4CAF50;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: auto;
-        }
+    h2 .fas:hover {
+      color: #00ffe7;
+      transform: scale(1.1);
+    }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #e0e0e0;
+    }
 
-        .header-with-icon {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+    .full-width-input,
+    textarea {
+      width: 100%;
+      padding: 0.9rem 1.1rem;
+      margin-top: 0.4rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
 
-        .header-with-icon a {
-            color: #333;
-            font-size: 20px;
-            text-decoration: none;
-        }
+    .full-width-input:focus,
+    textarea:focus {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 0 2px #00ffe7;
+    }
 
-        .header-with-icon a:hover {
-            color: #4CAF50;
-        }
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      background: linear-gradient(to right, #00ffe7, #1cb5e0);
+      border: none;
+      color: #000;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
 
-    </style>
+    button:hover {
+      transform: scale(1.03);
+    }
+
+    .subscribers-box {
+      background: rgba(255, 255, 255, 0.15);
+      margin-top: 1.5rem;
+      border-radius: 12px;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #fff;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+    }
+
+    h3 span:last-child {
+      background: #00ffe7;
+      color: #000;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+
+    #preloader {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      text-align: center;
+    }
+
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #00ffe7;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 40vh auto 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Fix for CKEditor width */
+    .cke, .cke_contents, .cke_inner {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 2rem 1.5rem;
+      }
+
+      h2.header-with-icon {
+        font-size: 1.5rem;
+      }
+
+      button {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2 class="header-with-icon">
-            Send Newsletter
-            <a href="{% url 'excel_page' %}" title="Go to Excel Page">
-                <i class="fas fa-home"></i>
-            </a>
-        </h2>
-        <form method="post" action="{% url 'send_newsletter' %}" onsubmit="showPreloader()">
-            {% csrf_token %}
-            <label for="subject">Subject:</label><br>
-            <input type="text" name="subject" id="subject" class="full-width-input" required><br><br>
+  <div class="container">
+    <h2 class="header-with-icon">
+      Send Newsletter
+      <a href="{% url 'excel_page' %}" title="Go to Excel Page">
+        <i class="fas fa-home"></i>
+      </a>
+    </h2>
 
-            <label>Message:</label><br>
-            <textarea name="body" rows="10" required></textarea><br><br>
+    <form method="post" action="{% url 'send_newsletter' %}" onsubmit="showPreloader()">
+      {% csrf_token %}
+      <label for="subject">Subject:</label>
+      <input type="text" name="subject" id="subject" class="full-width-input" required>
 
-            <button type="submit">Send Newsletter</button>
-        </form>
-<h3 style="display: flex; align-items: center; gap: 10px;">
-    <i class="fas fa-users" style="color: rgb(4, 46, 78);"></i>
-    <span style="font-weight: bold; color: rgb(4, 46, 78);">Subscribers Preview</span>
-    <span style="background-color: rgb(4, 46, 78); color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px;">
-        {{ subscribers|length }}
-    </span>
-</h3>
+      <label for="body">Message:</label>
+      <textarea name="body" rows="10" id="body" class="full-width-input" required style="min-height: 250px;"></textarea>
 
-        <div class="subscribers-box">
-            {% for subscriber in subscribers %}
-                {{ subscriber.email }}<br>
-            {% empty %}
-                <p>No subscribers yet.</p>
-            {% endfor %}
-        </div>
+      <button type="submit">Send Newsletter</button>
+    </form>
+
+    <h3>
+      <i class="fas fa-users"></i>
+      <span>Subscribers Preview</span>
+      <span>{{ subscribers|length }}</span>
+    </h3>
+
+    <div class="subscribers-box">
+      {% for subscriber in subscribers %}
+        {{ subscriber.email }}<br>
+      {% empty %}
+        <p>No subscribers yet.</p>
+      {% endfor %}
     </div>
+  </div>
 
-    <!-- Preloader -->
-    <div id="preloader">
-        <div style="position:relative; top:40%; font-size:20px;">
-            <span>Sending Newsletter...</span>
-            <br><br>
-            <div class="loader"></div>
-        </div>
+  <div id="preloader">
+    <div style="position:relative; top:40%; font-size:20px;">
+      <span>Sending Newsletter...</span>
+      <br><br>
+      <div class="loader"></div>
     </div>
+  </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; text-align:center;">
-        <div style="background:white; padding:30px; border-radius:10px; max-width:400px; margin:15% auto; font-size:18px;">
-            <p>Newsletter sent successfully!</p>
-            <button onclick="closeModal()" style="padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px;">OK</button>
-        </div>
-    </div>
+  <script>
+    CKEDITOR.replace('body', {
+      filebrowserImageUploadUrl: '/ckeditor/upload/',
+      filebrowserUploadUrl: '/ckeditor/upload/',
+      height: 300,
+      toolbar: [
+        { name: 'document', items: ['Source', '-', 'Preview', 'Print'] },
+        { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo'] },
+        { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
+        { name: 'colors', items: ['TextColor', 'BGColor'] },
+        { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
+        { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'] },
+        { name: 'align', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+        { name: 'links', items: ['Link', 'Unlink'] },
+        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] }
+      ],
+      extraPlugins: 'uploadimage',
+    });
 
-    <script>
-        CKEDITOR.replace('body', {
-            filebrowserImageUploadUrl: '/ckeditor/upload/',
-            filebrowserUploadUrl: '/ckeditor/upload/',
-            height: 300,
-            toolbar: [
-                { name: 'document', items: ['Source', '-', 'Preview', 'Print'] },
-                { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo'] },
-                { name: 'styles', items: ['Format', 'Font', 'FontSize'] },
-                { name: 'colors', items: ['TextColor', 'BGColor'] },
-                { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
-                { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'] },
-                { name: 'align', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-                { name: 'links', items: ['Link', 'Unlink'] },
-                { name: 'insert', items: ['Image', 'Table', 'HorizontalRule'] }
-            ],
-            extraPlugins: 'uploadimage',
-        });
-
-        function showPreloader() {
-            document.getElementById('preloader').style.display = 'block';
-            document.body.classList.add('noscroll');
-        }
-
-        function closeModal() {
-            document.getElementById('successModal').style.display = 'none';
-            document.body.classList.remove('noscroll');
-
-            const url = new URL(window.location.href);
-            url.searchParams.delete('sent');
-            window.history.replaceState({}, document.title, url.pathname + url.search);
-        }
-
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('sent') === 'true') {
-                document.getElementById('successModal').style.display = 'block';
-            }
-        };
-
-        // Make the form draggable
-        var form = document.querySelector('.container');
-        var isDragging = false;
-        var offsetX, offsetY;
-
-        form.addEventListener('mousedown', function(e) {
-            isDragging = true;
-            offsetX = e.clientX - form.getBoundingClientRect().left;
-            offsetY = e.clientY - form.getBoundingClientRect().top;
-            document.body.style.cursor = 'move';
-        });
-
-        document.addEventListener('mousemove', function(e) {
-            if (isDragging) {
-                form.style.left = e.clientX - offsetX + 'px';
-                form.style.top = e.clientY - offsetY + 'px';
-            }
-        });
-
-        document.addEventListener('mouseup', function() {
-            isDragging = false;
-            document.body.style.cursor = 'default';
-        });
-    </script>
+    function showPreloader() {
+      document.getElementById('preloader').style.display = 'block';
+      document.body.classList.add('noscroll');
+    }
+  </script>
 </body>
 </html>

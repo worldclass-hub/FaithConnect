@@ -45,12 +45,20 @@ class PDFUploadForm(forms.Form):
 # ============================
 # Gallery Upload Form
 # ============================
+
+from django import forms
+
+# ✅ Fix: Custom widget to support multiple files
+class MultiFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
 class GalleryUploadForm(forms.Form):
+    title = forms.CharField(max_length=255, required=True)
     uploaded_files = forms.FileField(
-        required=True,
-        widget=MultiFileInput(attrs={'multiple': True})
+        widget=MultiFileInput(attrs={'multiple': True}),
+        required=True
     )
-    title = forms.CharField(max_length=255)
 
 
 class HymnForm(forms.ModelForm):
