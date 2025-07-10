@@ -565,7 +565,6 @@ def get_file_for_date(request, year, month, day):
 
 
 
-
 @login_required
 def upload_image(request):
     if request.method == 'POST':
@@ -580,11 +579,13 @@ def upload_image(request):
                     for chunk in file.chunks():
                         temp_file.write(chunk)
 
+                # ✅ Upload to Supabase and get URL
                 image_url = upload_file_to_supabase(temp_path, "user-uploads")
 
+                # ✅ Save correctly to the image_url field
                 Gallery.objects.create(
                     title=title,
-                    uploaded_file=image_url
+                    image_url=image_url
                 )
 
                 os.remove(temp_path)
@@ -602,36 +603,20 @@ def upload_image(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 @login_required
 def lookbook(request):
-    # Fetch all images from the Gallery model and order them by the most recent
     gallery_images = Gallery.objects.all().order_by('-id')
-    
-    # Pagination: show 7 images per page
+
     paginator = Paginator(gallery_images, 7)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # ✅ Fetch all NewUpdate records for the modal
     updates = NewUpdate.objects.all().order_by('-upload_date')
 
     return render(request, 'files/lookbook.html', {
         'page_obj': page_obj,
-        'updates': updates,  # Pass updates to template
+        'updates': updates,
     })
-
-
 
 
 
