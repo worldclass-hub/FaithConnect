@@ -40,29 +40,34 @@
             width: 100%;
         }
 
-.container {
-    width: 80%;
-    max-width: 1000px;
-    min-height: 900px; /* Tall height */
-    height: auto;
-    margin: auto;
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    position: fixed; /* Fixed so it stays centered */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    cursor: move;
-    z-index: 100;
-    overflow-y: auto;
-    max-height: 95vh; /* Prevent overflow on small screens */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-@media (max-width: 768px) {
+        .container {
+            width: 90%;
+            max-width: 600px;
+            min-height: 400px;
+            height: auto;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: move;
+            z-index: 100;
+            overflow-y: auto;
+            max-height: 80%;
+        }
+
+@media (max-width: 480px) {
     .container {
         width: 95%;
         padding: 20px;
+        min-height: 800px; /* Make it tall for small screens */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed;
     }
 }
 
