@@ -111,3 +111,45 @@ class PrayerRequestForm(forms.ModelForm):
     class Meta:
         model = PrayerRequest
         fields = ['name', 'email', 'message']
+
+
+
+
+
+
+
+import tempfile, os
+from django import forms
+from .models import AboutPage
+from .upload_to_supabase import upload_file_to_supabase
+
+class AboutPageForm(forms.ModelForm):
+    image1_upload = forms.FileField(required=False)
+
+    class Meta:
+        model = AboutPage
+        fields = '__all__'
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        file = self.cleaned_data.get('image1_upload')
+
+        if file:
+            # Save to temp file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.name)[1]) as tmp:
+                for chunk in file.chunks():
+                    tmp.write(chunk)
+                tmp_path = tmp.name
+
+            # Upload to Supabase
+            uploaded_url = upload_file_to_supabase(tmp_path)
+
+            # Save the URL
+            instance.image1_url = uploaded_url
+
+            # Delete temp file
+            os.remove(tmp_path)
+
+        if commit:
+            instance.save()
+        return instance

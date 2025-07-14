@@ -503,24 +503,23 @@ class AutoReplyMessage(models.Model):
 
 
 
+
 class AboutPage(models.Model):
     title = models.CharField(max_length=255, default="About Us")
 
-    history = models.TextField(blank=True)  # plain text with word limit
+    history = models.TextField(blank=True)
     more_history = RichTextField(blank=True)
-
     the_man = RichTextField(blank=True)
     mission_statement = RichTextField(blank=True)
     vision = RichTextField(blank=True)
     value = RichTextField(blank=True)
     mandate = RichTextField(blank=True)
+
     contact_address = RichTextField(blank=True)
     phone = models.CharField(max_length=20, blank=True)
     email = models.EmailField(blank=True)
 
-    image1 = models.ImageField(upload_to='about/', blank=True, null=True)
-    image2 = models.ImageField(upload_to='about/', blank=True, null=True)
-    image3 = models.ImageField(upload_to='about/', blank=True, null=True)
+    image1_url = models.URLField(blank=True, null=True)  # ✅ only one image now
 
     def clean(self):
         if self.history:
@@ -530,6 +529,11 @@ class AboutPage(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+
+
 
 
 
@@ -544,6 +548,11 @@ class ComingSoonPage(models.Model):
 
     def __str__(self):
         return self.note
+
+
+
+
+
 
 
 
@@ -565,6 +574,11 @@ class UserProfile(models.Model):
         return self.fullname
 
 
+
+
+
+
+
 class NewUpdate(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to='new_updates/', blank=True, null=True,  help_text="Optional – You may leave the image empty.")
@@ -576,6 +590,11 @@ class NewUpdate(models.Model):
         return self.title
     
 
+
+
+
+
+
 from django.db import models
 
 class NewsletterSubscriber(models.Model):
@@ -585,6 +604,11 @@ class NewsletterSubscriber(models.Model):
 
     def __str__(self):
         return self.email
+
+
+
+
+
 
 class DailyNewsletter(models.Model):
     subject = models.CharField(max_length=255)

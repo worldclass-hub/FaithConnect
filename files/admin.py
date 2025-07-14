@@ -337,14 +337,13 @@ class AutoReplyMessageAdmin(admin.ModelAdmin):
 
 
 
-
-
+from django.contrib import admin
+from .models import AboutPage
+from .forms import AboutPageForm
 
 class AboutPageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'phone', 'email', 'history', 'the_man', 'mandate')
-    search_fields = ('title', 'phone', 'email')
-    list_filter = ('title',)
-    
+    form = AboutPageForm
+
     fieldsets = (
         (None, {
             'fields': ('title', 'history', 'more_history', 'the_man', 'mission_statement', 'vision', 'value', 'mandate')
@@ -352,17 +351,14 @@ class AboutPageAdmin(admin.ModelAdmin):
         ('Contact Information', {
             'fields': ('contact_address', 'phone', 'email')
         }),
-        ('Images', {
-            'fields': ('image1', 'image2', 'image3')
+        ('Image Upload', {
+            'fields': ('image1_upload',)
         }),
     )
 
-    # You can customize the save behavior if necessary (e.g., auto-cleaning or additional logic)
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-
-
 admin.site.register(AboutPage, AboutPageAdmin)
+
+
 
 
 

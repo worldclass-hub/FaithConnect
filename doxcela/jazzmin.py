@@ -1,8 +1,9 @@
 # Admin Theme For DashBoard With The Images For Both Log In and Log Out
 
 JAZZMIN_SETTINGS = {
-    "custom_css": "css/custom_jazzmin.css",  # Link to your custom CSS file
-    
+    "custom_css": "css/my_jazzmin.css",  # Link to your custom CSS file
+    "custom_js": "js/my_jazzmin.js",  # Path to your custom JS file
+
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Ecommerce Admin",
 
@@ -23,8 +24,8 @@ JAZZMIN_SETTINGS = {
     "site_logo_classes": "custom-logo-size",  # Use your custom class
     
     
-    "custom_css": "css/custom_jazzmin.css",  # Path to your custom CSS file
-    "custom_js": "js/custom_jazzmin.js",  # Path to your custom JS file
+    "custom_css": "css/my_jazzmin.css",  # Path to your custom CSS file
+    "custom_js": "js/my_jazzmin.js",  # Path to your custom JS file
 
 
     # CSS classes that are applied to the logo above

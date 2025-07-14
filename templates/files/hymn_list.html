@@ -21,8 +21,6 @@
         width: 100%;
         height: 100%;
         object-fit: cover; /* Ensures the image covers the space without distorting it */
-        filter: blur(1px); /* Apply the blur effect directly to the image */
-        z-index: 1; /* Ensure that the blur image stays below the text */
     }
     
     .sidebar_widget .banner-container .banner-image {
@@ -97,7 +95,11 @@
                                     <div class="list-view-item__image-wrapper">
                                         <!-- Image -->
                                         <a href="{% url 'hymn_detail' hymn.id %}">
-                                            <img class="list-view-item__image blur-up lazyload custom-image-size" data-src="{{ hymn.image.url }}" src="{{ hymn.image.url }}" alt="{{ hymn.title }}" title="{{ hymn.title }}">
+                                            <img class="list-view-item__image blur-up lazyload custom-image-size"
+                                                data-src="{% static 'login-form/images/HymnImage.PNG' %}"
+                                                src="{% static 'login-form/images/HymnImage.PNG' %}"
+                                                alt="Hymn Image"
+                                                title="Hymn Image">
                                         </a>
                                         <!-- End Image -->
                                     </div>

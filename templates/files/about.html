@@ -1,94 +1,125 @@
-{% extends "files/page.html" %}
-{% load static %}
-{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About GMMI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    .animated-gradient {
+      background-size: 300% 300%;
+      animation: gradientMove 8s ease infinite;
+    }
 
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-800 bg-white">
 
-{% block content %}
-<style>
-.about_image {
-height: 300px;
-}
-</style>
-
-    <!--Body Content-->
-    <div id="page-content">
-        <!--Page Title-->
-        <div class="page section-header text-center">
-            <div class="page-title">
-                <div class="wrapper"><h1 class="page-width">{% trans "About Us" %}</h1></div>
-            </div>
-        </div>
-        <!--End Page Title-->
-        <br>
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
-                    <div class="text-center mb-4">
-                        <h2 class="h2">{{ about.title }}</h2>
-
-                        <div class="rte-setting">
-                            <br><br>
-                            <p><strong>{% trans "History" %}</strong></p>
-                            <p>{{ about.history|safe }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-4 "><img class="blur-up lazyload about_image" data-src="{{ about.image1.url }}" src="{{ about.image1.url }}" alt="About Us" /></div>
-                <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-4 "><img class="blur-up lazyload about_image" data-src="{{ about.image2.url }}" src="{{ about.image2.url }}" alt="About Us" /></div>
-                <div class="col-12 col-sm-4 col-md-4 col-lg-4 mb-4 "><img class="blur-up lazyload about_image" data-src="{{ about.image3.url }}" src="{{ about.image3.url }}" alt="About Us" /></div>
-            </div>
-            <p>{{ about.more_history|safe }}</p>
-<br><br>
-           
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"> <strong>{% trans "The Man Behind Doxcela" %}</strong></h2>
-                    <div class="rte-setting"><p>{{ about.the_man|safe }}</p></div>
-                </div>
-                
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"><strong>{% trans "MISSION STATEMENT" %}T</strong></h2>
-                    <div class="rte-setting"><p>{{ about.mission_statement|safe }}</p></div>
-                </div>
-
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"><strong>{% trans "VISION" %}</strong></h2>
-                    <div class="rte-setting"><p>{{ about.vision|safe }}</p></div>
-                </div>
-
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"><strong>{% trans "VALUE" %}</strong></h2>
-                    <div class="rte-setting"><p>{{ about.value|safe }}</p></div>
-                </div>
-
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-4">
-                    <h2 class="h2"><strong>{% trans "OUR SIX-FOLD MANDATE" %}</strong></h2>
-                    <div class="rte-setting"><p>{{ about.mandate|safe}}</p></div>
-                </div>
-                
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                    <h2 class="h2"><strong>{% trans "CONTACT US" %}</strong></h2>
-                    <ul class="addressFooter">
-                        <li><i class="icon anm anm-map-marker-al"></i><p>{{ about.contact_address|safe }}</p></li>
-                        <li class="phone"><i class="icon anm anm-phone-s"></i><p>{{ about.phone|safe }}</p></li>
-                        <li class="email"><i class="icon anm anm-envelope-l"></i><p>{{ about.email|safe }}</p></li>
-                    </ul>
-                    <hr />
-                    <ul class="list--inline site-footer__social-icons social-icons">
-                        <li><a class="social-icons__link" href="{{ about.facebook_url }}" target="_blank"><i class="icon icon-facebook"></i> Facebook</a></li>
-                        <li><a class="social-icons__link" href="{{ about.twitter_url }}" target="_blank"><i class="icon icon-twitter"></i> Twitter</a></li>
-                        <li><a class="social-icons__link" href="{{ about.pinterest_url }}" target="_blank"><i class="icon icon-pinterest"></i> Pinterest</a></li>
-                        <li><a class="social-icons__link" href="{{ about.instagram_url }}" target="_blank"><i class="icon icon-instagram"></i> Instagram</a></li>
-                        <li><a class="social-icons__link" href="{{ about.tumblr_url }}" target="_blank"><i class="icon icon-tumblr-alt"></i> Tumblr</a></li>
-                        <li><a class="social-icons__link" href="{{ about.youtube_url }}" target="_blank"><i class="icon icon-youtube"></i> YouTube</a></li>
-                        <li><a class="social-icons__link" href="{{ about.vimeo_url }}" target="_blank"><i class="icon icon-vimeo-alt"></i> Vimeo</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+  <!-- Hero with Animated Gradient -->
+  <section class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 animated-gradient text-white py-28 relative">
+    <div class="max-w-5xl mx-auto px-4 text-center" data-aos="fade-down">
+      <h1 class="text-5xl font-extrabold mb-4">About GMMI</h1>
+      <p class="text-xl opacity-90">Discover who we are, what we believe, and where we’re going.</p>
     </div>
-    <!--End Body Content-->
-    
-{% endblock %}
+  </section>
+
+  <!-- History Section -->
+  <section class="py-20 px-6 bg-white">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+      <div data-aos="fade-right">
+        <h2 class="text-4xl font-bold text-indigo-900 mb-6">{{ about.title }}</h2>
+        <p class="text-lg text-gray-700 leading-relaxed mb-6">{{ about.history|safe }}</p>
+        <div class="text-gray-600 leading-relaxed">{{ about.more_history|safe }}</div>
+      </div>
+      <div data-aos="fade-left">
+        {% if about.image1_url %}
+        <img src="{{ about.image1_url }}" alt="About GMMI" class="rounded-xl shadow-lg object-cover w-full h-[500px]">
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission, Vision, Values, Mandate Cards -->
+  <section class="bg-gray-100 py-20 px-6">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
+      <div class="bg-white shadow-md rounded-lg p-6" data-aos="zoom-in">
+        <h3 class="text-xl font-semibold text-indigo-800 mb-3">The Man Behind GMMI</h3>
+        <p class="text-gray-700">{{ about.the_man|safe }}</p>
+      </div>
+      <div class="bg-white shadow-md rounded-lg p-6" data-aos="zoom-in">
+        <h3 class="text-xl font-semibold text-indigo-800 mb-3">Mission Statement</h3>
+        <p class="text-gray-700">{{ about.mission_statement|safe }}</p>
+      </div>
+      <div class="bg-white shadow-md rounded-lg p-6" data-aos="zoom-in">
+        <h3 class="text-xl font-semibold text-indigo-800 mb-3">Vision</h3>
+        <p class="text-gray-700">{{ about.vision|safe }}</p>
+      </div>
+      <div class="bg-white shadow-md rounded-lg p-6" data-aos="zoom-in">
+        <h3 class="text-xl font-semibold text-indigo-800 mb-3">Core Values</h3>
+        <p class="text-gray-700">{{ about.value|safe }}</p>
+      </div>
+      <div class="md:col-span-2 bg-white shadow-md rounded-lg p-6" data-aos="fade-up">
+        <h3 class="text-xl font-semibold text-indigo-800 mb-3">Our Six-Fold Mandate</h3>
+        <p class="text-gray-700">{{ about.mandate|safe }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section with Map -->
+  <section class="py-20 px-6 bg-white">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-start">
+      <div class="space-y-6" data-aos="fade-right">
+        <h2 class="text-3xl font-bold text-indigo-800">Visit Us</h2>
+        <div class="space-y-4">
+          <div class="flex gap-4 items-start">
+            <div class="text-indigo-600 text-2xl">📍</div>
+            <div>
+              <h4 class="font-semibold">Address</h4>
+              <p class="text-gray-700">{{ about.contact_address|safe }}</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="text-indigo-600 text-2xl">📞</div>
+            <div>
+              <h4 class="font-semibold">Phone</h4>
+              <p class="text-gray-700">{{ about.phone }}</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="text-indigo-600 text-2xl">📧</div>
+            <div>
+              <h4 class="font-semibold">Email</h4>
+              <p class="text-gray-700">{{ about.email }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rounded-xl overflow-hidden shadow-xl" data-aos="fade-left">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3163.396738060203!2d3.350166615309714!3d6.524379324165755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf4a472291dd3%3A0x5e45ffb8c8fc3606!2sLagos!5e0!3m2!1sen!2sng!4v1679487221234"
+          width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-500 text-sm py-6 border-t mt-10">
+    &copy; {{ now|date:"Y" }} GMMI. All rights reserved.
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 900,
+      once: true,
+    });
+  </script>
+</body>
+</html>

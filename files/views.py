@@ -1009,13 +1009,23 @@ def submit_contact(request):
 
 
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import EmailMultiAlternatives
+from datetime import datetime
+
+from .models import AboutPage, NewsletterSubscriber, NewUpdate
+from .upload_to_supabase import upload_file_to_supabase
 
 def about_view(request):
+    about = AboutPage.objects.first()
+
+    # Handle email subscription (AJAX)
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         email = request.POST.get('email')
         name = 'Subscriber'
 
-        # Try to get user's name if logged in
         if request.user.is_authenticated:
             if request.user.get_full_name():
                 name = request.user.get_full_name()
@@ -1028,7 +1038,6 @@ def about_view(request):
 
             NewsletterSubscriber.objects.create(email=email)
 
-            # Compose email content
             reply_subject = "Thanks for subscribing to our newsletter!"
             reply_body = (
                 "Thanks for subscribing to our newsletter! "
@@ -1037,7 +1046,6 @@ def about_view(request):
             )
             reply_body_html = reply_body.replace('\n', '<br>')
 
-            # Build HTML email body
             reply_html = f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 30px; border: 1px solid #eee;">
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -1072,7 +1080,6 @@ def about_view(request):
             </div>
             """
 
-            # Send the email
             email_msg = EmailMultiAlternatives(reply_subject, reply_body, 'doxcela@gmail.com', [email])
             email_msg.attach_alternative(reply_html, "text/html")
             email_msg.send()
@@ -1081,23 +1088,21 @@ def about_view(request):
 
         return JsonResponse({'status': 'error', 'message': 'Email required.'})
 
-    # GET method
-    about = AboutPage.objects.first()
+    # Handle image uploads (non-AJAX form)
+    if request.method == 'POST':
+        if request.FILES.get('image1'):
+            about.image1_url = upload_to_supabase(request.FILES['image1'], request.FILES['image1'].name)
+        if request.FILES.get('image2'):
+            about.image2_url = upload_to_supabase(request.FILES['image2'], request.FILES['image2'].name)
+        if request.FILES.get('image3'):
+            about.image3_url = upload_to_supabase(request.FILES['image3'], request.FILES['image3'].name)
+        about.save()
+
     updates = NewUpdate.objects.all().order_by('-upload_date')
     return render(request, 'files/about.html', {
         'about': about,
         'updates': updates
     })
-
-
-@csrf_exempt
-def never_show_modal(request):
-    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        email = request.POST.get('email')
-        if email:
-            NewsletterSubscriber.objects.filter(email=email).update(has_closed_modal=True)
-            return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error'})
 
 
 
