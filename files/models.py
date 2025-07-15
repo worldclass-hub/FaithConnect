@@ -131,7 +131,6 @@ class Hymn(models.Model):
     ]
 
     title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='hymns/images/')
     hymn_type = models.CharField(max_length=50, choices=HYMN_TYPE_CHOICES, default='morning')
     description = models.TextField(blank=True, null=True)
     lyrics = RichTextField()
@@ -185,7 +184,6 @@ class FrenchHymn(models.Model):
     ]
 
     title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='french_hymns/images/')
     hymn_type = models.CharField(max_length=50, choices=HYMN_TYPE_CHOICES, default='morning')
     description = models.TextField(blank=True, null=True)
     lyrics = RichTextField( null=True)
@@ -239,7 +237,6 @@ class YorubaHymn(models.Model):
 
     title = models.CharField(max_length=255)
     hymn_type = models.CharField(max_length=100, choices=HYMN_TYPE_CHOICES)
-    image = models.ImageField(upload_to='yoruba_hymns/')
     description = models.TextField(blank=True)
     lyrics = RichTextField( null=True)
 
@@ -293,7 +290,6 @@ class IgboHymn(models.Model):
 
     title = models.CharField(max_length=255)
     hymn_type = models.CharField(max_length=100, choices=HYMN_TYPE_CHOICES)
-    image = models.ImageField(upload_to='igbo_hymns/')
     description = models.TextField(blank=True)
     lyrics = RichTextField( null=True)
 
@@ -346,7 +342,6 @@ class HausaHymn(models.Model):
     ]
 
     title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='hymn_images/', blank=True)
     hymn_type = models.CharField(max_length=50, choices=HYMN_TYPES)
     description = models.TextField(blank=True)
     lyrics = RichTextField( null=True)
@@ -400,7 +395,6 @@ class ChineseHymn(models.Model):
 
     title = models.CharField(max_length=255)
     hymn_type = models.CharField(max_length=100, choices=HYMN_TYPE_CHOICES)
-    image = models.ImageField(upload_to='chinese_hymns/')
     description = models.TextField(blank=True)
     lyrics = RichTextField(null=True)
 
@@ -454,7 +448,6 @@ class GermanHymn(models.Model):
 
     title = models.CharField(max_length=255)
     hymn_type = models.CharField(max_length=100, choices=HYMN_TYPE_CHOICES)
-    image = models.ImageField(upload_to='german_hymns/')
     description = models.TextField(blank=True)
     lyrics = RichTextField(null=True)
 

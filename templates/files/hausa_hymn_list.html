@@ -115,8 +115,11 @@
                               <div class="list-view-item__image-wrapper">
                                   <!-- Image -->
                                   <a href="{% url 'hausa_hymn_detail' hymn.id %}">
-                                      <img class="list-view-item__image blur-up lazyload custom-image-size" data-src="{{ hymn.image.url }}" src="{{ hymn.image.url }}" alt="{{ hymn.title }}" title="{{ hymn.title }}">
-                                  </a>
+                                        <img class="list-view-item__image blur-up lazyload custom-image-size"
+                                                data-src="{% static 'login-form/images/HymnImage.PNG' %}"
+                                                src="{% static 'login-form/images/HymnImage.PNG' %}"
+                                                alt="Hymn Image"
+                                                title="Hymn Image">                                  </a>
                               </div>
                           </div>
                           <div class="list-view-item__title-column">

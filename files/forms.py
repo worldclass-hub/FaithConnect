@@ -64,7 +64,7 @@ class GalleryUploadForm(forms.Form):
 class HymnForm(forms.ModelForm):
     class Meta:
         model = Hymn
-        fields = ['title', 'image', 'lyrics', 'hymn_type']
+        fields = ['title',  'lyrics', 'hymn_type']
         widgets = {
             'lyrics': RichTextField(),  # This ensures CKEditor is used
         }
@@ -73,7 +73,7 @@ class HymnForm(forms.ModelForm):
 class FrenchHymnForm(forms.ModelForm):
     class Meta:
         model = FrenchHymn
-        fields = ['title', 'image', 'lyrics', 'hymn_type']
+        fields = ['title',  'lyrics', 'hymn_type']
         widgets = {
             'lyrics': RichTextField(),  # Ensures CKEditor is used
         }

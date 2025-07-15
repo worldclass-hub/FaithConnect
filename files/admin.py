@@ -128,7 +128,7 @@ admin.site.register(Gallery, GalleryAdmin)
 
 
 class HymnAdmin(admin.ModelAdmin):
-    list_display = ('title', 'hymn_type', 'image', 'description')
+    list_display = ('title', 'hymn_type',  'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(Hymn, HymnAdmin)
@@ -145,7 +145,7 @@ admin.site.register(Hymn, HymnAdmin)
 
 
 class ChineseHymnAdmin(admin.ModelAdmin):
-    list_display = ('title', 'hymn_type', 'image', 'description')
+    list_display = ('title', 'hymn_type',  'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(ChineseHymn, ChineseHymnAdmin)
@@ -159,7 +159,7 @@ admin.site.register(ChineseHymn, ChineseHymnAdmin)
 
 
 class GermanHymnAdmin(admin.ModelAdmin):
-    list_display = ('title', 'hymn_type', 'image', 'description')
+    list_display = ('title', 'hymn_type',  'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(GermanHymn, GermanHymnAdmin)
@@ -176,7 +176,7 @@ admin.site.register(GermanHymn, GermanHymnAdmin)
 
 
 class FrenchHymnAdmin(admin.ModelAdmin):
-    list_display = ('title', 'hymn_type', 'image', 'description')
+    list_display = ('title', 'hymn_type',  'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(FrenchHymn, FrenchHymnAdmin)
@@ -198,7 +198,7 @@ admin.site.register(FrenchHymn, FrenchHymnAdmin)
 
 
 class YorubaHymnAdmin(admin.ModelAdmin):
-    list_display = ('title', 'hymn_type', 'image', 'description')
+    list_display = ('title', 'hymn_type',  'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(YorubaHymn, YorubaHymnAdmin)
@@ -220,7 +220,7 @@ admin.site.register(YorubaHymn, YorubaHymnAdmin)
 
 
 class IgboHymnAdmin(admin.ModelAdmin):
-    list_display = ('title', 'hymn_type', 'image', 'description')
+    list_display = ('title', 'hymn_type',  'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(IgboHymn, IgboHymnAdmin)
@@ -242,7 +242,7 @@ admin.site.register(IgboHymn, IgboHymnAdmin)
 
 
 class HausaHymnAdmin(admin.ModelAdmin):
-    list_display = ('title', 'hymn_type', 'image', 'description')
+    list_display = ('title', 'hymn_type',  'description')
     search_fields = ('title', 'description', 'hymn_type')
 
 admin.site.register(HausaHymn, HausaHymnAdmin)
