@@ -374,17 +374,27 @@ admin.site.register(AboutPage, AboutPageAdmin)
 
 
 
-
 # admin.py
+from django.contrib import admin
+from django.utils.html import format_html
+from .models import ComingSoonPage
+from .forms import ComingSoonForm
 
 @admin.register(ComingSoonPage)
 class ComingSoonPageAdmin(admin.ModelAdmin):
+    form = ComingSoonForm
     list_display = ('id', 'note', 'updated_at', 'background_preview')
     readonly_fields = ('background_preview',)
 
+    fieldsets = (
+        (None, {
+            'fields': ('note', 'background_upload',)
+        }),
+    )
+
     def background_preview(self, obj):
-        if obj.background_image:
-            return format_html('<img src="{}" style="max-height: 200px;"/>', obj.background_image.url)
+        if obj.background_image_url:
+            return format_html('<img src="{}" style="max-height: 200px;">', obj.background_image_url)
         return "No image uploaded"
 
     background_preview.short_description = "Background Image Preview"

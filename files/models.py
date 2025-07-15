@@ -537,13 +537,12 @@ class AboutPage(models.Model):
 
 
 
-
 # models.py
 from django.db import models
 
 class ComingSoonPage(models.Model):
-    background_image = models.ImageField(upload_to='coming_soon_backgrounds/')
-    note = models.TextField(blank=True)  # plain text with word limit
+    background_image_url = models.URLField(blank=True, null=True)  # changed to URLField
+    note = models.TextField(blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

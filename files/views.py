@@ -61,9 +61,11 @@ def user_login(request):
 
 
 
-def coming_soon(request):
-    return render(request, "files/coming_soon.html")
+from .models import ComingSoonPage
 
+def coming_soon(request):
+    page = ComingSoonPage.objects.last()  # use .last() to get most recent
+    return render(request, 'files/coming_soon.html', {'page': page})
 
 
 
