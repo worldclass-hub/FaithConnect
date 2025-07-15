@@ -592,12 +592,30 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 
+from django.contrib import admin
+from django.utils.html import format_html
+from .models import NewUpdate
+from .forms import NewUpdateForm
 
+@admin.register(NewUpdate)
 class NewUpdateAdmin(admin.ModelAdmin):
-    list_display = ('title', 'upload_date', 'user')
-    search_fields = ('title',)
+    form = NewUpdateForm
 
-admin.site.register(NewUpdate, NewUpdateAdmin)
+    list_display = ('title', 'upload_date', 'user', 'image_tag')
+    search_fields = ('title',)
+    readonly_fields = ('image_url', 'image_tag')
+
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'content', 'user', 'image_upload', 'image_url', 'image_tag')
+        }),
+    )
+
+    def image_tag(self, obj):
+        if obj.image_url:
+            return format_html(f'<img src="{obj.image_url}" style="height: 100px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">')
+        return "-"
+    image_tag.short_description = 'Preview'
 
 
 

@@ -730,11 +730,12 @@
           <strong>Date:</strong> <span class="text-red-600">{{ update.upload_date }}</span>
         </p>
 
-        {% if update.image %}
-        <div class="mb-4">
-          <img src="{{ update.image.url }}" alt="Update Image" class="w-full rounded-md">
-        </div>
+       {% if update.image_url %}
+          <div class="mb-4">
+            <img src="{{ update.image_url }}" alt="Update Image" class="w-full rounded-md">
+          </div>
         {% endif %}
+
 
         <div class="text-center font-semibold text-lg text-black mb-3">
           {{ update.title }}

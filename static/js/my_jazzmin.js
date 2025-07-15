@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const videoSource = document.createElement("source");
         videoSource.src =
             window.innerWidth < 768
-                ? "/static/videos/People Working in Office - Busy Day - Royalty Free Stock Video.mp4"
-                : "/static/videos/Business Man Walking(1080p).mp4";
+                ? "/static/videos/Thank You Jesus - Hillsong Worship.mp4"
+                : "/static/videos/Thank You Jesus - Hillsong Worship.mp4";
         videoSource.type = "video/mp4";
 
         video.appendChild(videoSource);
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const avatarContainer = document.querySelector("#user-tools");
         if (avatarContainer) {
             const avatarImage = document.createElement("img");
-            avatarImage.src = "/static/img/doxcela2.png";
+            avatarImage.src = "/static/login-form/images/GMMI_LOGO.png";
             avatarImage.alt = "User Avatar";
             avatarImage.style.width = "30px";
             avatarImage.style.height = "30px";

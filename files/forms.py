@@ -188,3 +188,40 @@ class ComingSoonForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+
+
+
+
+
+# forms.py
+import os, tempfile
+from django import forms
+from .models import NewUpdate
+from .upload_to_supabase import upload_file_to_supabase
+
+class NewUpdateForm(forms.ModelForm):
+    image_upload = forms.FileField(required=False, help_text="Upload image (optional)")
+
+    class Meta:
+        model = NewUpdate
+        fields = ['title', 'content', 'user']
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        file = self.cleaned_data.get('image_upload')
+
+        if file:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.name)[1]) as tmp:
+                for chunk in file.chunks():
+                    tmp.write(chunk)
+                tmp_path = tmp.name
+
+            uploaded_url = upload_file_to_supabase(tmp_path)
+            instance.image_url = uploaded_url
+            os.remove(tmp_path)
+
+        if commit:
+            instance.save()
+        return instance
