@@ -1255,7 +1255,8 @@ background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justif
         <script src="{% static 'assets/js/main.js' %}"></script>
 
     </div>
-<script>
+
+ <script>
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("searchInput");
     const searchResults = document.getElementById("searchResults");
@@ -1265,7 +1266,7 @@ document.addEventListener("DOMContentLoaded", function () {
     searchInput.addEventListener("input", function () {
         const query = searchInput.value.trim();
 
-        clearTimeout(debounceTimeout);  // Clear previous timeout
+        clearTimeout(debounceTimeout);
 
         if (query.length < 2) {
             searchResults.style.display = "none";
@@ -1283,32 +1284,31 @@ document.addEventListener("DOMContentLoaded", function () {
                     } else {
                         data.results.forEach(result => {
                             const li = document.createElement("li");
-                            const language = result.language ? result.language.charAt(0).toUpperCase() + result.language.slice(1) : "English";
+                            const title = result.title || result.name || "Untitled";
+                            const language = result.language ? result.language.toLowerCase() : "english";
 
-                            if (result.url?.includes("/hymn/")) {
+                            // 🎵 Hymn (lyrics or description)
+                            if (result.lyrics || result.description) {
                                 li.innerHTML = `
-                                    <a href="${result.url}" class="search-result-item">
-                                        <strong>🎵 ${result.title || 'Untitled Hymn'} (${language})</strong><br>
-                                        <small>${result.description || ''}</small>
+                                    <a href="/search-results/?q=${query}&id=${result.id}&language=${language}#hymn-${result.id}" class="search-result-item">
+                                        <strong>🎵 ${title}</strong><br>
+                                        <small>${result.lyrics || result.description}</small>
                                     </a>
                                 `;
-                            } else if (result.youtube_url) {
+                            }
+                            // 📄 File (name + company_location)
+                            else if (result.name) {
                                 li.innerHTML = `
-                                    <a href="${result.url}" class="search-result-item">
-                                        <strong>🎥 YouTube Video</strong><br>
-                                        <small>${result.name || 'Untitled Video'}</small>
-                                    </a>
-                                `;
-                            } else if (result.name) {
-                                li.innerHTML = `
-                                    <a href="${result.url}" class="search-result-item">
-                                        <strong>${result.name}</strong><br>
+                                    <a href="/search-results/?q=${query}#file-${result.id}" class="search-result-item">
+                                        <strong>${title}</strong><br>
                                         <small>${result.company_location || 'No location'}</small>
                                     </a>
                                 `;
-                            } else {
+                            }
+                            // Unknown
+                            else {
                                 li.innerHTML = `
-                                    <a href="${result.url}" class="search-result-item">
+                                    <a href="/search-results/?q=${query}#unknown-${result.id}" class="search-result-item">
                                         <strong>Unknown</strong><br><small>No info available</small>
                                     </a>
                                 `;
@@ -1325,15 +1325,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     searchResults.innerHTML = "<li>Something went wrong</li>";
                     searchResults.style.display = "block";
                 });
-        }, 300); // Wait 300ms after user stops typing
+        }, 300);
     });
 
-    // Hide on Enter
     searchInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter") searchResults.style.display = "none";
     });
 
-    // Hide on outside click
     document.addEventListener("click", function (e) {
         if (!searchResults.contains(e.target) && !searchInput.contains(e.target)) {
             searchResults.style.display = "none";

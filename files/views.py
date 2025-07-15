@@ -1312,8 +1312,6 @@ def search_api(request):
         "user_has_profile": user_has_profile,
         "updates": updates
     })
-
-
 def search_results(request):
     query = request.GET.get('q', '').strip()
     highlight_id = request.GET.get('id')
@@ -1340,6 +1338,14 @@ def search_results(request):
         'chinese': ChineseHymn,
         'german': GermanHymn,
     }
+
+    hymn_results = Hymn.objects.filter(Q(title__icontains=query) | Q(lyrics__icontains=query) | Q(description__icontains=query)) if query else Hymn.objects.none()
+    yoruba_hymn_results = YorubaHymn.objects.filter(Q(title__icontains=query) | Q(lyrics__icontains=query) | Q(description__icontains=query)) if query else YorubaHymn.objects.none()
+    hausa_hymn_results = HausaHymn.objects.filter(Q(title__icontains=query) | Q(lyrics__icontains=query) | Q(description__icontains=query)) if query else HausaHymn.objects.none()
+    igbo_hymn_results = IgboHymn.objects.filter(Q(title__icontains=query) | Q(lyrics__icontains=query) | Q(description__icontains=query)) if query else IgboHymn.objects.none()
+    french_hymn_results = FrenchHymn.objects.filter(Q(title__icontains=query) | Q(lyrics__icontains=query) | Q(description__icontains=query)) if query else FrenchHymn.objects.none()
+    chinese_hymn_results = ChineseHymn.objects.filter(Q(title__icontains=query) | Q(lyrics__icontains=query) | Q(description__icontains=query)) if query else ChineseHymn.objects.none()
+    german_hymn_results = GermanHymn.objects.filter(Q(title__icontains=query) | Q(lyrics__icontains=query) | Q(description__icontains=query)) if query else GermanHymn.objects.none()
 
     highlighted_hymns = None
     if highlight_id and highlight_language in hymn_models:
@@ -1370,6 +1376,13 @@ def search_results(request):
         "query": query,
         "pdf_results": pdf_results_with_images,
         "file_results": file_results,
+        "hymn_results": hymn_results,
+        "yoruba_hymn_results": yoruba_hymn_results,
+        "hausa_hymn_results": hausa_hymn_results,
+        "igbo_hymn_results": igbo_hymn_results,
+        "french_hymn_results": french_hymn_results,
+        "chinese_hymn_results": chinese_hymn_results,
+        "german_hymn_results": german_hymn_results,
         "highlighted_hymns": highlighted_hymns,
         "highlight_language": highlight_language,
         "recent_files": recent_files,
@@ -1377,6 +1390,7 @@ def search_results(request):
         "user_has_profile": user_has_profile,
         "updates": updates
     })
+
 
 
 
