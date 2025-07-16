@@ -107,10 +107,11 @@ class UserProfileForm(forms.ModelForm):
 from django import forms
 from .models import PrayerRequest
 
+# forms.py
 class PrayerRequestForm(forms.ModelForm):
     class Meta:
         model = PrayerRequest
-        fields = ['name', 'email', 'message']
+        fields = ['name', 'email', 'phone', 'message']  # 👈 Add phone here
 
 
 

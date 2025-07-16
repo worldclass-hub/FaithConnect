@@ -662,13 +662,26 @@ admin.site.register(DailyNewsletter, DailyNewsletterAdmin)  # To show the newsle
 
 
 
+from django.contrib import admin
+from django.http import HttpResponse
+from .models import PrayerRequest
+from io import BytesIO
+import csv, os, datetime
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.utils import ImageReader
+from docx import Document
+from docx.shared import Inches, Pt, RGBColor
+from docx.oxml import parse_xml
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 @admin.register(PrayerRequest)
 class PrayerRequestAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'created_at')
+    list_display = ('name', 'email', 'phone', 'created_at')
     list_filter = ('created_at',)
-    search_fields = ('name', 'email', 'message')
-    readonly_fields = ('name', 'email', 'message', 'created_at')
+    search_fields = ('name', 'email', 'phone', 'message')
+    readonly_fields = ('name', 'email', 'phone', 'message', 'created_at')
     ordering = ('-created_at',)
     actions = ['export_as_csv', 'export_as_pdf', 'export_as_word']
 
@@ -680,9 +693,9 @@ class PrayerRequestAdmin(admin.ModelAdmin):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="prayer_requests.csv"'
         writer = csv.writer(response)
-        writer.writerow(['Name', 'Email', 'Message', 'Created At'])
+        writer.writerow(['Name', 'Email', 'Phone', 'Message', 'Created At'])
         for prayer in queryset:
-            writer.writerow([prayer.name, prayer.email, prayer.message, prayer.created_at])
+            writer.writerow([prayer.name, prayer.email, prayer.phone, prayer.message, prayer.created_at])
         return response
     export_as_csv.short_description = "📤 Export selected to CSV"
 
@@ -726,7 +739,7 @@ class PrayerRequestAdmin(admin.ModelAdmin):
         p.setFont("Helvetica", 11)
 
         for obj in queryset:
-            if y < 100:
+            if y < 120:
                 draw_footer()
                 p.showPage()
                 page_number += 1
@@ -737,6 +750,8 @@ class PrayerRequestAdmin(admin.ModelAdmin):
             p.drawString(50, y, f"Name: {obj.name}")
             y -= 18
             p.drawString(50, y, f"Email: {obj.email}")
+            y -= 18
+            p.drawString(50, y, f"Phone: {obj.phone or 'N/A'}")
             y -= 18
             p.drawString(50, y, f"Date: {obj.created_at.strftime('%Y-%m-%d %H:%M')}")
             y -= 18
@@ -763,24 +778,21 @@ class PrayerRequestAdmin(admin.ModelAdmin):
         })
     export_as_pdf.short_description = "🧾 Export selected to PDF"
 
-    # ✅ Word Export with Watermark + Logo
+    # ✅ Word Export
     def export_as_word(self, request, queryset):
         document = Document()
         section = document.sections[0]
         header = section.header
         header_paragraph = header.paragraphs[0]
 
-        # 🔰 Logo
         logo_path = os.path.join('static', 'login-form', 'images', 'GMMI_LOGO.png')
         if os.path.exists(logo_path):
             run = header_paragraph.add_run()
             run.add_picture(logo_path, width=Inches(1.5))
             header_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
-        # 💧 Watermark using VML XML
         watermark_paragraph = header.add_paragraph()
         watermark_run = watermark_paragraph.add_run()
-
         shape_xml = r"""
         <w:pict xmlns:v="urn:schemas-microsoft-com:vml"
                 xmlns:w="urn:schemas-microsoft-com:office:word"
@@ -796,16 +808,14 @@ class PrayerRequestAdmin(admin.ModelAdmin):
             </v:shape>
         </w:pict>
         """
-        watermark_element = parse_xml(shape_xml)  # ✅ fixed line
+        watermark_element = parse_xml(shape_xml)
         watermark_run._r.append(watermark_element)
 
-        # 📄 Title
         document.add_paragraph()
         title = document.add_heading("Prayer Requests Report", level=1)
         title.runs[0].font.size = Pt(24)
         title.runs[0].font.name = "Calibri"
 
-        # 🗓️ Date
         date_paragraph = document.add_paragraph()
         date_run = date_paragraph.add_run(f"Date Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}")
         date_run.bold = True
@@ -831,11 +841,14 @@ class PrayerRequestAdmin(admin.ModelAdmin):
             r2.font.size = Pt(11)
 
             p3 = document.add_paragraph()
-            r3 = p3.add_run(f"Date: {obj.created_at.strftime('%Y-%m-%d %H:%M')}")
+            r3 = p3.add_run(f"Phone: {obj.phone or 'N/A'}")
             r3.font.size = Pt(11)
 
-            document.add_paragraph("Message:", style="Intense Quote")
+            p4 = document.add_paragraph()
+            r4 = p4.add_run(f"Date: {obj.created_at.strftime('%Y-%m-%d %H:%M')}")
+            r4.font.size = Pt(11)
 
+            document.add_paragraph("Message:", style="Intense Quote")
             for line in obj.message.splitlines():
                 msg_paragraph = document.add_paragraph()
                 msg_run = msg_paragraph.add_run(line.strip())

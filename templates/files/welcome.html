@@ -579,35 +579,39 @@
       <h2 class="text-4xl font-extrabold mb-2">🙏 Submit Your Prayer</h2>
       <p class="text-gray-300">Let us agree with you in faith. Drop your request and we’ll pray for you.</p>
     </div>
+    
+<form id="prayerForm" class="space-y-4" method="POST">
+  {% csrf_token %}
+  <input type="text" name="name" placeholder="Your Name" required
+         class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
 
-    <form id="prayerForm" class="space-y-4">
-      {% csrf_token %}
-      <input type="text" name="name" placeholder="Your Name" required
-             class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
+  <input type="email" name="email" placeholder="Your Email" required
+         class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
 
-      <input type="email" name="email" placeholder="Your Email" required
-             class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
+  <input type="text" name="phone" placeholder="Your Phone Number (optional)"
+         class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500">
 
-      <textarea name="message" rows="5" placeholder="Type your prayer request here..." required
-                class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
+  <textarea name="message" rows="5" placeholder="Type your prayer request here..." required
+            class="w-full bg-gray-800 border border-gray-600 p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
 
-      <button id="submitBtn" type="submit"
-              class="w-full bg-pink-600 hover:bg-pink-700 py-3 rounded-lg font-semibold transition duration-300 flex items-center justify-center gap-2">
-        <span id="btnText">Send Request</span>
-        <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 100 16v-4l-3.5 3.5L12 24v-4a8 8 0 01-8-8z">
-          </path>
-        </svg>
-      </button>
-    </form>
+  <button id="submitBtn" type="submit"
+          class="w-full bg-pink-600 hover:bg-pink-700 py-3 rounded-lg font-semibold transition duration-300 flex items-center justify-center gap-2">
+    <span id="btnText">Send Request</span>
+    <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+         viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 100 16v-4l-3.5 3.5L12 24v-4a8 8 0 01-8-8z">
+      </path>
+    </svg>
+  </button>
+</form>
 
-    <!-- ✅ Success Message -->
-    <div id="successMessage" class="hidden mt-6 text-green-400 text-center font-medium animate-fade-in">
-      🙌🏽 Prayer request sent successfully. God is already at work!
-    </div>
+<!-- ✅ Success Message -->
+<div id="successMessage" class="hidden mt-6 text-green-400 text-center font-medium animate-fade-in">
+  🙌🏽 Prayer request sent successfully. God is already at work!
+</div>
+
   </div>
 </section>
 <!-- 🔥 The End  of Prayer Request -->

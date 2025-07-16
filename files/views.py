@@ -1695,6 +1695,10 @@ def overview(request):
 
 
 
+from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
+from .forms import PrayerRequestForm
 
 def prayer_request_view(request):
     if request.method == 'POST':
@@ -1702,7 +1706,7 @@ def prayer_request_view(request):
         if form.is_valid():
             prayer = form.save()
 
-            # Send confirmation email
+            # ✅ Send confirmation email
             send_mail(
                 subject="🙏 Your Prayer Request Was Received",
                 message=(
@@ -1710,6 +1714,7 @@ def prayer_request_view(request):
                     f"Thank you for your prayer request:\n\n"
                     f"\"{prayer.message}\"\n\n"
                     f"We are standing with you in faith!\n\n"
+                    f"📞 Phone: {prayer.phone or 'Not provided'}\n\n"
                     f"Blessings,\nGMMIConnect Team"
                 ),
                 from_email=settings.DEFAULT_FROM_EMAIL,
