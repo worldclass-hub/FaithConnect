@@ -333,11 +333,11 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'doxcela@gmail.com'          # Replace with your Gmail
-EMAIL_HOST_PASSWORD = 'psyz tqbn fadc iwdd'    # Use an App Password, not your main Gmail password
+EMAIL_HOST_USER = 'globalmandateministryinc@gmail.com'          # Replace with your Gmail
+EMAIL_HOST_PASSWORD = 'wgwn iidn tkju ilpt'    # Use an App Password, not your main Gmail password
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-ADMIN_EMAIL = 'doxcela@gmail.com'              # Can be same or different from sender
+ADMIN_EMAIL = 'globalmandateministryinc@gmail.com'              # Can be same or different from sender
 
 
 

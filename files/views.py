@@ -875,7 +875,7 @@ def contact(request):
             """
 
             # ✉️ Send the email
-            reply_email = EmailMultiAlternatives(subject, text_body, 'doxcela@gmail.com', [email])
+            reply_email = EmailMultiAlternatives(subject, text_body, 'globalmandateministryinc@gmail.com', [email])
             reply_email.attach_alternative(html_email, "text/html")
             reply_email.send()
 
@@ -1112,7 +1112,7 @@ def about_view(request):
             </div>
             """
 
-            email_msg = EmailMultiAlternatives(reply_subject, reply_body, 'doxcela@gmail.com', [email])
+            email_msg = EmailMultiAlternatives(reply_subject, reply_body, 'globalmandateministryinc@gmail.com', [email])
             email_msg.attach_alternative(reply_html, "text/html")
             email_msg.send()
 
@@ -1227,7 +1227,7 @@ def coming_soon(request):
             </div>
             """
 
-            email_msg = EmailMultiAlternatives(subject, text_body, 'doxcela@gmail.com', [email])
+            email_msg = EmailMultiAlternatives(subject, text_body, 'globalmandateministryinc@gmail.com', [email])
             email_msg.attach_alternative(html_email, "text/html")
             email_msg.send()
 
