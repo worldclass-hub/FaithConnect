@@ -230,11 +230,17 @@ def home(request):
 
 
 
-
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import FileUpload, NewsletterSubscriber, UserProfile, NewUpdate
+from .forms import UserProfileForm
+from datetime import datetime
 from .upload_to_supabase import upload_file_to_supabase
+import os
+
 
 def excel_page(request):
-    # Allowed extensions
     allowed_image_exts = ['.jpg', '.jpeg', '.png', '.gif']
     allowed_video_exts = ['.mp4', '.webm', '.ogg']
     allowed_audio_exts = ['.mp3', '.wav', '.aac']
@@ -244,17 +250,33 @@ def excel_page(request):
     allowed_zip_exts = ['.zip', '.rar']
 
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        # --- Profile update ---
-        if request.FILES.get('profile_image'):
-            # ... (your profile update code unchanged)
-            pass
 
-        # --- Newsletter subscription ---
-        if request.POST.get('email'):
-            # ... (your newsletter code unchanged)
-            pass
+        # 🎯 Profile Form
+        if 'fullname' in request.POST and request.FILES.get('profile_image'):
+            if request.user.is_authenticated:
+                if UserProfile.objects.filter(user=request.user).exists():
+                    return JsonResponse({'status': 'error', 'message': "Profile already exists."})
 
-        # --- File or YouTube upload ---
+                form = UserProfileForm(request.POST, request.FILES)
+                if form.is_valid():
+                    profile = form.save(commit=False)
+                    profile.user = request.user
+                    profile.save()
+                    return JsonResponse({'status': 'success'})
+                else:
+                    return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
+            else:
+                return JsonResponse({'status': 'error', 'message': "You must be logged in."}, status=400)
+
+        # 📬 Newsletter Subscription
+        elif 'email' in request.POST and not request.FILES:
+            email = request.POST.get('email')
+            if NewsletterSubscriber.objects.filter(email=email).exists():
+                return JsonResponse({'status': 'error', 'message': 'Email already subscribed.'})
+            NewsletterSubscriber.objects.create(email=email)
+            return JsonResponse({'status': 'success'})
+
+        # 📁 File or 🎥 YouTube Upload
         uploaded_file = request.FILES.get('uploaded_file')
         youtube_url = request.POST.get('youtube_url', '').strip()
         date = request.POST.get('date')
@@ -299,7 +321,7 @@ def excel_page(request):
 
         return JsonResponse({'status': 'success', 'message': 'File or video uploaded successfully.'})
 
-    # GET method
+    # --- GET Request ---
     files = FileUpload.objects.all().order_by('-date', '-time')
     selected_date = request.GET.get('date')
     if selected_date:
@@ -326,7 +348,7 @@ def excel_page(request):
     })
 
 
-
+# ✅ Optional (for when user closes modal and we want to suppress it again)
 @csrf_exempt
 def never_show_modal(request):
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -425,26 +447,34 @@ def upload_pdf(request):
 
 
 
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.shortcuts import render
+from .models import PDFUpload, UserProfile, NewUpdate
+from .forms import UserProfileForm
+from datetime import datetime
+
 
 def pdf_document(request):
-    # Handle AJAX profile form submission
+    # ✅ Handle AJAX profile form submission
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        if request.user.is_authenticated:
-            if UserProfile.objects.filter(user=request.user).exists():
-                return JsonResponse({'status': 'error', 'message': "Profile already exists."}, status=400)
+        if 'fullname' in request.POST and request.FILES.get('profile_image'):
+            if request.user.is_authenticated:
+                if UserProfile.objects.filter(user=request.user).exists():
+                    return JsonResponse({'status': 'error', 'message': "Profile already exists."}, status=400)
 
-            form = UserProfileForm(request.POST, request.FILES)
-            if form.is_valid():
-                profile = form.save(commit=False)
-                profile.user = request.user
-                profile.save()
-                return JsonResponse({'status': 'success'})
+                form = UserProfileForm(request.POST, request.FILES)
+                if form.is_valid():
+                    profile = form.save(commit=False)
+                    profile.user = request.user
+                    profile.save()
+                    return JsonResponse({'status': 'success'})
+                else:
+                    return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
             else:
-                return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
-        else:
-            return JsonResponse({'status': 'error', 'message': "You must be logged in."}, status=400)
+                return JsonResponse({'status': 'error', 'message': "You must be logged in."}, status=400)
 
-    # Fetch all PDFs
+    # ✅ Fetch all PDFs
     pdf_list = PDFUpload.objects.all().order_by('-id')
     selected_date = request.GET.get('date', None)
     if selected_date:
@@ -461,14 +491,13 @@ def pdf_document(request):
     if request.user.is_authenticated:
         user_has_profile = UserProfile.objects.filter(user=request.user).exists()
 
-    # ✅ Fetch all updates to show in the modal
     updates = NewUpdate.objects.all().order_by('-upload_date')
 
     return render(request, "files/pdf_document.html", {
         'page_obj': page_obj,
         'recent_pdfs': recent_pdfs,
         'user_has_profile': user_has_profile,
-        'updates': updates,  # Pass the updates to the template
+        'updates': updates,
     })
 
 
@@ -768,13 +797,21 @@ def german_hymn_detail(request, hymn_id):
 
 
 
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.core.mail import EmailMultiAlternatives
+from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_exempt
+from .models import NewUpdate, NewsletterSubscriber, UserProfile
+from datetime import datetime
+
 
 def contact(request):
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         email = request.POST.get('email')
         name = 'Subscriber'
 
-        # Try to get user's name if logged in
+        # 🔎 Try to get full name if logged in
         if request.user.is_authenticated:
             profile = UserProfile.objects.filter(user=request.user).first()
             if profile and profile.fullname:
@@ -786,7 +823,11 @@ def contact(request):
 
         if email:
             if NewsletterSubscriber.objects.filter(email=email).exists():
-                return JsonResponse({'status': 'error', 'message': 'Email already subscribed.', 'email': email})
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Email already subscribed.',
+                    'email': email
+                })
 
             NewsletterSubscriber.objects.create(email=email)
 
@@ -828,12 +869,12 @@ def contact(request):
                             <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" style="height: 24px;">
                         </a>
                     </div>
-                    <p style="color: #aaa; font-size: 12px; margin-top: 10px;">&copy; {datetime.now().year} Doxcela. All rights reserved.</p>
+                    <p style="color: #aaa; font-size: 12px; margin-top: 10px;">&copy; {now().year} Doxcela. All rights reserved.</p>
                 </div>
             </div>
             """
 
-            # Send the email
+            # ✉️ Send the email
             reply_email = EmailMultiAlternatives(subject, text_body, 'doxcela@gmail.com', [email])
             reply_email.attach_alternative(html_email, "text/html")
             reply_email.send()
@@ -842,20 +883,9 @@ def contact(request):
 
         return JsonResponse({'status': 'error', 'message': 'Email required.'})
 
-    # GET method
+    # GET: load contact page with updates
     updates = NewUpdate.objects.all().order_by('-upload_date')
     return render(request, 'files/contact.html', {'updates': updates})
-
-
-@csrf_exempt
-def never_show_modal(request):
-    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        email = request.POST.get('email')
-        if email:
-            NewsletterSubscriber.objects.filter(email=email).update(has_closed_modal=True)
-            return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error'})
-
 
 
 
@@ -1121,13 +1151,20 @@ def about_view(request):
 
 
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.core.mail import EmailMultiAlternatives
+from django.views.decorators.csrf import csrf_exempt
+from .models import ComingSoonPage, NewsletterSubscriber, UserProfile
+from datetime import datetime
+
 
 def coming_soon(request):
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         email = request.POST.get('email')
         name = 'Subscriber'
 
-        # Try to get user's name if logged in
+        # 🔍 Try to get full name from profile if logged in
         if request.user.is_authenticated:
             profile = UserProfile.objects.filter(user=request.user).first()
             if profile and profile.fullname:
@@ -1139,20 +1176,23 @@ def coming_soon(request):
 
         if email:
             if NewsletterSubscriber.objects.filter(email=email).exists():
-                return JsonResponse({'status': 'error', 'message': 'Email already subscribed.', 'email': email})
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Email already subscribed.',
+                    'email': email
+                })
 
             NewsletterSubscriber.objects.create(email=email)
 
-            # Prepare email content
             subject = "Thanks for subscribing to our newsletter!"
             text_body = (
+                f"Hi {name},\n\n"
                 "Thanks for subscribing to our newsletter! "
                 "You’re now part of our community and will be the first to receive the latest updates, exclusive content, and special offers.\n\n"
                 "We’re excited to have you with us!"
             )
             html_body = text_body.replace('\n', '<br>')
 
-            # Build the HTML email body
             html_email = f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 30px; border: 1px solid #eee;">
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -1187,7 +1227,6 @@ def coming_soon(request):
             </div>
             """
 
-            # Send the email
             email_msg = EmailMultiAlternatives(subject, text_body, 'doxcela@gmail.com', [email])
             email_msg.attach_alternative(html_email, "text/html")
             email_msg.send()
@@ -1198,7 +1237,16 @@ def coming_soon(request):
 
     # GET method
     page = ComingSoonPage.objects.last()
-    return render(request, 'files/coming_soon.html', {'page': page})
+
+    # Add optional user_has_profile context
+    user_has_profile = False
+    if request.user.is_authenticated:
+        user_has_profile = UserProfile.objects.filter(user=request.user).exists()
+
+    return render(request, 'files/coming_soon.html', {
+        'page': page,
+        'user_has_profile': user_has_profile
+    })
 
 
 @csrf_exempt
