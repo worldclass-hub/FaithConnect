@@ -258,7 +258,7 @@
 
   <!-- Mobile Menu -->
   <div id="mobileMenu" class="hidden md:hidden bg-black bg-opacity-95 text-white px-6 pb-4 space-y-1">
-    <a href="#" class="block py-2 hover:text-yellow-400">About</a>
+    <a href="{% url 'about' %}" class="block py-2 hover:text-yellow-400">About</a>
 
     <!-- Connect Dropdown (Mobile) -->
     {% if user.is_authenticated and user.is_staff %}
