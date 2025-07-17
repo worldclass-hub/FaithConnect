@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+    .logo {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+    .greeting {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      color: #4B0082;
+    }
+    .message {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    .footer {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 40px;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="cid:gmmi_logo" alt="GMMI Logo" class="logo" />
+
+    <p class="greeting">Dear {{ name }},</p>
+
+    <p class="message">
+      Thank you for registering for the <strong>GMMI School of Ministry</strong>.  
+      Your form has been received successfully, and our team will prayerfully review your application.
+    </p>
+
+    <p class="message">
+      Please stay connected with us via our website and social media pages. We will be in touch with you shortly with next steps.
+    </p>
+
+    <p class="footer">
+      With love and prayers,<br />
+      <strong>GMMI Team</strong><br />
+      globalmandateministryinc@gmail.com
+    </p>
+  </div>
+</body>
+</html>

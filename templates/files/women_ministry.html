@@ -1,24 +1,87 @@
-{% load  static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Women’s Ministry | GMMIConnect</title>
-<!-- Favicon -->
+  <title>Women's Ministry | GMMIConnect</title>
+  <!-- Favicon -->
   <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png">
   <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
-  <script src="{% static 'assets/js/typed.min.js' %}"></script></head>
+  <script src="{% static 'assets/js/typed.min.js' %}"></script>
+  
+  <!-- Preloader CSS -->
+  <style>
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1, #f06292);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease;
+    }
+    
+    .preloader.fade-out {
+      opacity: 0;
+    }
+    
+    .loader {
+      width: 70px;
+      height: 70px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .preloader-text {
+      color: white;
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .loading-dots:after {
+      content: '.';
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+    
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60% { content: '...'; }
+      80%, 100% { content: ''; }
+    }
+  </style>
+</head>
 <body class="bg-white text-gray-800">
+
+  <!-- Preloader -->
+  <div class="preloader">
+    <div class="loader"></div>
+    <div class="preloader-text">Loading Women's Ministry<span class="loading-dots"></span></div>
+  </div>
 
   <!-- Hero Section -->
   <section class="bg-pink-100 py-20 px-6 text-center">
-    <h1 class="text-4xl font-bold text-pink-700 mb-4">Welcome to the Women’s Ministry</h1>
+    <h1 class="text-4xl font-bold text-pink-700 mb-4">Welcome to the Women's Ministry</h1>
     <p class="text-lg max-w-2xl mx-auto mb-6">"She is clothed with strength and dignity; she can laugh at the days to come." — Proverbs 31:25</p>
     <a href="#contact" class="inline-block bg-pink-600 text-white px-6 py-3 rounded-full hover:bg-pink-700 transition">Join the Sisterhood</a>
   </section>
 
+  <!-- Rest of your content remains the same -->
   <!-- Mission & Vision -->
   <section class="py-16 px-6 bg-white text-center">
     <h2 class="text-3xl font-semibold text-pink-700 mb-6">Our Mission & Vision</h2>
@@ -30,7 +93,7 @@
     <h2 class="text-3xl text-center text-pink-700 font-semibold mb-10">Upcoming Events</h2>
     <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-pink-600">Annual Women’s Conference</h3>
+        <h3 class="text-xl font-bold mb-2 text-pink-600">Annual Women's Conference</h3>
         <p class="text-sm text-gray-600">Theme: Arise & Flourish. Date: Aug 23rd - 25th, 2025</p>
       </div>
       <div class="bg-white rounded shadow p-6">
@@ -72,77 +135,89 @@
     <h2 class="text-3xl font-semibold text-center text-pink-700 mb-10">Testimonies</h2>
     <div class="max-w-4xl mx-auto space-y-8">
       <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"Being part of this ministry gave me the courage to start my business and trust God again!" — Sister Mercy A.</blockquote>
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"The Women’s Prayer Fellowship revived my spiritual life in ways I can’t explain!" — Sister Ngozi E.</blockquote>
+      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"The Women's Prayer Fellowship revived my spiritual life in ways I can't explain!" — Sister Ngozi E.</blockquote>
     </div>
   </section>
 
-
-
-<!-- Media Highlights -->
-<section class="py-16 px-6 bg-white">
-  <h2 class="text-3xl text-pink-700 font-semibold text-center mb-10">Media Highlights</h2>
-  <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
-    
-    <!-- Empowerment Message -->
-    <div>
-      <iframe class="w-full h-56 rounded shadow" 
-              src="https://www.youtube.com/embed/aUYZE2PrbNk" 
-              title="How Jesus Empowered Women" allowfullscreen></iframe>
+  <!-- Media Highlights -->
+  <section class="py-16 px-6 bg-white">
+    <h2 class="text-3xl text-pink-700 font-semibold text-center mb-10">Media Highlights</h2>
+    <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Empowerment Message -->
+      <div>
+        <iframe class="w-full h-56 rounded shadow" 
+                src="https://www.youtube.com/embed/aUYZE2PrbNk" 
+                title="How Jesus Empowered Women" allowfullscreen></iframe>
+      </div>
+      
+      <!-- Inspirational Talk -->
+      <div>
+        <iframe class="w-full h-56 rounded shadow" 
+                src="https://www.youtube.com/embed/oWIusnIHCSE" 
+                title="Girl, Get Up | Sarah Jakes Roberts" allowfullscreen></iframe>
+      </div>
+      
+      <!-- Bible Study Lesson -->
+      <div>
+        <iframe class="w-full h-56 rounded shadow" 
+                src="https://www.youtube.com/embed/cSMRAzuIAj0" 
+                title="Women's Bible Study on Sarah" allowfullscreen></iframe>
+      </div>
     </div>
-    
-    <!-- Inspirational Talk -->
-    <div>
-      <iframe class="w-full h-56 rounded shadow" 
-              src="https://www.youtube.com/embed/oWIusnIHCSE" 
-              title="Girl, Get Up | Sarah Jakes Roberts" allowfullscreen></iframe>
+  </section>
+
+  {% load static %}
+
+  <!-- Leadership -->
+  <section class="bg-pink-100 py-16 px-6">
+    <h2 class="text-3xl text-pink-800 font-semibold text-center mb-10">Meet Our Leaders</h2>
+    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
+      
+      {% for leader in leaders %}
+      <div>
+        <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
+        <h3 class="font-bold text-lg text-pink-800">{{ leader.name }}</h3>
+        <p class="text-sm text-gray-600">{{ leader.title }}</p>
+      </div>
+      {% empty %}
+      <p class="text-center col-span-full text-gray-500">No leaders added yet.</p>
+      {% endfor %}
     </div>
-    
-    <!-- Bible Study Lesson -->
-    <div>
-      <iframe class="w-full h-56 rounded shadow" 
-              src="https://www.youtube.com/embed/cSMRAzuIAj0" 
-              title="Women's Bible Study on Sarah" allowfullscreen></iframe>
-    </div>
-
-  </div>
-</section>
-
-
-{% load static %}
-
-<!-- Leadership -->
-<section class="bg-pink-100 py-16 px-6">
-  <h2 class="text-3xl text-pink-800 font-semibold text-center mb-10">Meet Our Leaders</h2>
-  <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-    
-    {% for leader in leaders %}
-    <div>
-      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
-      <h3 class="font-bold text-lg text-pink-800">{{ leader.name }}</h3>
-      <p class="text-sm text-gray-600">{{ leader.title }}</p>
-    </div>
-    {% empty %}
-    <p class="text-center col-span-full text-gray-500">No leaders added yet.</p>
-    {% endfor %}
-
-  </div>
-</section>
-
-  <!-- Contact -->
-  <section id="contact" class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-pink-700 mb-6">Connect With Us</h2>
-    <form class="max-w-xl mx-auto grid gap-4">
-      <input type="text" placeholder="Full Name" class="border border-gray-300 rounded px-4 py-2" required />
-      <input type="email" placeholder="Email Address" class="border border-gray-300 rounded px-4 py-2" required />
-      <textarea placeholder="Message" class="border border-gray-300 rounded px-4 py-2" rows="4"></textarea>
-      <button class="bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700 transition">Send Message</button>
-    </form>
   </section>
 
   <!-- Footer -->
   <footer class="bg-pink-700 text-white py-6 text-center text-sm">
-    <p>&copy; 2025 GMMIConnect | Women’s Ministry | All Rights Reserved.</p>
+    <p>&copy; 2025 GMMIConnect | Women's Ministry | All Rights Reserved.</p>
   </footer>
 
+  <!-- Preloader JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const preloader = document.querySelector('.preloader');
+      
+      // Show the preloader immediately
+      preloader.style.display = 'flex';
+      
+      // Wait for everything to load
+      window.addEventListener('load', function() {
+        // Add fade-out class
+        preloader.classList.add('fade-out');
+        
+        // Remove preloader after fade out completes
+        setTimeout(function() {
+          preloader.style.display = 'none';
+        }, 500); // Match this with the CSS transition time
+      });
+      
+      // Fallback in case load event doesn't fire
+      setTimeout(function() {
+        preloader.classList.add('fade-out');
+        setTimeout(function() {
+          preloader.style.display = 'none';
+        }, 500);
+      }, 3000); // Maximum 3 seconds then force hide
+    });
+  </script>
 </body>
 </html>

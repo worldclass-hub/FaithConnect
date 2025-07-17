@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Registration PDF</title>
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; }
+        h1 { color: #4B0082; }
+        .info { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>GMMI School of Ministry Registration</h1>
+    <p class="info"><strong>Full Name:</strong> {{ registration.full_name }}</p>
+    <p class="info"><strong>Email:</strong> {{ registration.email }}</p>
+    <p class="info"><strong>Phone:</strong> {{ registration.phone }}</p>
+    <p class="info"><strong>Gender:</strong> {{ registration.gender }}</p>
+    <p class="info"><strong>Date of Birth:</strong> {{ registration.dob }}</p>
+    <p class="info"><strong>Marital Status:</strong> {{ registration.marital_status }}</p>
+    <p class="info"><strong>Country:</strong> {{ registration.country }}</p>
+    <p class="info"><strong>State/City:</strong> {{ registration.state_city }}</p>
+    <p class="info"><strong>Occupation:</strong> {{ registration.occupation }}</p>
+    <p class="info"><strong>Church:</strong> {{ registration.church }}</p>
+    <p class="info"><strong>Born Again:</strong> {{ registration.born_again }}</p>
+    <p class="info"><strong>Baptized in Holy Ghost:</strong> {{ registration.holy_ghost }}</p>
+    <p class="info"><strong>Reason:</strong> {{ registration.reason }}</p>
+</body>
+</html>

@@ -736,23 +736,34 @@ class WorshipMinistryLeader(models.Model):
 
 
 
+from django.db import models
 
-class ChildrenMinistryPhoto(models.Model):
-    image = models.ImageField(upload_to='children/photos/')
-    caption = models.CharField(max_length=100, blank=True)
+class ChildrenMinistryRegistration(models.Model):
+    AGE_GROUP_CHOICES = [
+        ('toddlers', 'Toddlers (0–3 yrs)'),
+        ('preschool', 'Preschool (4–5 yrs)'),
+        ('kids', 'Kids (6–9 yrs)'),
+        ('preteens', 'Pre-teens (10–12 yrs)'),
+    ]
 
-    class Meta:
-        verbose_name = "Children Ministry Photo"
-        verbose_name_plural = "Children Ministry Photos"
+    parent_name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    child_name = models.CharField(max_length=100)
+    age_group = models.CharField(max_length=20, choices=AGE_GROUP_CHOICES)
+    message = models.TextField(blank=True, null=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.caption or f"Photo {self.id}"
+        return f"{self.child_name} ({self.parent_name})"
+
+
+
 
 
 
 
 class GMSOMSlide(models.Model):
-    image = models.ImageField(upload_to='gmsom/slides/')
+    image_url = models.URLField("Image URL", blank=True, null=True)
     caption = models.CharField(max_length=100, blank=True)
 
     class Meta:
@@ -772,3 +783,31 @@ class GMSOMSlide(models.Model):
 
 #     def __str__(self):
 #         return f"{self.name} - {self.quote[:30]}"
+
+
+
+
+
+
+from django.db import models
+
+
+class SchoolOfMinistryRegistration(models.Model):
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    gender = models.CharField(max_length=10)
+    dob = models.DateField()
+    marital_status = models.CharField(max_length=20)
+    country = models.CharField(max_length=50)
+    state_city = models.CharField(max_length=50)
+    occupation = models.CharField(max_length=100, blank=True)
+    church = models.CharField(max_length=100, blank=True)
+    born_again = models.CharField(max_length=10)
+    holy_ghost = models.CharField(max_length=10)
+    reason = models.TextField()
+    photo = models.ImageField(upload_to='registrations/photos/')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.full_name

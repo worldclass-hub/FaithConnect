@@ -69,6 +69,9 @@ urlpatterns = [
     path('men-ministry/', views.men_ministry, name='men_ministry'),
     path('overview/', views.overview, name='overview'),
     path('prayer/', views.prayer_request_view, name='prayer-request'),
+    path('register/', views.register, name='register'),
+    path('thank-you/', views.thank_you, name='registration_thank_you'),  # simple thank you page
+
     # path('testimony/', views.testimony_view, name='testimony'),
 
 

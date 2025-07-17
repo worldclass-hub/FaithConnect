@@ -1,0 +1,366 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GMMI - School of Ministry Registration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png">
+  <style>
+    /* Preloader Styles */
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    
+    .preloader-logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 2rem;
+      animation: pulse 2s infinite;
+    }
+    
+    .loader {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+    
+    .loader-inner {
+      position: absolute;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid white;
+      width: 100%;
+      height: 100%;
+      animation: spin 1.5s linear infinite;
+    }
+    
+    .loader-inner:nth-child(2) {
+      animation-delay: 0.5s;
+      width: 70%;
+      height: 70%;
+      top: 15%;
+      left: 15%;
+      border-top-color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .loader-inner:nth-child(3) {
+      animation-delay: 1s;
+      width: 40%;
+      height: 40%;
+      top: 30%;
+      left: 30%;
+      border-top-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .loading-text {
+      color: white;
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .loading-dots:after {
+      content: '.';
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+    
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60% { content: '...'; }
+      80%, 100% { content: ''; }
+    }
+    
+    /* Submit Button Loader */
+    .submit-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .submit-loader.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .submit-spinner {
+      width: 70px;
+      height: 70px;
+      position: relative;
+    }
+    
+    .submit-spinner .dot {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      animation: submit-spin 1.8s infinite ease-in-out;
+    }
+    
+    .submit-spinner .dot:nth-child(1) {
+      top: 0;
+      left: 50%;
+      margin-left: -7px;
+      animation-delay: -1.8s;
+    }
+    
+    .submit-spinner .dot:nth-child(2) {
+      top: 12px;
+      left: 12px;
+      animation-delay: -1.6s;
+    }
+    
+    .submit-spinner .dot:nth-child(3) {
+      top: 50%;
+      left: 0;
+      margin-top: -7px;
+      animation-delay: -1.4s;
+    }
+    
+    .submit-spinner .dot:nth-child(4) {
+      top: 12px;
+      right: 12px;
+      animation-delay: -1.2s;
+    }
+    
+    .submit-spinner .dot:nth-child(5) {
+      top: 50%;
+      right: 0;
+      margin-top: -7px;
+      animation-delay: -1s;
+    }
+    
+    .submit-spinner .dot:nth-child(6) {
+      bottom: 12px;
+      right: 12px;
+      animation-delay: -0.8s;
+    }
+    
+    .submit-spinner .dot:nth-child(7) {
+      bottom: 0;
+      left: 50%;
+      margin-left: -7px;
+      animation-delay: -0.6s;
+    }
+    
+    .submit-spinner .dot:nth-child(8) {
+      bottom: 12px;
+      left: 12px;
+      animation-delay: -0.4s;
+    }
+    
+    @keyframes submit-spin {
+      0%, 100% {
+        transform: scale(0.3);
+        background: #4f46e5;
+      }
+      50% {
+        transform: scale(1);
+        background: #fff;
+      }
+    }
+    
+    .submit-loading-text {
+      color: white;
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 via-white to-indigo-200 min-h-screen flex items-center justify-center px-4 py-10">
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <img src="{% static 'login-form/images/GMMI_LOGO.png' %}" alt="GMMI Logo" class="preloader-logo">
+    <div class="loader">
+      <div class="loader-inner"></div>
+      <div class="loader-inner"></div>
+      <div class="loader-inner"></div>
+    </div>
+    <div class="loading-text">Loading<span class="loading-dots"></span></div>
+  </div>
+
+  <!-- Submit Loader -->
+  <div class="submit-loader" id="submitLoader">
+    <div class="submit-spinner">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <div class="submit-loading-text">Processing Registration</div>
+  </div>
+
+  <div class="w-full max-w-3xl bg-white shadow-2xl rounded-2xl p-8 md:p-12">
+    <div class="text-center mb-8">
+      <img src="{% static 'login-form/images/GMMI_LOGO.png' %}" alt="GMMI Logo" class="w-20 mx-auto mb-4">
+      <h1 class="text-3xl md:text-4xl font-bold text-indigo-800">School of Ministry Registration</h1>
+      <p class="text-gray-600 mt-2">Please fill in your details prayerfully and truthfully.</p>
+    </div>
+
+    <form id="registrationForm" method="POST" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div><label class="block text-sm text-gray-700 mb-1">Full Name</label><input type="text" name="full_name" class="w-full p-3 border rounded-xl" required></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Email Address</label><input type="email" name="email" class="w-full p-3 border rounded-xl" required></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Phone Number</label><input type="tel" name="phone" class="w-full p-3 border rounded-xl" required></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Gender</label><select name="gender" class="w-full p-3 border rounded-xl" required><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Date of Birth</label><input type="date" name="dob" class="w-full p-3 border rounded-xl" required></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Marital Status</label><select name="marital_status" class="w-full p-3 border rounded-xl" required><option value="">Select</option><option>Single</option><option>Married</option><option>Divorced</option></select></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Country</label><input type="text" name="country" class="w-full p-3 border rounded-xl" required></div>
+        <div><label class="block text-sm text-gray-700 mb-1">State / City</label><input type="text" name="state_city" class="w-full p-3 border rounded-xl" required></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Occupation</label><input type="text" name="occupation" class="w-full p-3 border rounded-xl"></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Church Affiliation</label><input type="text" name="church" class="w-full p-3 border rounded-xl"></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Born Again?</label><select name="born_again" class="w-full p-3 border rounded-xl"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+        <div><label class="block text-sm text-gray-700 mb-1">Baptized in the Holy Ghost?</label><select name="holy_ghost" class="w-full p-3 border rounded-xl"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+      </div>
+
+      <div><label class="block text-sm text-gray-700 mb-1">Why do you want to join the School of Ministry?</label><textarea name="reason" rows="4" class="w-full p-3 border rounded-xl" required></textarea></div>
+
+      <div><label class="block text-sm text-gray-700 mb-1">Upload Passport Photograph</label><input type="file" name="photo" accept="image/*" class="w-full p-3 border rounded-xl" required></div>
+
+      <div class="text-center pt-4">
+        <button type="submit" id="submitBtn" class="bg-indigo-700 text-white px-6 py-3 rounded-full hover:bg-indigo-800 transition w-48">
+          Submit Registration
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Thank You Modal -->
+  <div id="thankYouModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center transition duration-300">
+    <div id="modalContent" class="transform scale-90 opacity-0 transition-all duration-300 ease-out bg-white p-8 rounded-2xl shadow-xl text-center max-w-md w-full">
+      <h2 class="text-2xl font-bold text-indigo-700 mb-4">🎉 Thank You!</h2>
+      <p class="text-gray-700 mb-6">Your registration has been submitted successfully. We'll reach out to you shortly.</p>
+      <button onclick="closeModal()" class="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">Close</button>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Preloader
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const preloader = document.getElementById('preloader');
+        preloader.style.opacity = '0';
+        setTimeout(function() {
+          preloader.style.display = 'none';
+        }, 500);
+      }, 1500);
+    });
+
+    const form = document.getElementById('registrationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitLoader = document.getElementById('submitLoader');
+    const thankYouModal = document.getElementById('thankYouModal');
+    const modalContent = document.getElementById('modalContent');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Show the powerful submit loader
+      submitLoader.classList.add('active');
+      submitBtn.disabled = true;
+      
+      const formData = new FormData(form);
+      
+      // Simulate network delay for demo (remove in production)
+      setTimeout(() => {
+        fetch("{% url 'register' %}", {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Hide submit loader
+          submitLoader.classList.remove('active');
+          submitBtn.disabled = false;
+          
+          if (data.success) {
+            form.reset();
+            
+            // Show thank you modal
+            thankYouModal.classList.remove('hidden');
+            setTimeout(() => {
+              modalContent.classList.remove('scale-90', 'opacity-0');
+              modalContent.classList.add('scale-100', 'opacity-100');
+            }, 50);
+            
+            // Trigger Confetti
+            confetti({
+              particleCount: 200,
+              spread: 100,
+              origin: { y: 0.6 }
+            });
+          } else {
+            alert(data.message || "Something went wrong. Please check your input.");
+          }
+        })
+        .catch(error => {
+          submitLoader.classList.remove('active');
+          submitBtn.disabled = false;
+          alert("Network error. Please try again.");
+          console.error('Error:', error);
+        });
+      }, 1500); // Remove this setTimeout in production
+    });
+
+    function closeModal() {
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-90', 'opacity-0');
+      setTimeout(() => {
+        thankYouModal.classList.add('hidden');
+      }, 300);
+    }
+  </script>
+
+</body>
+</html>

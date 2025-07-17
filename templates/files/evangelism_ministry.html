@@ -10,122 +10,248 @@
   <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
   <script src="{% static 'assets/js/typed.min.js' %}"></script>
+  <style>
+    /* Preloader Styles */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #7f1d1d; /* Deep red background */
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    .loader {
+      width: 80px;
+      height: 80px;
+      border: 8px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fef08a; /* Yellow */
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .loader-text {
+      color: white;
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    .progress-bar {
+      width: 200px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #fef08a; /* Yellow */
+      transition: width 0.3s ease;
+    }
+    
+    .scripture-text {
+      color: rgba(255, 255, 255, 0.8);
+      font-style: italic;
+      margin-top: 20px;
+      max-width: 300px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    /* Hide the page content initially */
+    body.loading #main-content {
+      opacity: 0;
+    }
+    
+    /* Show the content after loading */
+    body.loaded #main-content {
+      opacity: 1;
+      transition: opacity 0.5s ease-in;
+    }
+  </style>
 </head>
-<body class="bg-white text-gray-800">
-
-  <!-- Hero Section -->
-  <section class="bg-red-900 text-white py-20 px-6 text-center">
-    <h1 class="text-4xl font-bold mb-4">Evangelism Ministry</h1>
-    <p class="text-lg max-w-2xl mx-auto mb-6">“Go ye into all the world, and preach the gospel to every creature.” — Mark 16:15</p>
-    <a href="#contact" class="inline-block bg-yellow-400 text-red-900 px-6 py-3 rounded-full hover:bg-yellow-300 transition font-bold">Join The Harvest</a>
-  </section>
-
-  <!-- Mission & Vision -->
-  <section class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-red-800 mb-6">Our Mission & Vision</h2>
-    <p class="max-w-3xl mx-auto text-lg text-gray-700">We are committed to soul-winning, street missions, crusades, outreach programs, and personal evangelism. Our goal is to depopulate hell and populate heaven.</p>
-  </section>
-
-  <!-- Outreach Events -->
-  <section class="bg-red-50 py-16 px-6">
-    <h2 class="text-3xl text-center text-red-900 font-semibold mb-10">Upcoming Outreach Events</h2>
-    <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-red-700">Community Crusade</h3>
-        <p class="text-sm text-gray-600">Join us at Ikeja for a 2-day open-air crusade. June 25–26, 2025</p>
-      </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-red-700">Market Evangelism</h3>
-        <p class="text-sm text-gray-600">Soul-winning in local markets. July 12th, 2025</p>
-      </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-red-700">Campus Harvest</h3>
-        <p class="text-sm text-gray-600">Targeted outreach at universities. August 15th, 2025</p>
-      </div>
+<body class="bg-white text-gray-800 loading">
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="loader"></div>
+    <div class="loader-text">Preparing for the Harvest...</div>
+    <div class="progress-bar">
+      <div class="progress" id="progress"></div>
     </div>
-  </section>
-
-  <!-- Evangelism Training -->
-  <section class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-red-800 mb-8">Evangelism Trainings</h2>
-    <p class="max-w-3xl mx-auto mb-6 text-gray-700">Learn how to evangelize effectively through our weekly training sessions. We equip every believer with tools to share the Gospel confidently.</p>
-    <a href="#" class="inline-block bg-red-900 text-white px-6 py-2 rounded hover:bg-red-800 transition">Register for Training</a>
-  </section>
-
-  <!-- Testimonies -->
-  <section class="bg-red-50 py-16 px-6">
-    <h2 class="text-3xl font-semibold text-center text-red-900 mb-10">Testimonies from the Field</h2>
-    <div class="max-w-4xl mx-auto space-y-8">
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"I received Jesus during one of your street outreaches — now I'm serving in church!" — Bro. Kelvin T.</blockquote>
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"The fire of evangelism caught me after your training! Souls are being saved weekly through me." — Sis. Lola A.</blockquote>
-    </div>
-  </section>
-
-
-
-
- <!-- Evangelism Media -->
-<section class="py-16 px-6 bg-white">
-  <h2 class="text-3xl text-red-900 font-semibold text-center mb-10">Evangelism Media</h2>
-  <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
-    
-    <!-- Video 1: Child Evangelism -->
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/cfgm3r3-b_U"
-      title="Child Evangelism Part 1"
-      allowfullscreen></iframe>
-    
-    <!-- Video 2: Youth Are Not the Future -->
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/KeNOoOi5z_0"
-      title="Youth Are Not the Future: The Urgent Task of Evangelism Today"
-      allowfullscreen></iframe>
-
-    <!-- Video 3: Episode 13: Evangelism -->
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/YnSYtr_GSlU"
-      title="Episode 13: Evangelism - Kids Faith Series"
-      allowfullscreen></iframe>
-
+    <div class="scripture-text">"The harvest truly is plenteous, but the labourers are few;" — Matthew 9:37</div>
   </div>
-</section>
 
+  <!-- Main Content (hidden during loading) -->
+  <div id="main-content">
+    <!-- Hero Section -->
+    <section class="bg-red-900 text-white py-20 px-6 text-center">
+      <h1 class="text-4xl font-bold mb-4">Evangelism Ministry</h1>
+      <p class="text-lg max-w-2xl mx-auto mb-6">"Go ye into all the world, and preach the gospel to every creature." — Mark 16:15</p>
+      <a href="#contact" class="inline-block bg-yellow-400 text-red-900 px-6 py-3 rounded-full hover:bg-yellow-300 transition font-bold">Join The Harvest</a>
+    </section>
 
-<!-- Leadership -->
-<section class="bg-red-100 py-16 px-6">
-  <h2 class="text-3xl text-red-900 font-semibold text-center mb-10">Evangelism Leadership</h2>
-  <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-    {% for leader in leaders %}
-    <div>
-      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
-      <h3 class="font-bold text-lg text-red-800">{{ leader.name }}</h3>
-      <p class="text-sm text-gray-600">{{ leader.title }}</p>
-    </div>
-    {% empty %}
-    <p class="text-center col-span-full text-gray-500">No evangelism leaders added yet.</p>
-    {% endfor %}
+    <!-- Mission & Vision -->
+    <section class="py-16 px-6 bg-white text-center">
+      <h2 class="text-3xl font-semibold text-red-800 mb-6">Our Mission & Vision</h2>
+      <p class="max-w-3xl mx-auto text-lg text-gray-700">We are committed to soul-winning, street missions, crusades, outreach programs, and personal evangelism. Our goal is to depopulate hell and populate heaven.</p>
+    </section>
+
+    <!-- Outreach Events -->
+    <section class="bg-red-50 py-16 px-6">
+      <h2 class="text-3xl text-center text-red-900 font-semibold mb-10">Upcoming Outreach Events</h2>
+      <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white rounded shadow p-6">
+          <h3 class="text-xl font-bold mb-2 text-red-700">Community Crusade</h3>
+          <p class="text-sm text-gray-600">Join us at Ikeja for a 2-day open-air crusade. June 25–26, 2025</p>
+        </div>
+        <div class="bg-white rounded shadow p-6">
+          <h3 class="text-xl font-bold mb-2 text-red-700">Market Evangelism</h3>
+          <p class="text-sm text-gray-600">Soul-winning in local markets. July 12th, 2025</p>
+        </div>
+        <div class="bg-white rounded shadow p-6">
+          <h3 class="text-xl font-bold mb-2 text-red-700">Campus Harvest</h3>
+          <p class="text-sm text-gray-600">Targeted outreach at universities. August 15th, 2025</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Evangelism Training -->
+    <section class="py-16 px-6 bg-white text-center">
+      <h2 class="text-3xl font-semibold text-red-800 mb-8">Evangelism Trainings</h2>
+      <p class="max-w-3xl mx-auto mb-6 text-gray-700">Learn how to evangelize effectively through our weekly training sessions. We equip every believer with tools to share the Gospel confidently.</p>
+      <a href="#" class="inline-block bg-red-900 text-white px-6 py-2 rounded hover:bg-red-800 transition">Register for Training</a>
+    </section>
+
+    <!-- Testimonies -->
+    <section class="bg-red-50 py-16 px-6">
+      <h2 class="text-3xl font-semibold text-center text-red-900 mb-10">Testimonies from the Field</h2>
+      <div class="max-w-4xl mx-auto space-y-8">
+        <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"I received Jesus during one of your street outreaches — now I'm serving in church!" — Bro. Kelvin T.</blockquote>
+        <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"The fire of evangelism caught me after your training! Souls are being saved weekly through me." — Sis. Lola A.</blockquote>
+      </div>
+    </section>
+
+    <!-- Evangelism Media -->
+    <section class="py-16 px-6 bg-white">
+      <h2 class="text-3xl text-red-900 font-semibold text-center mb-10">Evangelism Media</h2>
+      <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Video 1: Child Evangelism -->
+        <iframe class="w-full h-56 rounded shadow"
+          src="https://www.youtube.com/embed/cfgm3r3-b_U"
+          title="Child Evangelism Part 1"
+          allowfullscreen></iframe>
+        
+        <!-- Video 2: Youth Are Not the Future -->
+        <iframe class="w-full h-56 rounded shadow"
+          src="https://www.youtube.com/embed/KeNOoOi5z_0"
+          title="Youth Are Not the Future: The Urgent Task of Evangelism Today"
+          allowfullscreen></iframe>
+
+        <!-- Video 3: Episode 13: Evangelism -->
+        <iframe class="w-full h-56 rounded shadow"
+          src="https://www.youtube.com/embed/YnSYtr_GSlU"
+          title="Episode 13: Evangelism - Kids Faith Series"
+          allowfullscreen></iframe>
+
+      </div>
+    </section>
+
+    <!-- Leadership -->
+    <section class="bg-red-100 py-16 px-6">
+      <h2 class="text-3xl text-red-900 font-semibold text-center mb-10">Evangelism Leadership</h2>
+      <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
+        {% for leader in leaders %}
+        <div>
+          <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
+          <h3 class="font-bold text-lg text-red-800">{{ leader.name }}</h3>
+          <p class="text-sm text-gray-600">{{ leader.title }}</p>
+        </div>
+        {% empty %}
+        <p class="text-center col-span-full text-gray-500">No evangelism leaders added yet.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-red-900 text-white py-6 text-center text-sm">
+      <p>&copy; 2025 GMMIConnect | Evangelism Ministry | All Rights Reserved.</p>
+    </footer>
   </div>
-</section>
 
-
-
-
-
-  <!-- Contact -->
-  <section id="contact" class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-red-800 mb-6">Join the Evangelism Army</h2>
-    <form class="max-w-xl mx-auto grid gap-4">
-      <input type="text" placeholder="Full Name" class="border border-gray-300 rounded px-4 py-2" required />
-      <input type="email" placeholder="Email Address" class="border border-gray-300 rounded px-4 py-2" required />
-      <textarea placeholder="Message" class="border border-gray-300 rounded px-4 py-2" rows="4"></textarea>
-      <button class="bg-red-900 text-white px-6 py-2 rounded hover:bg-red-800 transition">Submit</button>
-    </form>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-red-900 text-white py-6 text-center text-sm">
-    <p>&copy; 2025 GMMIConnect | Evangelism Ministry | All Rights Reserved.</p>
-  </footer>
-
+  <!-- Preloader Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Simulate loading progress
+      let progress = 0;
+      const progressBar = document.getElementById('progress');
+      const preloader = document.getElementById('preloader');
+      const body = document.body;
+      
+      // Update progress bar
+      const interval = setInterval(function() {
+        progress += Math.random() * 10;
+        if (progress > 100) progress = 100;
+        progressBar.style.width = progress + '%';
+        
+        // Update loading text based on progress
+        const loaderText = document.querySelector('.loader-text');
+        if (progress < 30) {
+          loaderText.textContent = "Preparing for the Harvest...";
+        } else if (progress < 60) {
+          loaderText.textContent = "Equipping laborers...";
+        } else if (progress < 90) {
+          loaderText.textContent = "Almost ready...";
+        } else {
+          loaderText.textContent = "Launching ministry tools...";
+        }
+        
+        // When complete
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(function() {
+            preloader.style.opacity = '0';
+            setTimeout(function() {
+              preloader.style.display = 'none';
+              body.classList.remove('loading');
+              body.classList.add('loaded');
+            }, 500);
+          }, 500); // Additional delay for smooth transition
+        }
+      }, 200);
+      
+      // Ensure all resources are loaded before removing preloader
+      window.addEventListener('load', function() {
+        // If the simulated progress hasn't finished yet, wait for it
+        if (progress < 100) return;
+        
+        clearInterval(interval);
+        progressBar.style.width = '100%';
+        setTimeout(function() {
+          preloader.style.opacity = '0';
+          setTimeout(function() {
+            preloader.style.display = 'none';
+            body.classList.remove('loading');
+            body.classList.add('loaded');
+          }, 500);
+        }, 500);
+      });
+    });
+  </script>
 </body>
 </html>

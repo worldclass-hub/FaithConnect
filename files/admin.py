@@ -918,25 +918,219 @@ class EvangelismMinistryLeaderAdmin(admin.ModelAdmin):
 
 
 
+from django.contrib import admin
+from django.http import HttpResponse
+from .models import ChildrenMinistryRegistration
+from io import BytesIO
+import csv, os, datetime
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.utils import ImageReader
+from docx import Document
+from docx.shared import Inches, Pt, RGBColor
+from docx.oxml import parse_xml
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+
+@admin.register(ChildrenMinistryRegistration)
+class ChildrenMinistryRegistrationAdmin(admin.ModelAdmin):
+    list_display = ('parent_name', 'phone', 'child_name', 'age_group', 'submitted_at')
+    list_filter = ('submitted_at', 'age_group')
+    search_fields = ('parent_name', 'child_name', 'phone')
+    readonly_fields = ('parent_name', 'phone', 'child_name', 'age_group', 'message', 'submitted_at')
+    ordering = ('-submitted_at',)
+    actions = ['export_as_csv', 'export_as_pdf', 'export_as_word']
+
+    def has_add_permission(self, request):
+        return False
+
+    def export_as_csv(self, request, queryset):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="children_ministry_registrations.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Parent Name', 'Phone', 'Child Name', 'Age Group', 'Message', 'Submitted At'])
+        for entry in queryset:
+            writer.writerow([
+                entry.parent_name, entry.phone, entry.child_name,
+                entry.age_group, entry.message, entry.submitted_at
+            ])
+        return response
+    export_as_csv.short_description = "📤 Export selected to CSV"
+
+    def export_as_pdf(self, request, queryset):
+        buffer = BytesIO()
+        p = canvas.Canvas(buffer, pagesize=A4)
+        width, height = A4
+        y = height - 100
+        page_number = 1
+
+        logo_path = os.path.join('static', 'login-form', 'images', 'GMMI_LOGO.png')
+        watermark_text = "GMMIConnect"
+
+        def draw_header():
+            nonlocal y
+            try:
+                logo = ImageReader(logo_path)
+                p.drawImage(logo, 40, height - 80, width=60, height=60, mask='auto')
+            except:
+                pass
+            p.setFont("Helvetica-Bold", 16)
+            p.drawString(110, height - 60, "Children Ministry Registrations")
+            p.setFont("Helvetica", 10)
+            p.drawRightString(width - 40, height - 60, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+            y = height - 100
+
+        def draw_footer():
+            p.setFont("Helvetica-Oblique", 8)
+            p.setFillColor(colors.grey)
+            p.drawCentredString(width / 2.0, 20, f"Page {page_number}")
+            p.saveState()
+            p.setFont("Helvetica-Bold", 40)
+            p.setFillColorRGB(0.9, 0.9, 0.9)
+            p.translate(width / 2, height / 2)
+            p.rotate(45)
+            p.drawCentredString(0, 0, watermark_text)
+            p.restoreState()
+
+        draw_header()
+        p.setFont("Helvetica", 11)
+
+        for obj in queryset:
+            if y < 120:
+                draw_footer()
+                p.showPage()
+                page_number += 1
+                draw_header()
+                p.setFont("Helvetica", 11)
+
+            p.setFillColor(colors.black)
+            p.drawString(50, y, f"Parent: {obj.parent_name}")
+            y -= 18
+            p.drawString(50, y, f"Phone: {obj.phone}")
+            y -= 18
+            p.drawString(50, y, f"Child: {obj.child_name}")
+            y -= 18
+            p.drawString(50, y, f"Age Group: {obj.age_group}")
+            y -= 18
+            p.drawString(50, y, f"Date: {obj.submitted_at.strftime('%Y-%m-%d %H:%M')}")
+            y -= 18
+            p.drawString(50, y, "Message:")
+            y -= 16
+
+            for line in obj.message.splitlines():
+                if y < 80:
+                    draw_footer()
+                    p.showPage()
+                    page_number += 1
+                    draw_header()
+                    p.setFont("Helvetica", 11)
+                p.drawString(70, y, line.strip())
+                y -= 14
+
+            y -= 20
+
+        draw_footer()
+        p.save()
+        buffer.seek(0)
+        return HttpResponse(buffer, content_type='application/pdf', headers={
+            'Content-Disposition': 'attachment; filename="children_ministry_registrations.pdf"'
+        })
+    export_as_pdf.short_description = "🧾 Export selected to PDF"
+
+    def export_as_word(self, request, queryset):
+        document = Document()
+        section = document.sections[0]
+        header = section.header
+        header_paragraph = header.paragraphs[0]
+
+        logo_path = os.path.join('static', 'login-form', 'images', 'GMMI_LOGO.png')
+        if os.path.exists(logo_path):
+            run = header_paragraph.add_run()
+            run.add_picture(logo_path, width=Inches(1.5))
+            header_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+        watermark_paragraph = header.add_paragraph()
+        watermark_run = watermark_paragraph.add_run()
+        shape_xml = r"""
+        <w:pict xmlns:v="urn:schemas-microsoft-com:vml"
+                xmlns:w="urn:schemas-microsoft-com:office:word"
+                xmlns:o="urn:schemas-microsoft-com:office:office">
+            <v:shape id="WordArt1" o:spid="_x0000_s1025" type="#_x0000_t136"
+                     style="position:absolute; margin-left:0; margin-top:0;
+                            width:500pt; height:100pt; z-index:-251654144;
+                            mso-wrap-edited:f; rotation:315"
+                     fillcolor="#e6e6e6" stroked="f">
+                <v:textpath style="font-family:Calibri; font-size:36pt"
+                            on="t" string="GMMIConnect"/>
+                <v:fill opacity="0.1"/>
+            </v:shape>
+        </w:pict>
+        """
+        watermark_element = parse_xml(shape_xml)
+        watermark_run._r.append(watermark_element)
+
+        document.add_paragraph()
+        title = document.add_heading("Children Ministry Registrations", level=1)
+        title.runs[0].font.size = Pt(24)
+        title.runs[0].font.name = "Calibri"
+
+        date_paragraph = document.add_paragraph()
+        date_run = date_paragraph.add_run(f"Date Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}")
+        date_run.bold = True
+        date_run.font.size = Pt(10)
+        date_run.font.name = "Calibri"
+        document.add_paragraph()
+
+        for obj in queryset:
+            header = document.add_paragraph()
+            header_run = header.add_run("🧒 Registration Entry")
+            header_run.bold = True
+            header_run.font.size = Pt(13)
+            header_run.font.name = "Calibri"
+            header_run.font.color.rgb = RGBColor(46, 116, 181)
+
+            p1 = document.add_paragraph(f"Parent: {obj.parent_name}")
+            p2 = document.add_paragraph(f"Phone: {obj.phone}")
+            p3 = document.add_paragraph(f"Child: {obj.child_name}")
+            p4 = document.add_paragraph(f"Age Group: {obj.age_group}")
+            p5 = document.add_paragraph(f"Date: {obj.submitted_at.strftime('%Y-%m-%d %H:%M')}")
+
+            document.add_paragraph("Message:", style="Intense Quote")
+            for line in obj.message.splitlines():
+                document.add_paragraph(line.strip(), style='BodyText')
+
+            document.add_paragraph("\n")
+
+        buffer = BytesIO()
+        document.save(buffer)
+        buffer.seek(0)
+
+        return HttpResponse(
+            buffer.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            headers={'Content-Disposition': 'attachment; filename="children_ministry_registrations.docx"'}
+        )
+    export_as_word.short_description = "📝 Export selected to Word (.docx)"
 
 
 
-from .models import ChildrenMinistryPhoto
 
-@admin.register(ChildrenMinistryPhoto)
-class ChildrenMinistryPhotoAdmin(admin.ModelAdmin):
-    list_display = ['caption', 'image']
-
-
-
-
-
+from django.utils.html import format_html
+from django.contrib import admin
 from .models import GMSOMSlide
+from .forms import GMSOMSlideForm
 
 @admin.register(GMSOMSlide)
 class GMSOMSlideAdmin(admin.ModelAdmin):
-    list_display = ['caption', 'image']
+    form = GMSOMSlideForm
+    list_display = ['caption', 'image_preview']
+    readonly_fields = ['image_preview', 'image_url']
 
+    def image_preview(self, obj):
+        if obj.image_url:
+            return format_html('<img src="{}" style="height: 100px;" />', obj.image_url)
+        return "-"
+    image_preview.short_description = 'Preview'
 
 
 
@@ -965,3 +1159,83 @@ class GMSOMSlideAdmin(admin.ModelAdmin):
 # class TestimonyAdmin(admin.ModelAdmin):
 #     list_display = ("name", "quote", "created_at")
 #     search_fields = ("name", "quote")
+
+
+
+
+from django.contrib import admin
+from django.http import HttpResponse
+from .models import SchoolOfMinistryRegistration
+from io import BytesIO
+from xhtml2pdf import pisa
+from docx import Document
+from docx.shared import Inches
+import datetime
+
+@admin.register(SchoolOfMinistryRegistration)
+class SchoolOfMinistryRegistrationAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'phone', 'country', 'submitted_at')
+    readonly_fields = ('submitted_at',)
+    ordering = ('-submitted_at',)
+    actions = ['export_as_pdf', 'export_as_word']
+
+    def has_add_permission(self, request):
+        return False  # Optional: disable admin adding from backend
+
+    def export_as_pdf(self, request, queryset):
+        from django.template.loader import render_to_string
+
+        buffer = BytesIO()
+        result = BytesIO()
+
+        for reg in queryset:
+            context = {'registration': reg}
+            html = render_to_string("files/pdf_template.html", context)
+            pisa_status = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), dest=result)
+
+        response = HttpResponse(result.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="school_registrations.pdf"'
+        return response
+    export_as_pdf.short_description = "🖨️ Export selected to PDF"
+
+    def export_as_word(self, request, queryset):
+        document = Document()
+        document.add_heading('GMMI School of Ministry Registrations', 0)
+
+        for reg in queryset:
+            document.add_paragraph(f"Full Name: {reg.full_name}")
+            document.add_paragraph(f"Email: {reg.email}")
+            document.add_paragraph(f"Phone: {reg.phone}")
+            document.add_paragraph(f"Gender: {reg.gender}")
+            document.add_paragraph(f"Date of Birth: {reg.dob}")
+            document.add_paragraph(f"Marital Status: {reg.marital_status}")
+            document.add_paragraph(f"Country: {reg.country}")
+            document.add_paragraph(f"State/City: {reg.state_city}")
+            document.add_paragraph(f"Occupation: {reg.occupation}")
+            document.add_paragraph(f"Church: {reg.church}")
+            document.add_paragraph(f"Born Again: {reg.born_again}")
+            document.add_paragraph(f"Baptized in Holy Ghost: {reg.holy_ghost}")
+            document.add_paragraph(f"Reason: {reg.reason}")
+            document.add_paragraph("")
+
+            if reg.photo:
+                try:
+                    document.add_paragraph("Passport Photograph:")
+                    document.add_picture(reg.photo.path, width=Inches(1.5))
+                except:
+                    document.add_paragraph("Photo not available.")
+
+            document.add_paragraph("\n" + "-"*30 + "\n")
+
+        word_stream = BytesIO()
+        document.save(word_stream)
+        word_stream.seek(0)
+
+        return HttpResponse(
+            word_stream.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            headers={'Content-Disposition': 'attachment; filename="school_registrations.docx"'}
+        )
+    export_as_word.short_description = "📄 Export selected to Word"
+
+

@@ -226,3 +226,66 @@ class NewUpdateForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+
+
+
+# forms.py
+import os, tempfile
+from django import forms
+from .models import GMSOMSlide
+from .upload_to_supabase import upload_file_to_supabase
+
+class GMSOMSlideForm(forms.ModelForm):
+    image_upload = forms.FileField(label="Slide Image", required=False)
+
+    class Meta:
+        model = GMSOMSlide
+        fields = ['caption']  # don't include image_url directly in admin
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        uploaded_file = self.cleaned_data.get('image_upload')
+
+        if uploaded_file:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as tmp:
+                for chunk in uploaded_file.chunks():
+                    tmp.write(chunk)
+                tmp_path = tmp.name
+
+            uploaded_url = upload_file_to_supabase(tmp_path)
+            instance.image_url = uploaded_url
+            os.remove(tmp_path)
+
+        if commit:
+            instance.save()
+        return instance
+
+
+
+
+
+# forms.py
+from django import forms
+from .models import SchoolOfMinistryRegistration
+
+class SchoolOfMinistryForm(forms.ModelForm):
+    class Meta:
+        model = SchoolOfMinistryRegistration
+        fields = '__all__'
+
+
+
+
+
+
+
+# forms.py
+from django import forms
+from .models import ChildrenMinistryRegistration
+
+class ChildrenMinistryRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = ChildrenMinistryRegistration
+        fields = '__all__'

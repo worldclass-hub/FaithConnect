@@ -10,8 +10,182 @@
   <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
   <script src="{% static 'assets/js/typed.min.js' %}"></script>
+  
+  <!-- Preloader CSS -->
+  <style>
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(-45deg, #1e3a8a, #1e40af, #2563eb, #3b82f6);
+      background-size: 400% 400%;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      animation: gradientBG 8s ease infinite;
+    }
+    
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .preloader.fade-out {
+      opacity: 0;
+      transition: opacity 1s ease-out;
+    }
+    
+    .fire-loader {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin-bottom: 30px;
+    }
+    
+    .fire-particle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #fbbf24;
+      border-radius: 50%;
+      filter: blur(5px);
+      animation: firePulse 2s ease infinite;
+    }
+    
+    .fire-particle:nth-child(1) {
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 0s;
+    }
+    
+    .fire-particle:nth-child(2) {
+      top: 50%;
+      left: 30%;
+      transform: translate(-50%, -50%);
+      animation-delay: 0.2s;
+    }
+    
+    .fire-particle:nth-child(3) {
+      top: 50%;
+      left: 70%;
+      transform: translate(-50%, -50%);
+      animation-delay: 0.4s;
+    }
+    
+    .fire-particle:nth-child(4) {
+      top: 70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 0.6s;
+    }
+    
+    @keyframes firePulse {
+      0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+        background: #fbbf24;
+      }
+      50% { 
+        transform: translate(-50%, -80%) scale(1.5);
+        opacity: 0.8;
+        background: #f59e0b;
+      }
+    }
+    
+    .youth-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background-image: url("{% static 'login-form/images/GMMI_LOGO.png' %}");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.7));
+      z-index: 2;
+    }
+    
+    .preloader-text {
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .preloader-text::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: #fbbf24;
+      animation: textUnderline 2s ease infinite;
+    }
+    
+    @keyframes textUnderline {
+      0%, 100% { width: 100px; }
+      50% { width: 150px; }
+    }
+    
+    .verse-display {
+      color: rgba(255, 255, 255, 0.9);
+      font-style: italic;
+      font-size: 16px;
+      text-align: center;
+      max-width: 300px;
+      line-height: 1.5;
+      margin-top: 20px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .loading-percentage {
+      color: #fbbf24;
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    
+    .pulse-text {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+  </style>
 </head>
 <body class="bg-white text-gray-800">
+
+  <!-- Ultra-Powerful Youth Preloader -->
+  <div class="preloader">
+    <div class="fire-loader">
+      <div class="fire-particle"></div>
+      <div class="fire-particle"></div>
+      <div class="fire-particle"></div>
+      <div class="fire-particle"></div>
+      <div class="youth-logo"></div>
+    </div>
+    <div class="preloader-text">Youth On Fire</div>
+    <div class="verse-display">"Let no man despise thy youth; but be thou an example of the believers..." — 1 Timothy 4:12</div>
+    <div class="loading-percentage pulse-text">0%</div>
+  </div>
 
   <!-- Hero Section -->
   <section class="bg-blue-900 text-white py-20 px-6 text-center">
@@ -20,6 +194,7 @@
     <a href="#contact" class="inline-block bg-yellow-400 text-blue-900 px-6 py-3 rounded-full hover:bg-yellow-300 transition font-bold">Join the Movement</a>
   </section>
 
+  <!-- Rest of your content remains the same -->
   <!-- Mission & Vision -->
   <section class="py-16 px-6 bg-white text-center">
     <h2 class="text-3xl font-semibold text-blue-800 mb-6">Our Mission & Vision</h2>
@@ -77,59 +252,39 @@
     </div>
   </section>
 
-
-
-<!-- Youth Media Highlights -->
-<section class="py-16 px-6 bg-white">
-  <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Youth Media Highlights</h2>
-  <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/4d9OkCofvQQ"
-      title="Following Jesus as a Teenager"
-      allowfullscreen></iframe>
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/tQraix3fgpw"
-      title="Next Level Youth: Let’s Talk About Jesus"
-      allowfullscreen></iframe>
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/o46uZ64N-YI"
-      title="Message for Uprising Youth Group"
-      allowfullscreen></iframe>
-  </div>
-</section>
-
-
-<!-- Leadership -->
-<section class="bg-blue-100 py-16 px-6">
-  <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Youth Leadership Team</h2>
-  <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-    
-    <!-- Leader 1 -->
-       {% for leader in leaders %}
-    <div>
-      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
-      <h3 class="font-bold text-lg text-blue-800">{{ leader.name }}</h3>
-      <p class="text-sm text-gray-600">{{ leader.title }}</p>
+  <!-- Youth Media Highlights -->
+  <section class="py-16 px-6 bg-white">
+    <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Youth Media Highlights</h2>
+    <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
+      <iframe class="w-full h-56 rounded shadow"
+        src="https://www.youtube.com/embed/4d9OkCofvQQ"
+        title="Following Jesus as a Teenager"
+        allowfullscreen></iframe>
+      <iframe class="w-full h-56 rounded shadow"
+        src="https://www.youtube.com/embed/tQraix3fgpw"
+        title="Next Level Youth: Let's Talk About Jesus"
+        allowfullscreen></iframe>
+      <iframe class="w-full h-56 rounded shadow"
+        src="https://www.youtube.com/embed/o46uZ64N-YI"
+        title="Message for Uprising Youth Group"
+        allowfullscreen></iframe>
     </div>
-    {% empty %}
-    <p class="text-center text-gray-500 col-span-full">No youth leaders added yet.</p>
-    {% endfor %}
+  </section>
 
-
-  </div>
-</section>
-
-
-
-  <!-- Contact Form -->
-  <section id="contact" class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-blue-800 mb-6">Connect With Us</h2>
-    <form class="max-w-xl mx-auto grid gap-4">
-      <input type="text" placeholder="Full Name" class="border border-gray-300 rounded px-4 py-2" required />
-      <input type="email" placeholder="Email Address" class="border border-gray-300 rounded px-4 py-2" required />
-      <textarea placeholder="Message" class="border border-gray-300 rounded px-4 py-2" rows="4"></textarea>
-      <button class="bg-blue-900 text-white px-6 py-2 rounded hover:bg-blue-800 transition">Send Message</button>
-    </form>
+  <!-- Leadership -->
+  <section class="bg-blue-100 py-16 px-6">
+    <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Youth Leadership Team</h2>
+    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
+      {% for leader in leaders %}
+      <div>
+        <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
+        <h3 class="font-bold text-lg text-blue-800">{{ leader.name }}</h3>
+        <p class="text-sm text-gray-600">{{ leader.title }}</p>
+      </div>
+      {% empty %}
+      <p class="text-center text-gray-500 col-span-full">No youth leaders added yet.</p>
+      {% endfor %}
+    </div>
   </section>
 
   <!-- Footer -->
@@ -137,5 +292,57 @@
     <p>&copy; 2025 GMMIConnect | Youth Ministry | All Rights Reserved.</p>
   </footer>
 
+  <!-- Ultra-Powerful Preloader JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const preloader = document.querySelector('.preloader');
+      const percentage = document.querySelector('.loading-percentage');
+      
+      // Force show preloader and disable scrolling
+      preloader.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      // Simulate loading percentage
+      let percent = 0;
+      const interval = setInterval(function() {
+        percent += Math.floor(Math.random() * 5) + 1;
+        if (percent > 100) percent = 100;
+        percentage.textContent = percent + '%';
+        
+        if (percent === 100) {
+          clearInterval(interval);
+        }
+      }, 100);
+      
+      // When everything is loaded
+      window.addEventListener('load', function() {
+        // Ensure we show 100%
+        percentage.textContent = '100%';
+        
+        // Start fade out
+        setTimeout(function() {
+          preloader.classList.add('fade-out');
+          
+          // Allow scrolling again
+          document.body.style.overflow = '';
+          
+          // Remove preloader after animation completes
+          setTimeout(function() {
+            preloader.style.display = 'none';
+          }, 1000);
+        }, 500);
+      });
+      
+      // Fallback in case load event doesn't fire
+      setTimeout(function() {
+        percentage.textContent = '100%';
+        preloader.classList.add('fade-out');
+        document.body.style.overflow = '';
+        setTimeout(function() {
+          preloader.style.display = 'none';
+        }, 1000);
+      }, 5000); // Maximum 5 seconds then force hide
+    });
+  </script>
 </body>
 </html>

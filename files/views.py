@@ -1623,14 +1623,39 @@ def thank_you(request):
 
 
 
-
-
-
-from .models import ChildrenMinistryPhoto
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
+from .forms import ChildrenMinistryRegistrationForm
 
 def children_ministry(request):
-    photos = ChildrenMinistryPhoto.objects.all()
-    return render(request, 'files/children_ministry.html', {'photos': photos})
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        form = ChildrenMinistryRegistrationForm(request.POST)
+        if form.is_valid():
+            instance = form.save()
+
+            subject = "New Children Ministry Registration"
+            message = f"""
+🧒 CHILDREN MINISTRY REGISTRATION
+
+👤 Parent: {instance.parent_name}
+📞 Phone: {instance.phone}
+👶 Child: {instance.child_name}
+📘 Age Group: {instance.age_group}
+📝 Message: {instance.message or 'None'}
+
+🕒 Submitted: {instance.submitted_at.strftime('%Y-%m-%d %I:%M %p')}
+"""
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ["globalmandateministryinc@gmail.com"])
+
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+    form = ChildrenMinistryRegistrationForm()
+    return render(request, 'files/children_ministry.html', {
+        'form': form
+    })
 
 
 
@@ -1734,3 +1759,137 @@ def prayer_request_view(request):
 # def testimony_view(request):
 #     testimonies = Testimony.objects.all().order_by('-created_at')
 #     return render(request, 'files/testimony.html', {'testimonies': testimonies})
+
+
+
+
+
+
+
+from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
+from io import BytesIO
+from xhtml2pdf import pisa
+from docx import Document
+from docx.shared import Inches
+from .forms import SchoolOfMinistryForm
+import mimetypes
+
+
+def generate_pdf(context):
+    html = render_to_string("files/pdf_template.html", context)
+    result = BytesIO()
+    pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
+    return result.getvalue()
+
+
+def generate_word(context):
+    data = context['registration']
+    doc = Document()
+    doc.add_heading('GMMI School of Ministry Registration', 0)
+
+    doc.add_paragraph(f"Full Name: {data.full_name}")
+    doc.add_paragraph(f"Email: {data.email}")
+    doc.add_paragraph(f"Phone: {data.phone}")
+    doc.add_paragraph(f"Gender: {data.gender}")
+    doc.add_paragraph(f"Date of Birth: {data.dob}")
+    doc.add_paragraph(f"Marital Status: {data.marital_status}")
+    doc.add_paragraph(f"Country: {data.country}")
+    doc.add_paragraph(f"State/City: {data.state_city}")
+    doc.add_paragraph(f"Occupation: {data.occupation}")
+    doc.add_paragraph(f"Church: {data.church}")
+    doc.add_paragraph(f"Born Again: {data.born_again}")
+    doc.add_paragraph(f"Baptized in Holy Ghost: {data.holy_ghost}")
+    doc.add_paragraph(f"Reason: {data.reason}")
+
+    # Add student photo if available
+    if data.photo:
+        try:
+            doc.add_paragraph("Passport Photograph:")
+            doc.add_picture(data.photo.path, width=Inches(1.5))
+        except Exception as e:
+            doc.add_paragraph("Photo could not be loaded.")
+
+    word_stream = BytesIO()
+    doc.save(word_stream)
+    word_stream.seek(0)
+    return word_stream
+
+
+def register(request):
+    if request.method == 'POST':
+        form = SchoolOfMinistryForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save()
+            context = {'registration': instance}
+
+            # Generate PDF and Word
+            pdf_file = generate_pdf(context)
+            word_file = generate_word(context)
+
+            # Prepare Admin Email
+            admin_email = EmailMessage(
+                subject="New GMMI Registration",
+                body=f"A new registration has been submitted by {instance.full_name}.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=["globalmandateministryinc@gmail.com"],
+            )
+
+            # Attach PDF
+            if pdf_file:
+                admin_email.attach(
+                    f"{instance.full_name}_registration.pdf",
+                    pdf_file,
+                    "application/pdf"
+                )
+
+            # Attach Word Doc
+            if word_file:
+                admin_email.attach(
+                    f"{instance.full_name}_registration.docx",
+                    word_file.getvalue(),
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                )
+
+            # Attach Image Safely
+            if instance.photo:
+                mime_type, _ = mimetypes.guess_type(instance.photo.name)
+                admin_email.attach(
+                    instance.photo.name,
+                    instance.photo.read(),
+                    mime_type or 'image/jpeg'
+                )
+
+            admin_email.send(fail_silently=False)
+
+            # ✉️ Send Confirmation Email to Student (with embedded logo)
+            html_message = render_to_string("files/email_to_student.html", {"name": instance.full_name})
+
+            student_email = EmailMultiAlternatives(
+                subject="🎓 GMMI Registration Successful!",
+                body="Thank you for registering. Please view this email in HTML.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[instance.email],
+            )
+            student_email.attach_alternative(html_message, "text/html")
+
+            # Embed GMMI logo image inside the email
+            logo_path = os.path.join(settings.BASE_DIR, "static", "login-form", "images", "GMMI_LOGO.png")
+            if os.path.exists(logo_path):
+                with open(logo_path, 'rb') as f:
+                    logo = MIMEImage(f.read())
+                    logo.add_header('Content-ID', '<gmmi_logo>')
+                    logo.add_header('Content-Disposition', 'inline', filename="GMMI_LOGO.png")
+                    student_email.attach(logo)
+
+            student_email.send(fail_silently=False)
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+
+    form = SchoolOfMinistryForm()
+    return render(request, 'files/register.html', {'form': form})

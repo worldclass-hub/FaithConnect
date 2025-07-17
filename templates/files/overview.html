@@ -84,7 +84,7 @@
     <p class="max-w-3xl mx-auto text-gray-200 text-lg md:text-xl leading-relaxed mb-8" data-aos="fade-up" data-aos-delay="200">
       A divine platform for raising kingdom ambassadors, equipped with truth, fire, and revelation — to influence every sphere of society for Christ.
     </p>
-    <a href="#" class="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-8 py-3 rounded-full shadow-lg transition duration-300" data-aos="zoom-in" data-aos-delay="400">
+    <a href="{% url 'register' %}" class="inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-8 py-3 rounded-full shadow-lg transition duration-300" data-aos="zoom-in" data-aos-delay="400">
       Register Now
     </a>
   </div>
@@ -111,11 +111,16 @@
       <div class="relative rounded-xl overflow-hidden shadow-xl h-[500px] md:h-[600px]">
         <div class="fade-slideshow skeleton" id="slideshow-skeleton"></div>
         <div class="fade-slideshow hidden" id="slideshow">
-          {% for slide in slides %}
-            <img src="{{ slide.image.url }}" alt="{{ slide.caption|default:'GMSOM Slide' }}" />
+        {% for slide in slides %}
+            {% if slide.image_url %}
+              <img src="{{ slide.image_url }}" alt="{{ slide.caption|default:'GMSOM Slide' }}" />
+            {% else %}
+              <img src="{% static 'login-form/images/school_ministry1.PNG' %}" alt="Default Slide" />
+            {% endif %}
           {% empty %}
-            <img src="{% static 'login-form/images/schoolministry1.png' %}" alt="Default Slide" />
+            <img src="{% static 'login-form/images/school_ministry1.PNG' %}" alt="Default Slide" />
           {% endfor %}
+
         </div>
       </div>
     </div>
@@ -157,7 +162,7 @@
 <section class="bg-yellow-400 text-black py-16 text-center">
   <h2 class="text-3xl font-bold mb-4">Ready to begin your mandate?</h2>
   <p class="mb-6 text-lg">This is more than school — it’s a divine assignment. Step in now.</p>
-  <a href="#" class="bg-black text-yellow-400 px-8 py-3 rounded-full font-semibold hover:bg-gray-800 transition duration-300">
+  <a href="{% url 'register' %}" class="bg-black text-yellow-400 px-8 py-3 rounded-full font-semibold hover:bg-gray-800 transition duration-300">
     Register for GMSOM
   </a>
 </section>

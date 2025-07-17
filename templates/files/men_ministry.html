@@ -4,29 +4,162 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Men’s Ministry | GMMIConnect</title>
+  <title>Men's Ministry | GMMIConnect</title>
   <!-- Favicon -->
   <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png">
   <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
   <script src="{% static 'assets/js/typed.min.js' %}"></script>
+  
+  <!-- Preloader CSS -->
+  <style>
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1e3a8a, #1e40af, #1d4ed8);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s ease-out;
+    }
+    
+    .preloader.fade-out {
+      opacity: 0;
+    }
+    
+    .loader {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+    
+    .loader-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 8px solid transparent;
+      border-radius: 50%;
+      animation: rotate 2s linear infinite;
+    }
+    
+    .loader-ring:nth-child(1) {
+      border-top-color: #fbbf24;
+      border-bottom-color: #fbbf24;
+    }
+    
+    .loader-ring:nth-child(2) {
+      border-left-color: #f59e0b;
+      border-right-color: #f59e0b;
+      animation-direction: reverse;
+    }
+    
+    .loader-ring:nth-child(3) {
+      border-top-color: #d97706;
+      border-bottom-color: #d97706;
+      animation-duration: 3s;
+    }
+    
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .preloader-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background-image: url("{% static 'login-form/images/GMMI_LOGO.png' %}");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    
+    .preloader-text {
+      color: white;
+      margin-top: 40px;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .loading-bar {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      margin-top: 20px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .loading-progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+      animation: loading 3s ease-in-out infinite;
+    }
+    
+    @keyframes loading {
+      0% { width: 0%; }
+      50% { width: 100%; }
+      100% { width: 0%; }
+    }
+    
+    .verses {
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 20px;
+      font-style: italic;
+      font-size: 14px;
+      text-align: center;
+      max-width: 300px;
+      line-height: 1.4;
+    }
+  </style>
 </head>
 <body class="bg-white text-gray-800">
 
+  <!-- Powerful Preloader -->
+  <div class="preloader">
+    <div class="loader">
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <div class="preloader-logo"></div>
+    </div>
+    <div class="preloader-text">Men's Ministry</div>
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
+    </div>
+    <div class="verses">
+      "Be watchful, stand firm in the faith, act like men, be strong."<br>
+      — 1 Corinthians 16:13
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <section class="bg-blue-900 text-white py-20 px-6 text-center">
-    <h1 class="text-4xl font-bold mb-4">Men’s Ministry</h1>
-    <p class="text-lg max-w-2xl mx-auto mb-6">“Be watchful, stand firm in the faith, act like men, be strong.” — 1 Corinthians 16:13</p>
+    <h1 class="text-4xl font-bold mb-4">Men's Ministry</h1>
+    <p class="text-lg max-w-2xl mx-auto mb-6">"Be watchful, stand firm in the faith, act like men, be strong." — 1 Corinthians 16:13</p>
     <a href="#contact" class="inline-block bg-yellow-400 text-blue-900 px-6 py-3 rounded-full hover:bg-yellow-300 transition font-bold">Join the Brotherhood</a>
   </section>
 
+  <!-- Rest of your content remains the same -->
   <!-- Mission & Purpose -->
   <section class="py-16 px-6 bg-white text-center">
     <h2 class="text-3xl font-semibold text-blue-800 mb-6">Raising Godly Men of Impact</h2>
-    <p class="max-w-3xl mx-auto text-lg text-gray-700">The Men’s Ministry exists to build strong, spiritual leaders, fathers, husbands, mentors, and kingdom warriors — empowered to transform their homes, churches, and nations.</p>
+    <p class="max-w-3xl mx-auto text-lg text-gray-700">The Men's Ministry exists to build strong, spiritual leaders, fathers, husbands, mentors, and kingdom warriors — empowered to transform their homes, churches, and nations.</p>
   </section>
 
-  <!-- Men’s Gatherings -->
+  <!-- Men's Gatherings -->
   <section class="bg-blue-50 py-16 px-6">
     <h2 class="text-3xl text-center text-blue-900 font-semibold mb-10">Key Programs & Events</h2>
     <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -39,8 +172,8 @@
         <p class="text-sm text-gray-600">Teaching men to lead godly homes with grace and wisdom.</p>
       </div>
       <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-blue-700">Men’s Advance</h3>
-        <p class="text-sm text-gray-600">Annual men’s retreat and spiritual bootcamp. Next: October 2025</p>
+        <h3 class="text-xl font-bold mb-2 text-blue-700">Men's Advance</h3>
+        <p class="text-sm text-gray-600">Annual men's retreat and spiritual bootcamp. Next: October 2025</p>
       </div>
     </div>
   </section>
@@ -64,69 +197,86 @@
   <section class="bg-blue-50 py-16 px-6">
     <h2 class="text-3xl font-semibold text-center text-blue-900 mb-10">Testimonies of Transformation</h2>
     <div class="max-w-4xl mx-auto space-y-8">
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"God used the Men’s Ministry to restore my marriage and identity as a father." — Bro. James E.</blockquote>
+      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"God used the Men's Ministry to restore my marriage and identity as a father." — Bro. James E.</blockquote>
       <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"I never knew what it meant to be a spiritual man until I joined this group." — Elder David U.</blockquote>
     </div>
   </section>
-<!-- Media Clips -->
-<section class="py-16 px-6 bg-white">
-  <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Highlights from Men’s Programs</h2>
-  <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <!-- Men of Valor Teaching -->
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/VDv-SDAJE1M"
-      title="Men Of Valor | Elder Antonio"
-      allowfullscreen></iframe>
-
-    <!-- Mighty Men of Valor Sermon -->
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/FqV2hAlh_aA"
-      title="Mighty Men of Valor!"
-      allowfullscreen></iframe>
-
-    <!-- Becoming a Mighty Man of Valor -->
-    <iframe class="w-full h-56 rounded shadow"
-      src="https://www.youtube.com/embed/Lp3wwvMML3o"
-      title="Becoming A Mighty Man Of Valor | Pastor Jay Haizlip"
-      allowfullscreen></iframe>
-
-  </div>
-</section>
+  <!-- Media Clips -->
+  <section class="py-16 px-6 bg-white">
+    <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Highlights from Men's Programs</h2>
+    <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Men of Valor Teaching -->
+      <iframe class="w-full h-56 rounded shadow"
+        src="https://www.youtube.com/embed/VDv-SDAJE1M"
+        title="Men Of Valor | Elder Antonio"
+        allowfullscreen></iframe>
+      <!-- Mighty Men of Valor Sermon -->
+      <iframe class="w-full h-56 rounded shadow"
+        src="https://www.youtube.com/embed/FqV2hAlh_aA"
+        title="Mighty Men of Valor!"
+        allowfullscreen></iframe>
+      <!-- Becoming a Mighty Man of Valor -->
+      <iframe class="w-full h-56 rounded shadow"
+        src="https://www.youtube.com/embed/Lp3wwvMML3o"
+        title="Becoming A Mighty Man Of Valor | Pastor Jay Haizlip"
+        allowfullscreen></iframe>
+    </div>
+  </section>
 
   <!-- Leadership -->
   <section class="bg-blue-100 py-16 px-6">
     <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Meet the Leaders</h2>
     <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-         {% for leader in leaders %}
-    <div>
-      <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
-      <h3 class="font-bold text-lg text-blue-800">{{ leader.name }}</h3>
-      <p class="text-sm text-gray-600">{{ leader.title }}</p>
+      {% for leader in leaders %}
+      <div>
+        <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
+        <h3 class="font-bold text-lg text-blue-800">{{ leader.name }}</h3>
+        <p class="text-sm text-gray-600">{{ leader.title }}</p>
+      </div>
+      {% empty %}
+      <p class="text-center text-gray-500 col-span-full">No leaders added yet.</p>
+      {% endfor %}
     </div>
-    {% empty %}
-    <p class="text-center text-gray-500 col-span-full">No leaders added yet.</p>
-    {% endfor %}
-
-
-    </div>
-  </section>
-
-  <!-- Contact Form -->
-  <section id="contact" class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-blue-800 mb-6">Interested in Men’s Ministry?</h2>
-    <form class="max-w-xl mx-auto grid gap-4">
-      <input type="text" placeholder="Full Name" class="border border-gray-300 rounded px-4 py-2" required />
-      <input type="email" placeholder="Email Address" class="border border-gray-300 rounded px-4 py-2" required />
-      <textarea placeholder="Message" class="border border-gray-300 rounded px-4 py-2" rows="4"></textarea>
-      <button class="bg-blue-900 text-white px-6 py-2 rounded hover:bg-blue-800 transition">Submit</button>
-    </form>
   </section>
 
   <!-- Footer -->
   <footer class="bg-blue-900 text-white py-6 text-center text-sm">
-    <p>&copy; 2025 GMMIConnect | Men’s Ministry | All Rights Reserved.</p>
+    <p>&copy; 2025 GMMIConnect | Men's Ministry | All Rights Reserved.</p>
   </footer>
 
+  <!-- Preloader JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const preloader = document.querySelector('.preloader');
+      
+      // Force show preloader (in case CSS hasn't loaded yet)
+      preloader.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      // When everything is loaded
+      window.addEventListener('load', function() {
+        // Start fade out
+        preloader.classList.add('fade-out');
+        
+        // Allow scrolling again
+        document.body.style.overflow = '';
+        
+        // Remove preloader after animation completes
+        setTimeout(function() {
+          preloader.style.display = 'none';
+        }, 800); // Match the CSS transition duration
+      });
+      
+      // Fallback in case load event doesn't fire
+      setTimeout(function() {
+        preloader.classList.add('fade-out');
+        document.body.style.overflow = '';
+        setTimeout(function() {
+          preloader.style.display = 'none';
+        }, 800);
+      }, 5000); // Maximum 5 seconds then force hide
+    });
+  </script>
 </body>
 </html>
