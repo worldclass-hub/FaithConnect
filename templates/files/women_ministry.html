@@ -9,17 +9,24 @@
   <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png">
   <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
   <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
-  <script src="{% static 'assets/js/typed.min.js' %}"></script>
   
-  <!-- Preloader CSS -->
   <style>
+    :root {
+      --primary: #7E22CE;  /* Royal purple - spiritual significance */
+      --secondary: #EC4899; /* Vibrant pink - feminine energy */
+      --accent: #F59E0B;    /* Warm gold - divine light */
+      --light: #F3E8FF;     /* Soft purple - background */
+      --dark: #1F2937;      /* Dark gray - text */
+    }
+    
+    /* Powerful Preloader Styles */
     .preloader {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1, #f06292);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -64,131 +71,267 @@
       60% { content: '...'; }
       80%, 100% { content: ''; }
     }
+    
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary), #9D4EDD);
+      color: white;
+    }
+    
+    .mission-section {
+      background-color: white;
+    }
+    
+    .events-section {
+      background-color: var(--light);
+    }
+    
+    .groups-section {
+      background-color: white;
+      background-image: radial-gradient(circle at 10% 20%, rgba(236,72,153,0.05) 0%, rgba(236,72,153,0) 90%);
+    }
+    
+    .media-section {
+      background-color: var(--light);
+    }
+    
+    .leaders-section {
+      background: linear-gradient(to bottom right, white, var(--light));
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+    }
+    
+    .btn-primary:hover {
+      background-color: #6B21A8;
+    }
+    
+    .section-title {
+      color: var(--primary);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50%;
+      height: 3px;
+      background-color: var(--accent);
+    }
+    
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .group-card {
+      border-left: 4px solid var(--secondary);
+    }
+    
+    /* Super Powerful WhatsApp Button Styles */
+    .whatsapp-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+      z-index: 999;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+      text-decoration: none;
+    }
+
+    .whatsapp-button:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 6px 25px rgba(37, 211, 102, 0.7);
+    }
+
+    .whatsapp-button i {
+      font-size: 32px;
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-button:hover i {
+      transform: scale(1.1);
+    }
+
+    .whatsapp-button .tooltip {
+      position: absolute;
+      right: 75px;
+      background: white;
+      color: #075E54;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      transform: translateX(10px);
+    }
+
+    .whatsapp-button:hover .tooltip {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+    }
+
+    @media (max-width: 768px) {
+      .whatsapp-button {
+        width: 55px;
+        height: 55px;
+        bottom: 20px;
+        right: 20px;
+      }
+      .whatsapp-button i {
+        font-size: 28px;
+      }
+      .whatsapp-button .tooltip {
+        font-size: 13px;
+        right: 65px;
+        padding: 6px 12px;
+      }
+    }
   </style>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-white text-gray-800">
 
-  <!-- Preloader -->
+  <!-- Powerful Preloader -->
   <div class="preloader">
     <div class="loader"></div>
     <div class="preloader-text">Loading Women's Ministry<span class="loading-dots"></span></div>
   </div>
 
+  <!-- Super Powerful WhatsApp Button -->
+  <a href="https://wa.me/2348123456789?text=Join%20Our%20Women%20WhatsApp%20Group" 
+     class="whatsapp-button" 
+     target="_blank"
+     aria-label="Join our WhatsApp group">
+    <i class="fab fa-whatsapp"></i>
+    <span class="tooltip">Join Our Women WhatsApp Group</span>
+  </a>
+
   <!-- Hero Section -->
-  <section class="bg-pink-100 py-20 px-6 text-center">
-    <h1 class="text-4xl font-bold text-pink-700 mb-4">Welcome to the Women's Ministry</h1>
-    <p class="text-lg max-w-2xl mx-auto mb-6">"She is clothed with strength and dignity; she can laugh at the days to come." — Proverbs 31:25</p>
-    <a href="#contact" class="inline-block bg-pink-600 text-white px-6 py-3 rounded-full hover:bg-pink-700 transition">Join the Sisterhood</a>
+  <section class="hero-section py-20 px-6 text-center">
+    <h1 class="text-4xl font-bold text-white mb-4">Welcome to the Women's Ministry</h1>
+    <p class="text-lg max-w-2xl mx-auto mb-6 text-white text-opacity-90">"She is clothed with strength and dignity; she can laugh at the days to come." — Proverbs 31:25</p>
+    <a href="https://wa.me/2348123456789?text=Join%20Our%20Women%20WhatsApp%20Group" 
+       class="btn-primary inline-block text-white px-6 py-3 rounded-full hover:bg-opacity-90 transition"
+       target="_blank">
+      Join the Sisterhood
+    </a>
   </section>
 
-  <!-- Rest of your content remains the same -->
   <!-- Mission & Vision -->
-  <section class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-pink-700 mb-6">Our Mission & Vision</h2>
+  <section class="mission-section py-16 px-6 text-center">
+    <h2 class="section-title text-3xl font-semibold mb-6">Our Mission & Vision</h2>
     <p class="max-w-3xl mx-auto text-lg text-gray-700">To empower every woman—young or old—to grow in Christ, thrive in purpose, and impact her world spiritually, emotionally, and economically.</p>
   </section>
 
   <!-- Upcoming Events -->
-  <section class="bg-pink-50 py-16 px-6">
-    <h2 class="text-3xl text-center text-pink-700 font-semibold mb-10">Upcoming Events</h2>
-    <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-pink-600">Annual Women's Conference</h3>
-        <p class="text-sm text-gray-600">Theme: Arise & Flourish. Date: Aug 23rd - 25th, 2025</p>
-      </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-pink-600">Mothers in Prayer</h3>
-        <p class="text-sm text-gray-600">Every Wednesday | 6PM at the Main Auditorium</p>
-      </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-pink-600">Business Empowerment Bootcamp</h3>
-        <p class="text-sm text-gray-600">Practical tools for women in business. Sept 15th, 2025</p>
-      </div>
+  <section class="events-section py-16 px-6">
+  <h2 class="section-title text-3xl text-center font-semibold mb-10">Upcoming Events</h2>
+  <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- REMOVE THIS STATIC SECTION -->
+
+    {% for event in events %}
+    <div class="card bg-white rounded-lg shadow p-6">
+      <h3 class="text-xl font-bold mb-2 {{ event.theme_color }}">
+        <i class="{{ event.icon }} mr-2"></i>{{ event.title }}
+      </h3>
+      <p class="text-sm text-gray-600">
+        {{ event.description }}<br>
+        {{ event.date|date:"M d, Y" }}{% if event.location %} — {{ event.location }}{% endif %}
+      </p>
     </div>
-  </section>
+    {% empty %}
+    <p class="text-center col-span-full text-gray-500">No events added yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
 
   <!-- Women Groups -->
-  <section class="py-16 px-6 bg-white">
-    <h2 class="text-3xl font-semibold text-pink-700 text-center mb-10">Women Groups & Fellowships</h2>
+  <section class="groups-section py-16 px-6">
+    <h2 class="section-title text-3xl font-semibold text-center mb-10">Women Groups & Fellowships</h2>
     <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6">
-      <div class="bg-pink-100 p-6 rounded shadow">
-        <h3 class="text-xl font-semibold text-pink-800">Young Ladies</h3>
-        <p class="text-sm mt-2">Mentorship, career building, and purity-focused sessions.</p>
+      <div class="group-card bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-semibold text-purple-800">Young Ladies</h3>
+        <p class="text-sm mt-2 text-gray-600">Mentorship, career building, and purity-focused sessions.</p>
       </div>
-      <div class="bg-pink-100 p-6 rounded shadow">
-        <h3 class="text-xl font-semibold text-pink-800">Married Women</h3>
-        <p class="text-sm mt-2">Marriage enrichment, parenting classes, and fellowship.</p>
+      <div class="group-card bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-semibold text-purple-800">Married Women</h3>
+        <p class="text-sm mt-2 text-gray-600">Marriage enrichment, parenting classes, and fellowship.</p>
       </div>
-      <div class="bg-pink-100 p-6 rounded shadow">
-        <h3 class="text-xl font-semibold text-pink-800">Single Moms</h3>
-        <p class="text-sm mt-2">Support network, financial literacy and prayer support.</p>
+      <div class="group-card bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-semibold text-purple-800">Single Moms</h3>
+        <p class="text-sm mt-2 text-gray-600">Support network, financial literacy and prayer support.</p>
       </div>
-      <div class="bg-pink-100 p-6 rounded shadow">
-        <h3 class="text-xl font-semibold text-pink-800">Widows</h3>
-        <p class="text-sm mt-2">Healing, restoration, and hope in Christ.</p>
+      <div class="group-card bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-semibold text-purple-800">Widows</h3>
+        <p class="text-sm mt-2 text-gray-600">Healing, restoration, and hope in Christ.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- Testimonies -->
-  <section class="bg-pink-50 py-16 px-6">
-    <h2 class="text-3xl font-semibold text-center text-pink-700 mb-10">Testimonies</h2>
-    <div class="max-w-4xl mx-auto space-y-8">
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"Being part of this ministry gave me the courage to start my business and trust God again!" — Sister Mercy A.</blockquote>
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"The Women's Prayer Fellowship revived my spiritual life in ways I can't explain!" — Sister Ngozi E.</blockquote>
     </div>
   </section>
 
   <!-- Media Highlights -->
-  <section class="py-16 px-6 bg-white">
-    <h2 class="text-3xl text-pink-700 font-semibold text-center mb-10">Media Highlights</h2>
+  <section class="media-section py-16 px-6">
+    <h2 class="section-title text-3xl font-semibold text-center mb-10">Media Highlights</h2>
     <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Empowerment Message -->
-      <div>
-        <iframe class="w-full h-56 rounded shadow" 
-                src="https://www.youtube.com/embed/aUYZE2PrbNk" 
-                title="How Jesus Empowered Women" allowfullscreen></iframe>
+      <div class="card bg-white rounded-lg overflow-hidden shadow">
+        <iframe class="w-full h-56" src="https://www.youtube.com/embed/aUYZE2PrbNk" title="How Jesus Empowered Women" allowfullscreen></iframe>
+        <div class="p-4">
+          <h3 class="font-semibold text-purple-800">How Jesus Empowered Women</h3>
+        </div>
       </div>
-      
-      <!-- Inspirational Talk -->
-      <div>
-        <iframe class="w-full h-56 rounded shadow" 
-                src="https://www.youtube.com/embed/oWIusnIHCSE" 
-                title="Girl, Get Up | Sarah Jakes Roberts" allowfullscreen></iframe>
+      <div class="card bg-white rounded-lg overflow-hidden shadow">
+        <iframe class="w-full h-56" src="https://www.youtube.com/embed/oWIusnIHCSE" title="Girl, Get Up | Sarah Jakes Roberts" allowfullscreen></iframe>
+        <div class="p-4">
+          <h3 class="font-semibold text-purple-800">Girl, Get Up</h3>
+        </div>
       </div>
-      
-      <!-- Bible Study Lesson -->
-      <div>
-        <iframe class="w-full h-56 rounded shadow" 
-                src="https://www.youtube.com/embed/cSMRAzuIAj0" 
-                title="Women's Bible Study on Sarah" allowfullscreen></iframe>
+      <div class="card bg-white rounded-lg overflow-hidden shadow">
+        <iframe class="w-full h-56" src="https://www.youtube.com/embed/cSMRAzuIAj0" title="Women's Bible Study on Sarah" allowfullscreen></iframe>
+        <div class="p-4">
+          <h3 class="font-semibold text-purple-800">Bible Study on Sarah</h3>
+        </div>
       </div>
-    </div>
-  </section>
-
-  {% load static %}
-
-  <!-- Leadership -->
-  <section class="bg-pink-100 py-16 px-6">
-    <h2 class="text-3xl text-pink-800 font-semibold text-center mb-10">Meet Our Leaders</h2>
-    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-      
-      {% for leader in leaders %}
-      <div>
-        <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
-        <h3 class="font-bold text-lg text-pink-800">{{ leader.name }}</h3>
-        <p class="text-sm text-gray-600">{{ leader.title }}</p>
-      </div>
-      {% empty %}
-      <p class="text-center col-span-full text-gray-500">No leaders added yet.</p>
-      {% endfor %}
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-pink-700 text-white py-6 text-center text-sm">
-    <p>&copy; 2025 GMMIConnect | Women's Ministry | All Rights Reserved.</p>
+  <footer class="bg-purple-900 text-white py-8 text-center">
+    <div class="max-w-6xl mx-auto px-6">
+      <p class="mb-4">&copy; 2025 GMMIConnect | Women's Ministry | All Rights Reserved.</p>
+      <div class="flex justify-center space-x-6">
+        <a href="#" class="text-white hover:text-purple-300"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="text-white hover:text-purple-300"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-white hover:text-purple-300"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
   </footer>
 
   <!-- Preloader JavaScript -->
@@ -207,7 +350,7 @@
         // Remove preloader after fade out completes
         setTimeout(function() {
           preloader.style.display = 'none';
-        }, 500); // Match this with the CSS transition time
+        }, 500);
       });
       
       // Fallback in case load event doesn't fire
@@ -216,7 +359,7 @@
         setTimeout(function() {
           preloader.style.display = 'none';
         }, 500);
-      }, 3000); // Maximum 3 seconds then force hide
+      }, 3000);
     });
   </script>
 </body>

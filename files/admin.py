@@ -874,45 +874,53 @@ class PrayerRequestAdmin(admin.ModelAdmin):
 
 
 
+from django.contrib import admin
+from .models import WomenEvent
+
+@admin.register(WomenEvent)
+class WomenEventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'location')
+    list_filter = ('date',)
+    search_fields = ('title', 'description', 'location')
+
+
+
+
 
 from django.contrib import admin
-from .models import WomenMinistryLeader
+from .models import MenEvent
 
-@admin.register(WomenMinistryLeader)
-class WomenMinistryLeaderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'title']
-
-
-
-
-
-
-from .models import MenMinistryLeader
-
-@admin.register(MenMinistryLeader)
-class MenMinistryLeaderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'title']
+@admin.register(MenEvent)
+class MenEventAdmin(admin.ModelAdmin):
+    list_display = ['title', 'date', 'location']
+    list_filter = ['date']
+    search_fields = ['title', 'description', 'location']
 
 
 
 
 
+from django.contrib import admin
+from .models import YouthEvent
 
-from .models import YouthMinistryLeader
-
-@admin.register(YouthMinistryLeader)
-class YouthMinistryLeaderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'title']
-
-
-
+@admin.register(YouthEvent)
+class YouthEventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'icon', 'theme_color')
+    search_fields = ('title', 'description')
+    list_filter = ('date',)
+    ordering = ('date',)
 
 
-from .models import EvangelismMinistryLeader
 
-@admin.register(EvangelismMinistryLeader)
-class EvangelismMinistryLeaderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'title']
+
+from django.contrib import admin
+from .models import OutreachEvent
+
+@admin.register(OutreachEvent)
+class OutreachEventAdmin(admin.ModelAdmin):
+    list_display = ['title', 'date', 'location']
+    list_filter = ['date']
+    search_fields = ['title', 'description', 'location']
 
 
 
@@ -1237,5 +1245,11 @@ class SchoolOfMinistryRegistrationAdmin(admin.ModelAdmin):
             headers={'Content-Disposition': 'attachment; filename="school_registrations.docx"'}
         )
     export_as_word.short_description = "📄 Export selected to Word"
+
+
+
+
+
+
 
 

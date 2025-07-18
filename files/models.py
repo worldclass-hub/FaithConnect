@@ -659,80 +659,128 @@ class PrayerRequest(models.Model):
 
 
 
-from django.db import models
-
-class WomenMinistryLeader(models.Model):
-    name = models.CharField(max_length=100)
-    title = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='leaders/women/')  # this goes to MEDIA folder
-
-    class Meta:
-        verbose_name = "Women Ministry Leader"
-        verbose_name_plural = "Women Ministry Leaders"
-
-    def __str__(self):
-        return self.name
 
 
-
-
-
-class MenMinistryLeader(models.Model):
-    name = models.CharField(max_length=100)
-    title = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='leaders/men/')
+class WomenEvent(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    date = models.DateField()
+    location = models.CharField(max_length=200, blank=True)
+    icon = models.CharField(
+        max_length=50,
+        help_text="Font Awesome icon class e.g. 'fas fa-heart'",
+        default='fas fa-star'
+    )
+    theme_color = models.CharField(
+        max_length=30,
+        help_text="Tailwind color class for icon e.g. 'text-pink-500'",
+        default='text-pink-500'
+    )
 
     class Meta:
-        verbose_name = "Men Ministry Leader"
-        verbose_name_plural = "Men Ministry Leaders"
+        verbose_name = "Women Event"
+        verbose_name_plural = "Women Events"
+        ordering = ['date']
 
     def __str__(self):
-        return self.name
+        return f"{self.title} — {self.date.strftime('%b %d, %Y')}"
 
 
 
-class YouthMinistryLeader(models.Model):
-    name = models.CharField(max_length=100)
-    title = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='leaders/youth/')
+
+
+
+
+
+
+# models.py
+class MenEvent(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    date = models.DateField()
+    location = models.CharField(max_length=200, blank=True)
+    icon = models.CharField(
+        max_length=50,
+        help_text="Font Awesome icon class e.g. 'fas fa-fire-alt'",
+        default='fas fa-fire-alt'
+    )
+    theme_color = models.CharField(
+        max_length=30,
+        help_text="Tailwind color class e.g. 'text-blue-600'",
+        default='text-blue-600'
+    )
 
     class Meta:
-        verbose_name = "Youth Ministry Leader"
-        verbose_name_plural = "Youth Ministry Leaders"
+        verbose_name = "Men Event"
+        verbose_name_plural = "Men Events"
+        ordering = ['date']
 
     def __str__(self):
-        return self.name
+        return f"{self.title} — {self.date.strftime('%b %d, %Y')}"
 
 
 
 
-class EvangelismMinistryLeader(models.Model):
-    name = models.CharField(max_length=100)
-    title = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='leaders/evangelism/')
+
+
+
+
+
+class YouthEvent(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    date = models.DateField()
+    icon = models.CharField(
+        max_length=50,
+        help_text="Font Awesome icon class e.g. 'fas fa-fire' or 'fas fa-users'",
+        default='fas fa-calendar-alt'
+    )
+    theme_color = models.CharField(
+        max_length=30,
+        help_text="Tailwind color class for icon e.g. 'text-amber-500', 'text-indigo-500'",
+        default='text-indigo-500'
+    )
 
     class Meta:
-        verbose_name = "Evangelism Ministry Leader"
-        verbose_name_plural = "Evangelism Ministry Leaders"
+        verbose_name = "Youth Event"
+        verbose_name_plural = "Youth Events"
+        ordering = ['date']
 
     def __str__(self):
-        return self.name
+        return f"{self.title} — {self.date.strftime('%b %d, %Y')}"
 
 
 
 
 
-class WorshipMinistryLeader(models.Model):
-    name = models.CharField(max_length=100)
-    title = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='leaders/worship/')
+
+class OutreachEvent(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    date = models.DateField()
+    location = models.CharField(max_length=200, blank=True)
+    icon = models.CharField(
+        max_length=50,
+        help_text="Font Awesome icon class e.g. 'fas fa-bullhorn'",
+        default='fas fa-cross'
+    )
+    theme_color = models.CharField(
+        max_length=30,
+        help_text="Tailwind color class e.g. 'text-red-600'",
+        default='text-red-700'
+    )
 
     class Meta:
-        verbose_name = "Worship Ministry Leader"
-        verbose_name_plural = "Worship Ministry Leaders"
+        verbose_name = "Outreach Event"
+        verbose_name_plural = "Outreach Events"
+        ordering = ['date']
 
     def __str__(self):
-        return self.name
+        return f"{self.title} — {self.date.strftime('%b %d, %Y')}"
+
+
+
+
 
 
 

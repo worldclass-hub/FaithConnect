@@ -83,7 +83,104 @@
       opacity: 1;
       transition: opacity 0.5s ease-in;
     }
+
+    /* Section Gradients */
+    .hero-section {
+      background: linear-gradient(135deg, #7f1d1d, #991b1b);
+    }
+    
+    .mission-section {
+      background: linear-gradient(to bottom, #fef2f2, #fee2e2);
+    }
+    
+    .events-section {
+      background: linear-gradient(to bottom, #fee2e2, #fecaca);
+    }
+    
+    .training-section {
+      background: linear-gradient(to bottom, #fff, #fee2e2);
+    }
+    
+    .media-section {
+      background: linear-gradient(to bottom, #fef2f2, #fee2e2);
+    }
+    
+    .leadership-section {
+      background: linear-gradient(to bottom, #fecaca, #fca5a5);
+    }
+    
+    .footer-section {
+      background: linear-gradient(135deg, #7f1d1d, #991b1b);
+    }
+
+    /* WhatsApp Button */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+      z-index: 99;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+    
+    .whatsapp-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+    
+    .whatsapp-btn i {
+      font-size: 30px;
+    }
+    
+    .whatsapp-tooltip {
+      position: absolute;
+      right: 70px;
+      background: white;
+      color: #075E54;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      white-space: nowrap;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .whatsapp-btn:hover .whatsapp-tooltip {
+      opacity: 1;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Cards */
+    .evangelism-card {
+      background: white;
+      border-left: 4px solid #b91c1c;
+      transition: all 0.3s ease;
+    }
+    
+    .evangelism-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
   </style>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="bg-white text-gray-800 loading">
   <!-- Preloader -->
@@ -96,75 +193,72 @@
     <div class="scripture-text">"The harvest truly is plenteous, but the labourers are few;" — Matthew 9:37</div>
   </div>
 
-  <!-- Main Content (hidden during loading) -->
+  <!-- Main Content -->
   <div id="main-content">
     <!-- Hero Section -->
-    <section class="bg-red-900 text-white py-20 px-6 text-center">
+    <section class="hero-section text-white py-20 px-6 text-center">
       <h1 class="text-4xl font-bold mb-4">Evangelism Ministry</h1>
-      <p class="text-lg max-w-2xl mx-auto mb-6">"Go ye into all the world, and preach the gospel to every creature." — Mark 16:15</p>
-      <a href="#contact" class="inline-block bg-yellow-400 text-red-900 px-6 py-3 rounded-full hover:bg-yellow-300 transition font-bold">Join The Harvest</a>
+      <p class="text-lg max-w-2xl mx-auto mb-8">"Go ye into all the world, and preach the gospel to every creature." — Mark 16:15</p>
+      <a href="https://chat.whatsapp.com/YOUR_EVANGELISM_WHATSAPP_GROUP_LINK" class="inline-block bg-yellow-400 text-red-900 px-8 py-4 rounded-full hover:bg-yellow-300 transition-all duration-300 font-bold text-lg" target="_blank">
+        Join The Harvest
+      </a>
     </section>
 
     <!-- Mission & Vision -->
-    <section class="py-16 px-6 bg-white text-center">
+    <section class="mission-section py-16 px-6 text-center">
       <h2 class="text-3xl font-semibold text-red-800 mb-6">Our Mission & Vision</h2>
       <p class="max-w-3xl mx-auto text-lg text-gray-700">We are committed to soul-winning, street missions, crusades, outreach programs, and personal evangelism. Our goal is to depopulate hell and populate heaven.</p>
     </section>
 
     <!-- Outreach Events -->
-    <section class="bg-red-50 py-16 px-6">
-      <h2 class="text-3xl text-center text-red-900 font-semibold mb-10">Upcoming Outreach Events</h2>
-      <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-white rounded shadow p-6">
-          <h3 class="text-xl font-bold mb-2 text-red-700">Community Crusade</h3>
-          <p class="text-sm text-gray-600">Join us at Ikeja for a 2-day open-air crusade. June 25–26, 2025</p>
-        </div>
-        <div class="bg-white rounded shadow p-6">
-          <h3 class="text-xl font-bold mb-2 text-red-700">Market Evangelism</h3>
-          <p class="text-sm text-gray-600">Soul-winning in local markets. July 12th, 2025</p>
-        </div>
-        <div class="bg-white rounded shadow p-6">
-          <h3 class="text-xl font-bold mb-2 text-red-700">Campus Harvest</h3>
-          <p class="text-sm text-gray-600">Targeted outreach at universities. August 15th, 2025</p>
-        </div>
-      </div>
-    </section>
+<section class="events-section py-16 px-6">
+  <h2 class="text-3xl text-center text-red-900 font-semibold mb-10">Upcoming Outreach Events</h2>
+  {% if events %}
+  <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for event in events %}
+    <div class="evangelism-card rounded-lg shadow p-6">
+      <h3 class="text-xl font-bold mb-2 text-red-700">
+        <i class="{{ event.icon }} {{ event.theme_color }}"></i> {{ event.title }}
+      </h3>
+      <p class="text-sm text-gray-600">
+        {{ event.description }}<br>
+        <strong>{{ event.date|date:"F j, Y" }}</strong>{% if event.location %} — {{ event.location }}{% endif %}
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p class="text-center text-gray-600">No upcoming outreach events at the moment.</p>
+  {% endif %}
+</section>
+
 
     <!-- Evangelism Training -->
-    <section class="py-16 px-6 bg-white text-center">
+    <section class="training-section py-16 px-6 text-center">
       <h2 class="text-3xl font-semibold text-red-800 mb-8">Evangelism Trainings</h2>
       <p class="max-w-3xl mx-auto mb-6 text-gray-700">Learn how to evangelize effectively through our weekly training sessions. We equip every believer with tools to share the Gospel confidently.</p>
-      <a href="#" class="inline-block bg-red-900 text-white px-6 py-2 rounded hover:bg-red-800 transition">Register for Training</a>
-    </section>
-
-    <!-- Testimonies -->
-    <section class="bg-red-50 py-16 px-6">
-      <h2 class="text-3xl font-semibold text-center text-red-900 mb-10">Testimonies from the Field</h2>
-      <div class="max-w-4xl mx-auto space-y-8">
-        <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"I received Jesus during one of your street outreaches — now I'm serving in church!" — Bro. Kelvin T.</blockquote>
-        <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"The fire of evangelism caught me after your training! Souls are being saved weekly through me." — Sis. Lola A.</blockquote>
-      </div>
+      <a href="#" class="inline-block bg-red-900 text-white px-6 py-3 rounded hover:bg-red-800 transition">Register for Training</a>
     </section>
 
     <!-- Evangelism Media -->
-    <section class="py-16 px-6 bg-white">
+    <section class="media-section py-16 px-6">
       <h2 class="text-3xl text-red-900 font-semibold text-center mb-10">Evangelism Media</h2>
       <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
         
         <!-- Video 1: Child Evangelism -->
-        <iframe class="w-full h-56 rounded shadow"
+        <iframe class="w-full h-56 rounded-lg shadow"
           src="https://www.youtube.com/embed/cfgm3r3-b_U"
           title="Child Evangelism Part 1"
           allowfullscreen></iframe>
         
         <!-- Video 2: Youth Are Not the Future -->
-        <iframe class="w-full h-56 rounded shadow"
+        <iframe class="w-full h-56 rounded-lg shadow"
           src="https://www.youtube.com/embed/KeNOoOi5z_0"
           title="Youth Are Not the Future: The Urgent Task of Evangelism Today"
           allowfullscreen></iframe>
 
         <!-- Video 3: Episode 13: Evangelism -->
-        <iframe class="w-full h-56 rounded shadow"
+        <iframe class="w-full h-56 rounded-lg shadow"
           src="https://www.youtube.com/embed/YnSYtr_GSlU"
           title="Episode 13: Evangelism - Kids Faith Series"
           allowfullscreen></iframe>
@@ -172,26 +266,17 @@
       </div>
     </section>
 
-    <!-- Leadership -->
-    <section class="bg-red-100 py-16 px-6">
-      <h2 class="text-3xl text-red-900 font-semibold text-center mb-10">Evangelism Leadership</h2>
-      <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-        {% for leader in leaders %}
-        <div>
-          <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
-          <h3 class="font-bold text-lg text-red-800">{{ leader.name }}</h3>
-          <p class="text-sm text-gray-600">{{ leader.title }}</p>
-        </div>
-        {% empty %}
-        <p class="text-center col-span-full text-gray-500">No evangelism leaders added yet.</p>
-        {% endfor %}
-      </div>
-    </section>
 
     <!-- Footer -->
-    <footer class="bg-red-900 text-white py-6 text-center text-sm">
+    <footer class="footer-section text-white py-8 text-center">
       <p>&copy; 2025 GMMIConnect | Evangelism Ministry | All Rights Reserved.</p>
     </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://chat.whatsapp.com/YOUR_EVANGELISM_WHATSAPP_GROUP_LINK" class="whatsapp-btn" target="_blank">
+      <i class="fab fa-whatsapp"></i>
+      <span class="whatsapp-tooltip">Join Evangelism WhatsApp Group</span>
+    </a>
   </div>
 
   <!-- Preloader Script -->
@@ -231,13 +316,12 @@
               body.classList.remove('loading');
               body.classList.add('loaded');
             }, 500);
-          }, 500); // Additional delay for smooth transition
+          }, 500);
         }
       }, 200);
       
       // Ensure all resources are loaded before removing preloader
       window.addEventListener('load', function() {
-        // If the simulated progress hasn't finished yet, wait for it
         if (progress < 100) return;
         
         clearInterval(interval);

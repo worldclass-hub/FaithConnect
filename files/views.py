@@ -1661,47 +1661,51 @@ def children_ministry(request):
 
 
 
-
 from django.shortcuts import render
-from .models import WomenMinistryLeader
+from .models import WomenEvent
 
 def women_ministry(request):
-    leaders = WomenMinistryLeader.objects.all()
-    return render(request, 'files/women_ministry.html', {'leaders': leaders})
+    events = WomenEvent.objects.all()
+    return render(request, 'files/women_ministry.html', {
+        'events': events,
+    })
 
 
 
 
-
-from .models import EvangelismMinistryLeader
+from django.utils import timezone
+from django.shortcuts import render
+from .models import OutreachEvent
 
 def evangelism_ministry(request):
-    leaders = EvangelismMinistryLeader.objects.all()
-    return render(request, 'files/evangelism_ministry.html', {'leaders': leaders})
+    events = OutreachEvent.objects.filter(date__gte=timezone.now().date())
+    return render(request, 'files/evangelism_ministry.html', {
+        'events': events,
+    })
 
 
 
 
-
-
-from .models import YouthMinistryLeader
+from .models import YouthEvent
 
 def youth_ministry(request):
-    leaders = YouthMinistryLeader.objects.all()
-    return render(request, 'files/youth_ministry.html', {'leaders': leaders})
+    events = YouthEvent.objects.all()
+    return render(request, 'files/youth_ministry.html', {
+        'events': events,
+    })
 
 
 
 
 
-
-
-from .models import MenMinistryLeader
+from django.shortcuts import render
+from .models import MenEvent
 
 def men_ministry(request):
-    leaders = MenMinistryLeader.objects.all()
-    return render(request, 'files/men_ministry.html', {'leaders': leaders})
-
+    events = MenEvent.objects.all()
+    return render(request, 'files/men_ministry.html', {
+        'events': events,
+    })
 
 
 

@@ -169,7 +169,269 @@
       50% { opacity: 1; }
       100% { opacity: 0.7; }
     }
+
+    /* WhatsApp Button */
+    .whatsapp-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+      z-index: 999;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+      text-decoration: none;
+    }
+
+    .whatsapp-button:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 6px 25px rgba(37, 211, 102, 0.7);
+    }
+
+    .whatsapp-button i {
+      font-size: 32px;
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-button:hover i {
+      transform: scale(1.1);
+    }
+
+    .whatsapp-button .tooltip {
+      position: absolute;
+      right: 75px;
+      background: white;
+      color: #075E54;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      transform: translateX(10px);
+    }
+
+    .whatsapp-button:hover .tooltip {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* 🔥 BLAZING SECTION STYLES 🔥 */
+    .hero-section {
+      background: linear-gradient(135deg, #4338CA 0%, #7C3AED 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(251,191,36,0.15) 0%, transparent 70%);
+      animation: pulse 8s infinite alternate;
+    }
+    
+    .mission-section {
+      background: linear-gradient(to bottom, #F0FDF4 0%, #ECFDF5 100%);
+      position: relative;
+    }
+    
+    .mission-section::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: linear-gradient(90deg, #10B981 0%, #3B82F6 100%);
+    }
+    
+    .events-section {
+      background: linear-gradient(to bottom, #EFF6FF 0%, #DBEAFE 100%);
+      position: relative;
+    }
+    
+    .events-title {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .events-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #F59E0B 0%, #EF4444 100%);
+      border-radius: 2px;
+    }
+    
+    .event-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    
+    .event-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%);
+    }
+    
+    .event-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.2);
+    }
+    
+    .fellowship-section {
+      background: linear-gradient(to bottom, #F8FAFC 0%, #F1F5F9 100%);
+    }
+    
+    .fellowship-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .fellowship-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #10B981 0%, #3B82F6 100%);
+    }
+    
+    .fellowship-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+    }
+    
+    .media-section {
+      background: linear-gradient(to bottom, #F9FAFB 0%, #F3F4F6 100%);
+      border-top: 1px solid #E5E7EB;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    
+    .media-iframe {
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border: none;
+      overflow: hidden;
+    }
+    
+    .media-iframe:hover {
+      transform: scale(1.02);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .leadership-section {
+      background: linear-gradient(135deg, #E0F2FE 0%, #CFFAFE 100%);
+      position: relative;
+    }
+    
+    .leader-card {
+      transition: all 0.3s ease;
+    }
+    
+    .leader-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .leader-photo {
+      border: 4px solid white;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .leader-card:hover .leader-photo {
+      transform: scale(1.05);
+      box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.2);
+    }
+    
+    .footer-section {
+      background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+      position: relative;
+    }
+    
+    .footer-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #F59E0B 0%, #F97316 100%);
+    }
+    
+    /* Animated join button */
+    .join-button {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .join-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.5s ease;
+      z-index: -1;
+    }
+    
+    .join-button:hover::before {
+      left: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .whatsapp-button {
+        width: 55px;
+        height: 55px;
+        bottom: 20px;
+        right: 20px;
+      }
+      .whatsapp-button i {
+        font-size: 28px;
+      }
+      .whatsapp-button .tooltip {
+        font-size: 13px;
+        right: 65px;
+        padding: 6px 12px;
+      }
+    }
   </style>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-white text-gray-800">
 
@@ -187,111 +449,220 @@
     <div class="loading-percentage pulse-text">0%</div>
   </div>
 
+  <!-- Super Powerful WhatsApp Button -->
+  <a href="https://wa.me/2348123456789?text=Join%20Youth%20WhatsApp%20Group" 
+     class="whatsapp-button" 
+     target="_blank"
+     aria-label="Join Youth WhatsApp group">
+    <i class="fab fa-whatsapp"></i>
+    <span class="tooltip">Join Youth WhatsApp Group</span>
+  </a>
+
   <!-- Hero Section -->
-  <section class="bg-blue-900 text-white py-20 px-6 text-center">
-    <h1 class="text-4xl font-bold mb-4">Welcome to the Youth Ministry</h1>
-    <p class="text-lg max-w-2xl mx-auto mb-6">"Let no man despise thy youth; but be thou an example of the believers..." — 1 Timothy 4:12</p>
-    <a href="#contact" class="inline-block bg-yellow-400 text-blue-900 px-6 py-3 rounded-full hover:bg-yellow-300 transition font-bold">Join the Movement</a>
+  <section class="hero-section text-white py-24 px-6 text-center">
+    <div class="max-w-4xl mx-auto relative z-10">
+      <h1 class="text-5xl font-bold mb-6 drop-shadow-lg">Welcome to the Youth Ministry</h1>
+      <p class="text-xl max-w-2xl mx-auto mb-8 opacity-90">"Let no man despise thy youth; but be thou an example of the believers..." — 1 Timothy 4:12</p>
+      <a href="https://wa.me/2348123456789?text=Join%20Youth%20WhatsApp%20Group" 
+         class="join-button inline-block bg-amber-400 text-indigo-900 px-8 py-4 rounded-full hover:bg-amber-300 transition-all font-bold text-lg shadow-lg hover:shadow-xl"
+         target="_blank">
+        Join the Movement
+      </a>
+    </div>
   </section>
 
-  <!-- Rest of your content remains the same -->
   <!-- Mission & Vision -->
-  <section class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-blue-800 mb-6">Our Mission & Vision</h2>
-    <p class="max-w-3xl mx-auto text-lg text-gray-700">Raising bold, Spirit-filled youth who are unashamed of the Gospel, grounded in truth, and impacting the world through creativity, influence, and power.</p>
-  </section>
-
-  <!-- Upcoming Events -->
-  <section class="bg-blue-50 py-16 px-6">
-    <h2 class="text-3xl text-center text-blue-900 font-semibold mb-10">Upcoming Youth Events</h2>
-    <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-blue-700">Youth Fire Night</h3>
-        <p class="text-sm text-gray-600">Night of worship, word, and revival. June 28th, 2025</p>
-      </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-blue-700">Talent Expression Sunday</h3>
-        <p class="text-sm text-gray-600">Drama, spoken word, music & art. July 14th, 2025</p>
-      </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-blue-700">Campus Invasion</h3>
-        <p class="text-sm text-gray-600">Crusade & outreach at universities. August 10th, 2025</p>
-      </div>
+  <section class="mission-section py-20 px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-4xl font-bold text-gray-900 mb-8">Our Mission & Vision</h2>
+      <p class="text-xl max-w-3xl mx-auto text-gray-700 leading-relaxed">
+        Raising bold, Spirit-filled youth who are unashamed of the Gospel, grounded in truth, 
+        and impacting the world through creativity, influence, and power.
+      </p>
     </div>
   </section>
-
-  <!-- Youth Fellowships -->
-  <section class="py-16 px-6 bg-white">
-    <h2 class="text-3xl font-semibold text-blue-800 text-center mb-10">Fellowships & Tribes</h2>
-    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6">
-      <div class="bg-blue-100 p-6 rounded shadow">
-        <h3 class="text-xl font-semibold text-blue-900">Teen Tribe (13–19)</h3>
-        <p class="text-sm mt-2">Raising grounded, vibrant teenagers for Jesus.</p>
-      </div>
-      <div class="bg-blue-100 p-6 rounded shadow">
-        <h3 class="text-xl font-semibold text-blue-900">Young Adults (20–30)</h3>
-        <p class="text-sm mt-2">Campus fellowships, leadership, and purpose pursuit.</p>
-      </div>
-      <div class="bg-blue-100 p-6 rounded shadow">
-        <h3 class="text-xl font-semibold text-blue-900">Creative Team</h3>
-        <p class="text-sm mt-2">Dance, drama, spoken word, and social media outreach.</p>
-      </div>
-      <div class="bg-blue-100 p-6 rounded shadow">
-        <h3 class="text-xl font-semibold text-blue-900">Music Ministry</h3>
-        <p class="text-sm mt-2">Worship teams, instrumentalists, and gospel artists in training.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonies -->
-  <section class="bg-blue-50 py-16 px-6">
-    <h2 class="text-3xl font-semibold text-center text-blue-900 mb-10">Testimonies</h2>
-    <div class="max-w-4xl mx-auto space-y-8">
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"I was once depressed, but joining the Youth Fire nights brought back my joy and fire!" — Bro. Chinedu A.</blockquote>
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"The mentorship from older youth leaders changed my academic and spiritual life completely." — Sis. Faith I.</blockquote>
-    </div>
-  </section>
-
-  <!-- Youth Media Highlights -->
-  <section class="py-16 px-6 bg-white">
-    <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Youth Media Highlights</h2>
-    <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
-      <iframe class="w-full h-56 rounded shadow"
-        src="https://www.youtube.com/embed/4d9OkCofvQQ"
-        title="Following Jesus as a Teenager"
-        allowfullscreen></iframe>
-      <iframe class="w-full h-56 rounded shadow"
-        src="https://www.youtube.com/embed/tQraix3fgpw"
-        title="Next Level Youth: Let's Talk About Jesus"
-        allowfullscreen></iframe>
-      <iframe class="w-full h-56 rounded shadow"
-        src="https://www.youtube.com/embed/o46uZ64N-YI"
-        title="Message for Uprising Youth Group"
-        allowfullscreen></iframe>
-    </div>
-  </section>
-
-  <!-- Leadership -->
-  <section class="bg-blue-100 py-16 px-6">
-    <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Youth Leadership Team</h2>
-    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-      {% for leader in leaders %}
-      <div>
-        <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
-        <h3 class="font-bold text-lg text-blue-800">{{ leader.name }}</h3>
-        <p class="text-sm text-gray-600">{{ leader.title }}</p>
-      </div>
+<!-- Upcoming Events -->
+<section class="events-section py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="events-title text-4xl text-center font-bold text-gray-900 mb-12">Upcoming Youth Events</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for event in events %}
+        <div class="event-card p-8">
+          <div class="{{ event.theme_color }} mb-4">
+            <i class="{{ event.icon }} text-3xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-3 text-gray-800">{{ event.title }}</h3>
+          <p class="text-gray-600 mb-4">{{ event.description }}</p>
+          <div class="flex items-center text-sm text-gray-500">
+            <i class="far fa-calendar-alt mr-2"></i>
+            <span>{{ event.date|date:"F jS, Y" }}</span>
+          </div>
+        </div>
       {% empty %}
-      <p class="text-center text-gray-500 col-span-full">No youth leaders added yet.</p>
+        <p class="text-center col-span-full text-gray-500">No upcoming events available yet.</p>
       {% endfor %}
     </div>
+  </div>
+</section>
+
+
+ <!-- Youth Fellowships Section - Fixed Version -->
+<section class="fellowship-section py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Fellowships & Tribes</h2>
+    <div class="grid sm:grid-cols-2 gap-8">
+      <!-- Teen Tribe Card -->
+      <div class="fellowship-card p-8">
+        <div class="flex items-start gap-4"> <!-- Changed mr-4 to gap-4 -->
+          <div class="bg-blue-100 p-3 rounded-lg flex-shrink-0"> <!-- Added flex-shrink-0 -->
+            <i class="fas fa-child text-blue-600 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Teen Tribe (13–19)</h3>
+            <p class="text-gray-600">Raising grounded, vibrant teenagers for Jesus.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Young Adults Card -->
+      <div class="fellowship-card p-8">
+        <div class="flex items-start gap-4"> <!-- Changed mr-4 to gap-4 -->
+          <div class="bg-indigo-100 p-3 rounded-lg flex-shrink-0"> <!-- Added flex-shrink-0 -->
+            <i class="fas fa-user-graduate text-indigo-600 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Young Adults (20–30)</h3>
+            <p class="text-gray-600">Campus fellowships, leadership, and purpose pursuit.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Creative Team Card -->
+      <div class="fellowship-card p-8">
+        <div class="flex items-start gap-4"> <!-- Changed mr-4 to gap-4 -->
+          <div class="bg-purple-100 p-3 rounded-lg flex-shrink-0"> <!-- Added flex-shrink-0 -->
+            <i class="fas fa-paint-brush text-purple-600 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Creative Team</h3>
+            <p class="text-gray-600">Dance, drama, spoken word, and social media outreach.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Music Ministry Card -->
+      <div class="fellowship-card p-8">
+        <div class="flex items-start gap-4"> <!-- Changed mr-4 to gap-4 -->
+          <div class="bg-amber-100 p-3 rounded-lg flex-shrink-0"> <!-- Added flex-shrink-0 -->
+            <i class="fas fa-music text-amber-600 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Music Ministry</h3>
+            <p class="text-gray-600">Worship teams, instrumentalists, and gospel artists in training.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Youth Media Highlights -->
+  <section class="media-section py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Youth Media Highlights</h2>
+      <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-8">
+        <iframe class="media-iframe w-full h-64"
+          src="https://www.youtube.com/embed/4d9OkCofvQQ"
+          title="Following Jesus as a Teenager"
+          allowfullscreen></iframe>
+        <iframe class="media-iframe w-full h-64"
+          src="https://www.youtube.com/embed/tQraix3fgpw"
+          title="Next Level Youth: Let's Talk About Jesus"
+          allowfullscreen></iframe>
+        <iframe class="media-iframe w-full h-64"
+          src="https://www.youtube.com/embed/o46uZ64N-YI"
+          title="Message for Uprising Youth Group"
+          allowfullscreen></iframe>
+      </div>
+    </div>
   </section>
 
+
   <!-- Footer -->
-  <footer class="bg-blue-900 text-white py-6 text-center text-sm">
-    <p>&copy; 2025 GMMIConnect | Youth Ministry | All Rights Reserved.</p>
+  <footer class="footer-section text-white py-8 text-center">
+    <div class="max-w-6xl mx-auto px-6">
+      <p class="text-lg">&copy; 2025 GMMIConnect | Youth Ministry | All Rights Reserved.</p>
+      <div class="flex justify-center space-x-6 mt-6">
+        <a href="#" class="text-white hover:text-amber-300 transition">
+          <i class="fab fa-facebook-f text-xl"></i>
+        </a>
+        <a href="#" class="text-white hover:text-amber-300 transition">
+          <i class="fab fa-instagram text-xl"></i>
+        </a>
+        <a href="#" class="text-white hover:text-amber-300 transition">
+          <i class="fab fa-youtube text-xl"></i>
+        </a>
+        <a href="#" class="text-white hover:text-amber-300 transition">
+          <i class="fab fa-twitter text-xl"></i>
+        </a>
+      </div>
+    </div>
   </footer>
 
+  <!-- Ultra-Powerful Preloader JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const preloader = document.querySelector('.preloader');
+      const percentage = document.querySelector('.loading-percentage');
+      
+      // Force show preloader and disable scrolling
+      preloader.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      // Simulate loading percentage
+      let percent = 0;
+      const interval = setInterval(function() {
+        percent += Math.floor(Math.random() * 5) + 1;
+        if (percent > 100) percent = 100;
+        percentage.textContent = percent + '%';
+        
+        if (percent === 100) {
+          clearInterval(interval);
+        }
+      }, 100);
+      
+      // When everything is loaded
+      window.addEventListener('load', function() {
+        // Ensure we show 100%
+        percentage.textContent = '100%';
+        
+        // Start fade out
+        setTimeout(function() {
+          preloader.classList.add('fade-out');
+          
+          // Allow scrolling again
+          document.body.style.overflow = '';
+          
+          // Remove preloader after animation completes
+          setTimeout(function() {
+            preloader.style.display = 'none';
+          }, 1000);
+        }, 500);
+      });
+      
+      // Fallback in case load event doesn't fire
+      setTimeout(function() {
+        percentage.textContent = '100%';
+        preloader.classList.add('fade-out');
+        document.body.style.overflow = '';
+        setTimeout(function() {
+          preloader.style.display = 'none';
+        }, 1000);
+      }, 5000); // Maximum 5 seconds then force hide
+    });
+  </script>
+</body>
+</html>
   <!-- Ultra-Powerful Preloader JavaScript -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {

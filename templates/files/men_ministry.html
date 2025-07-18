@@ -123,7 +123,154 @@
       max-width: 300px;
       line-height: 1.4;
     }
+
+    /* WhatsApp Button Styles */
+    .whatsapp-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 99;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: #25D366;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+      text-decoration: none;
+    }
+
+    .whatsapp-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+    }
+
+    .whatsapp-button i {
+      font-size: 40px;
+    }
+
+    .whatsapp-tooltip {
+      position: absolute;
+      right: 80px;
+      background: white;
+      color: #075E54;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      white-space: nowrap;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .whatsapp-button:hover .whatsapp-tooltip {
+      opacity: 1;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Responsive WhatsApp button */
+    @media (max-width: 768px) {
+      .whatsapp-button {
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        right: 20px;
+      }
+      .whatsapp-button i {
+        font-size: 35px;
+      }
+    }
+
+    /* Custom Section Colors */
+    .hero-section {
+      background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+      color: white;
+    }
+    
+    .mission-section {
+      background: linear-gradient(to bottom, #f8fafc, #e0f2fe);
+    }
+    
+    .programs-section {
+      background: linear-gradient(to bottom, #e0f2fe, #bfdbfe);
+    }
+    
+    .mentorship-section {
+      background: linear-gradient(to bottom, #f0f9ff, #e0f2fe);
+    }
+    
+    .media-section {
+      background: linear-gradient(to bottom, #f8fafc, #e0f2fe);
+    }
+    
+    .leadership-section {
+      background: linear-gradient(135deg, #e0f2fe, #bfdbfe);
+    }
+    
+    .footer-section {
+      background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+      color: white;
+    }
+    
+    .btn-primary {
+      background: #f59e0b;
+      color: #1e3a8a;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-primary:hover {
+      background: #fbbf24;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .section-title {
+      color: #1e3a8a;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: #f59e0b;
+    }
+    
+    .card {
+      background: white;
+      border-left: 4px solid #f59e0b;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-title {
+      color: #1e40af;
+    }
   </style>
+  <!-- Font Awesome for WhatsApp icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="bg-white text-gray-800">
 
@@ -145,104 +292,88 @@
     </div>
   </div>
 
+  <!-- WhatsApp Button - Floating Action Button -->
+  <a href="https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK" class="whatsapp-button" target="_blank" rel="noopener noreferrer">
+    <i class="fab fa-whatsapp"></i>
+    <span class="whatsapp-tooltip">Join Men's WhatsApp Group</span>
+  </a>
+
   <!-- Hero Section -->
-  <section class="bg-blue-900 text-white py-20 px-6 text-center">
+  <section class="hero-section text-white py-20 px-6 text-center">
     <h1 class="text-4xl font-bold mb-4">Men's Ministry</h1>
-    <p class="text-lg max-w-2xl mx-auto mb-6">"Be watchful, stand firm in the faith, act like men, be strong." — 1 Corinthians 16:13</p>
-    <a href="#contact" class="inline-block bg-yellow-400 text-blue-900 px-6 py-3 rounded-full hover:bg-yellow-300 transition font-bold">Join the Brotherhood</a>
+    <p class="text-lg max-w-2xl mx-auto mb-8">"Be watchful, stand firm in the faith, act like men, be strong." — 1 Corinthians 16:13</p>
+    <a href="https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK" class="btn-primary inline-block px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-300 transition-all duration-300" target="_blank">
+      Join the Brotherhood
+    </a>
   </section>
 
-  <!-- Rest of your content remains the same -->
   <!-- Mission & Purpose -->
-  <section class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-blue-800 mb-6">Raising Godly Men of Impact</h2>
+  <section class="mission-section py-16 px-6 text-center">
+    <h2 class="section-title text-3xl font-semibold mb-6">Raising Godly Men of Impact</h2>
     <p class="max-w-3xl mx-auto text-lg text-gray-700">The Men's Ministry exists to build strong, spiritual leaders, fathers, husbands, mentors, and kingdom warriors — empowered to transform their homes, churches, and nations.</p>
   </section>
 
   <!-- Men's Gatherings -->
-  <section class="bg-blue-50 py-16 px-6">
-    <h2 class="text-3xl text-center text-blue-900 font-semibold mb-10">Key Programs & Events</h2>
-    <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-blue-700">Men of Fire</h3>
-        <p class="text-sm text-gray-600">Monthly prayer and discipleship meeting for spiritual sharpening.</p>
+  <section class="programs-section py-16 px-6">
+  <h2 class="section-title text-3xl text-center font-semibold mb-10">Key Programs & Events</h2>
+  <div class="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for event in events %}
+      <div class="card rounded-lg shadow-md p-6 border-l-4 {{ event.theme_color }}">
+        <h3 class="card-title text-xl font-bold mb-2">
+          <i class="{{ event.icon }} mr-2 {{ event.theme_color }}"></i>{{ event.title }}
+        </h3>
+        <p class="text-sm text-gray-600">{{ event.description }}</p>
+        <p class="text-xs text-gray-400 mt-2">📍 {{ event.location }} — 📅 {{ event.date|date:"F j, Y" }}</p>
       </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-blue-700">The Fatherhood Forum</h3>
-        <p class="text-sm text-gray-600">Teaching men to lead godly homes with grace and wisdom.</p>
-      </div>
-      <div class="bg-white rounded shadow p-6">
-        <h3 class="text-xl font-bold mb-2 text-blue-700">Men's Advance</h3>
-        <p class="text-sm text-gray-600">Annual men's retreat and spiritual bootcamp. Next: October 2025</p>
-      </div>
-    </div>
-  </section>
+    {% empty %}
+      <p class="text-center col-span-full">No upcoming events at this time.</p>
+    {% endfor %}
+  </div>
+</section>
+
 
   <!-- Mentorship & Brotherhood -->
-  <section class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold text-blue-800 mb-8">Mentorship & Brotherhood</h2>
+  <section class="mentorship-section py-16 px-6 text-center">
+    <h2 class="section-title text-3xl font-semibold mb-8">Mentorship & Brotherhood</h2>
     <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-8 text-left">
-      <div>
-        <h3 class="text-xl font-bold text-blue-700 mb-2">Iron Sharpens Iron</h3>
+      <div class="card p-6">
+        <h3 class="card-title text-xl font-bold mb-2">Iron Sharpens Iron</h3>
         <p class="text-sm text-gray-700">One-on-one mentorship and accountability relationships for men.</p>
       </div>
-      <div>
-        <h3 class="text-xl font-bold text-blue-700 mb-2">Kingdom Builders</h3>
+      <div class="card p-6">
+        <h3 class="card-title text-xl font-bold mb-2">Kingdom Builders</h3>
         <p class="text-sm text-gray-700">Business, leadership, and financial empowerment for kingdom expansion.</p>
       </div>
     </div>
   </section>
 
-  <!-- Testimonies -->
-  <section class="bg-blue-50 py-16 px-6">
-    <h2 class="text-3xl font-semibold text-center text-blue-900 mb-10">Testimonies of Transformation</h2>
-    <div class="max-w-4xl mx-auto space-y-8">
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"God used the Men's Ministry to restore my marriage and identity as a father." — Bro. James E.</blockquote>
-      <blockquote class="bg-white p-6 rounded shadow text-sm text-gray-700 italic">"I never knew what it meant to be a spiritual man until I joined this group." — Elder David U.</blockquote>
-    </div>
-  </section>
-
   <!-- Media Clips -->
-  <section class="py-16 px-6 bg-white">
-    <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Highlights from Men's Programs</h2>
+  <section class="media-section py-16 px-6">
+    <h2 class="section-title text-3xl font-semibold text-center mb-10">Highlights from Men's Programs</h2>
     <div class="max-w-5xl mx-auto grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Men of Valor Teaching -->
-      <iframe class="w-full h-56 rounded shadow"
+      <iframe class="w-full h-56 rounded-lg shadow-md"
         src="https://www.youtube.com/embed/VDv-SDAJE1M"
         title="Men Of Valor | Elder Antonio"
         allowfullscreen></iframe>
       <!-- Mighty Men of Valor Sermon -->
-      <iframe class="w-full h-56 rounded shadow"
+      <iframe class="w-full h-56 rounded-lg shadow-md"
         src="https://www.youtube.com/embed/FqV2hAlh_aA"
         title="Mighty Men of Valor!"
         allowfullscreen></iframe>
       <!-- Becoming a Mighty Man of Valor -->
-      <iframe class="w-full h-56 rounded shadow"
+      <iframe class="w-full h-56 rounded-lg shadow-md"
         src="https://www.youtube.com/embed/Lp3wwvMML3o"
         title="Becoming A Mighty Man Of Valor | Pastor Jay Haizlip"
         allowfullscreen></iframe>
     </div>
   </section>
 
-  <!-- Leadership -->
-  <section class="bg-blue-100 py-16 px-6">
-    <h2 class="text-3xl text-blue-900 font-semibold text-center mb-10">Meet the Leaders</h2>
-    <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 text-center">
-      {% for leader in leaders %}
-      <div>
-        <img src="{{ leader.photo.url }}" class="w-28 h-28 mx-auto rounded-full mb-3" alt="{{ leader.name }}" />
-        <h3 class="font-bold text-lg text-blue-800">{{ leader.name }}</h3>
-        <p class="text-sm text-gray-600">{{ leader.title }}</p>
-      </div>
-      {% empty %}
-      <p class="text-center text-gray-500 col-span-full">No leaders added yet.</p>
-      {% endfor %}
-    </div>
-  </section>
 
   <!-- Footer -->
-  <footer class="bg-blue-900 text-white py-6 text-center text-sm">
-    <p>&copy; 2025 GMMIConnect | Men's Ministry | All Rights Reserved.</p>
+  <footer class="footer-section text-white py-8 text-center">
+    <p class="text-sm">&copy; 2025 GMMIConnect | Men's Ministry | All Rights Reserved.</p>
+    
   </footer>
 
   <!-- Preloader JavaScript -->
@@ -276,6 +407,12 @@
           preloader.style.display = 'none';
         }, 800);
       }, 5000); // Maximum 5 seconds then force hide
+    });
+
+    // WhatsApp button click tracking (optional)
+    document.querySelector('.whatsapp-button').addEventListener('click', function() {
+      // You can add analytics tracking here
+      console.log('WhatsApp button clicked');
     });
   </script>
 </body>
