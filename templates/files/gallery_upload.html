@@ -6,211 +6,704 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GMMI Gallery Upload</title>
   <link rel="icon" href="{% static 'login-form/images/GMMI_LOGO.png' %}" type="image/png" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #6c5ce7;
+      --primary-dark: #4b44c6;
+      --secondary: #2ed573;
+      --accent: #ff4757;
+      --light: #f5f6fa;
+      --dark: #2d3436;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: url("{% static 'login-form/images/wallpaper2.jpg' %}") no-repeat center center fixed;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url("{% static 'login-form/images/wallpaper2.jpg' %}") no-repeat center center fixed;
       background-size: cover;
       margin: 0;
-      padding: 15px;
+      padding: 0;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
       flex-direction: column;
+      color: white;
     }
 
-    .upload-container {
-      background: #fff;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    /* Quantum Preloader */
+    #quantumPreloader {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: 500px;
-      text-align: center;
-      max-height: 90vh;
-      overflow-y: auto;
+      height: 100%;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
     }
 
+    .quantum-sphere {
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle at 30% 30%, var(--primary), var(--secondary));
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 40px var(--primary);
+      animation: quantumPulse 2s infinite alternate;
+    }
+
+    .quantum-sphere::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border: 3px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      animation: quantumRotate 20s linear infinite;
+    }
+
+    .quantum-sphere::after {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      border: 3px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: quantumRotateReverse 30s linear infinite;
+    }
+
+    @keyframes quantumPulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 20px var(--primary); }
+      100% { transform: scale(1.05); box-shadow: 0 0 60px var(--primary); }
+    }
+
+    @keyframes quantumRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes quantumRotateReverse {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+
+    .preloader-text {
+      font-size: 18px;
+      font-weight: 500;
+      color: white;
+      margin-top: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .preloader-progress {
+      width: 300px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      margin-top: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .preloader-progress-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      animation: loadingProgress 2s ease-in-out forwards;
+    }
+
+    @keyframes loadingProgress {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+
+    /* Upload Container */
+    .upload-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      margin: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 0.8s 0.5s forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .upload-container h2 {
+      color: white;
+      font-size: 28px;
+      margin-bottom: 25px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .upload-container h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 3px;
+    }
+
+    /* Drop Area */
     .drop-area {
-      border: 2px dashed #6c5ce7;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 15px;
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 20px;
       cursor: pointer;
+      transition: var(--transition);
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
     }
 
     .drop-area:hover {
-      background: #f9f9f9;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
     }
 
-    input[type="file"], input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+    .drop-area.highlight {
+      background: rgba(108, 92, 231, 0.1);
+      border-color: var(--primary);
     }
 
-    .send-btn {
-      background: #6c5ce7;
+    .drop-area i {
+      font-size: 48px;
       color: white;
-      border: none;
-      padding: 12px;
-      width: 100%;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .send-btn:hover {
-      background: #4b44c6;
-    }
-
-    .error-msg {
-      color: red;
       margin-bottom: 15px;
+      display: block;
+      opacity: 0.7;
     }
 
+    .drop-area p {
+      margin: 10px 0;
+      color: white;
+      font-size: 16px;
+    }
+
+    .drop-area strong {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* File List */
     #fileList {
       text-align: left;
-      margin-bottom: 10px;
-      max-height: 150px;
+      margin-bottom: 20px;
+      max-height: 200px;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) rgba(108, 92, 231, 0.1);
+    }
+
+    #fileList::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #fileList::-webkit-scrollbar-track {
+      background: rgba(108, 92, 231, 0.1);
+      border-radius: 10px;
+    }
+
+    #fileList::-webkit-scrollbar-thumb {
+      background-color: var(--primary);
+      border-radius: 10px;
     }
 
     .file-item {
-      background: #f1f1f1;
-      padding: 6px;
-      margin: 5px 0;
-      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px 15px;
+      margin: 8px 0;
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      border-left: 4px solid var(--primary);
     }
 
-    .home-text {
-      background-color: #7bed9f;
-      color: black;
-      padding: 12px 24px;
-      border-radius: 5px;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      margin-top: 20px;
-      transition: background-color 0.3s ease, color 0.3s ease;
+    .file-item:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateX(5px);
     }
 
-    .home-text:hover {
-      background-color: #6c5ce7;
+    .file-item span:first-child {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 10px;
       color: white;
     }
 
-    .home-text a {
+    .file-item .remove-btn {
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 18px;
+      transition: var(--transition);
+    }
+
+    .file-item .remove-btn:hover {
+      transform: scale(1.2);
+    }
+
+    /* Input Fields */
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      margin: 15px 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      transition: var(--transition);
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(108, 92, 231, 0.1);
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+    }
+
+    input[type="text"]::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Buttons */
+    .send-btn {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 16px;
+      width: 100%;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 15px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .send-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+    }
+
+    .send-btn:active {
+      transform: translateY(1px);
+    }
+
+    .send-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, 
+                  transparent 0%, 
+                  rgba(255, 255, 255, 0.3) 50%, 
+                  transparent 100%);
+      transform: translateX(-100%) rotate(45deg);
+      transition: transform 0.6s ease;
+    }
+
+    .send-btn:hover::after {
+      transform: translateX(100%) rotate(45deg);
+    }
+
+    /* LookBook Button */
+    .lookbook-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      color: var(--dark);
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 600;
       text-decoration: none;
-      color: inherit;
+      margin-top: 30px;
+      transition: var(--transition);
+      box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
     }
 
-    @media (max-width: 700px) {
-      .upload-container {
-        width: 100%;
-        max-width: 90%;
-        padding: 20px;
-      }
+    .lookbook-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(46, 213, 115, 0.6);
+      color: white;
     }
 
-    /* Preloader */
-    #crazyLoaderOverlay {
+    .lookbook-btn:active {
+      transform: translateY(1px);
+    }
+
+    .lookbook-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, 
+                  transparent 0%, 
+                  rgba(255, 255, 255, 0.3) 50%, 
+                  transparent 100%);
+      transform: translateX(-100%) rotate(45deg);
+      transition: transform 0.6s ease;
+    }
+
+    .lookbook-btn:hover::after {
+      transform: translateX(100%) rotate(45deg);
+    }
+
+    /* Error Message */
+    .error-msg {
+      color: var(--accent);
+      background: rgba(255, 71, 87, 0.1);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      border-left: 4px solid var(--accent);
+    }
+
+    /* Holographic Loader Overlay */
+    #holographicLoader {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0, 0, 0, 0.95);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 9999;
+      flex-direction: column;
     }
 
-    .crazy-loader {
-      display: flex;
+    .holographic-sphere {
+      width: 150px;
+      height: 150px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: holographicRotate 8s infinite linear;
+    }
+
+    .holographic-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 3px solid;
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+
+    .ring-1 {
+      border-color: var(--primary);
+      transform: rotateY(70deg);
+      animation: ringPulse1 3s infinite ease-in-out;
+    }
+
+    .ring-2 {
+      border-color: var(--secondary);
+      transform: rotateX(70deg);
+      animation: ringPulse2 4s infinite ease-in-out;
+    }
+
+    .ring-3 {
+      border-color: var(--accent);
+      transform: rotateX(70deg) rotateY(70deg);
+      animation: ringPulse3 5s infinite ease-in-out;
+    }
+
+    @keyframes holographicRotate {
+      0% { transform: rotateX(0) rotateY(0); }
+      100% { transform: rotateX(360deg) rotateY(360deg); }
+    }
+
+    @keyframes ringPulse1 {
+      0%, 100% { transform: rotateY(70deg) scale(1); opacity: 0.8; }
+      50% { transform: rotateY(70deg) scale(1.2); opacity: 1; }
+    }
+
+    @keyframes ringPulse2 {
+      0%, 100% { transform: rotateX(70deg) scale(1); opacity: 0.8; }
+      50% { transform: rotateX(70deg) scale(1.1); opacity: 1; }
+    }
+
+    @keyframes ringPulse3 {
+      0%, 100% { transform: rotateX(70deg) rotateY(70deg) scale(1); opacity: 0.8; }
+      50% { transform: rotateX(70deg) rotateY(70deg) scale(1.3); opacity: 1; }
+    }
+
+    .loader-text {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      margin-top: 40px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    .progress-container {
+      width: 80%;
+      max-width: 400px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-top: 30px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      position: relative;
+      transition: width 0.3s ease;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .percentage {
+      position: absolute;
+      right: 10px;
+      top: -25px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Success Animation */
+    .success-animation {
+      display: none;
       flex-direction: column;
       align-items: center;
-      gap: 30px;
+      justify-content: center;
+      text-align: center;
     }
 
-    .balls {
-      display: flex;
-      gap: 12px;
+    .success-checkmark {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      position: relative;
     }
 
-    .balls div {
-      width: 20px;
-      height: 20px;
-      background: #6c5ce7;
+    .check-icon {
+      width: 80px;
+      height: 80px;
+      position: relative;
       border-radius: 50%;
-      animation-timing-function: cubic-bezier(0, 1, 1, 0);
-      animation-duration: 0.7s;
-      animation-iteration-count: infinite;
+      box-sizing: content-box;
+      border: 4px solid var(--secondary);
+      margin: 0 auto;
     }
 
-    .balls div:nth-child(1) { animation-name: bounce1; animation-delay: 0s; }
-    .balls div:nth-child(2) { animation-name: bounce2; animation-delay: 0.15s; }
-    .balls div:nth-child(3) { animation-name: bounce3; animation-delay: 0.3s; }
-    .balls div:nth-child(4) { animation-name: bounce4; animation-delay: 0.45s; }
-
-    @keyframes bounce1 {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-30px) rotate(45deg); background: #ff4757; }
+    .check-icon::before {
+      top: 3px;
+      left: -2px;
+      width: 30px;
+      transform-origin: 100% 50%;
+      border-radius: 100px 0 0 100px;
     }
 
-    @keyframes bounce2 {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-40px) rotate(-45deg); background: #ffa502; }
+    .check-icon::after {
+      top: 0;
+      left: 30px;
+      width: 60px;
+      transform-origin: 0 50%;
+      border-radius: 0 100px 100px 0;
+      animation: rotate-circle 4.25s ease-in;
     }
 
-    @keyframes bounce3 {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-35px) rotate(90deg); background: #1e90ff; }
+    .check-icon::before, .check-icon::after {
+      content: '';
+      height: 100px;
+      position: absolute;
+      background: rgba(46, 213, 115, 0.1);
+      transform: rotate(-45deg);
     }
 
-    @keyframes bounce4 {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-25px) rotate(-90deg); background: #2ed573; }
+    .check-icon .icon-line {
+      height: 5px;
+      background-color: var(--secondary);
+      display: block;
+      border-radius: 2px;
+      position: absolute;
+      z-index: 10;
     }
 
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 5px solid #6c5ce7;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    .icon-line.line-tip {
+      top: 46px;
+      left: 14px;
+      width: 25px;
+      transform: rotate(45deg);
+      animation: icon-line-tip 0.75s;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .icon-line.line-long {
+      top: 38px;
+      right: 8px;
+      width: 47px;
+      transform: rotate(-45deg);
+      animation: icon-line-long 0.75s;
+    }
+
+    @keyframes icon-line-tip {
+      0% { width: 0; left: 1px; top: 19px; }
+      54% { width: 0; left: 1px; top: 19px; }
+      70% { width: 50px; left: -8px; top: 37px; }
+      84% { width: 17px; left: 21px; top: 48px; }
+      100% { width: 25px; left: 14px; top: 46px; }
+    }
+
+    @keyframes icon-line-long {
+      0% { width: 0; right: 46px; top: 54px; }
+      65% { width: 0; right: 46px; top: 54px; }
+      84% { width: 55px; right: 0px; top: 35px; }
+      100% { width: 47px; right: 8px; top: 38px; }
+    }
+
+    .success-text {
+      color: var(--secondary);
+      font-size: 28px;
+      font-weight: 600;
+      margin-top: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .success-subtext {
+      color: white;
+      font-size: 16px;
+      margin-top: 15px;
+      opacity: 0.8;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .upload-container {
+        padding: 30px 20px;
+        margin: 15px;
+        max-width: 95%;
+      }
+
+      .holographic-sphere {
+        width: 120px;
+        height: 120px;
+      }
+
+      .lookbook-btn {
+        padding: 14px 30px;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .upload-container {
+        padding: 25px 15px;
+      }
+
+      .drop-area {
+        padding: 20px;
+      }
+
+      .holographic-sphere {
+        width: 100px;
+        height: 100px;
+      }
+
+      .loader-text {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Preloader Overlay -->
-  <div id="crazyLoaderOverlay">
-    <div class="crazy-loader">
-      <div class="balls">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <div class="spinner"></div>
+  <!-- Quantum Preloader -->
+  <div id="quantumPreloader">
+    <div class="quantum-sphere"></div>
+    <div class="preloader-text">Initializing Gallery</div>
+    <div class="preloader-progress">
+      <div class="preloader-progress-bar"></div>
     </div>
   </div>
 
-  <!-- Upload Card -->
+  <!-- Upload Container -->
   <div class="upload-container">
     <h2>Upload Image to Gallery</h2>
 
@@ -220,38 +713,175 @@
 
     <form id="uploadForm" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="drop-area" onclick="document.getElementById('fileInput').click()">
-        Drop files here or <strong>click to browse</strong>
+      <div class="drop-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Drag & Drop your files here</p>
+        <p>or <strong>click to browse</strong></p>
       </div>
       <input type="file" id="fileInput" name="uploaded_files" multiple accept="image/*" style="display: none;" onchange="handleFiles(event)">
       <div id="fileList"></div>
       <input type="text" name="title" placeholder="Enter image title" required />
-      <button type="submit" id="submitBtn" class="send-btn">Upload</button>
+      <button type="submit" id="submitBtn" class="send-btn">
+        <span id="btnText">Upload Images</span>
+      </button>
     </form>
   </div>
 
-  <!-- LookBook Button BELOW Card -->
-  <div class="home-text">
-    <a href="{% url 'lookbook' %}">View LookBook</a>
+  <!-- LookBook Button -->
+  <a href="{% url 'lookbook' %}" class="lookbook-btn">View LookBook</a>
+
+  <!-- Holographic Loader Overlay -->
+  <div id="holographicLoader">
+    <div class="holographic-sphere">
+      <div class="holographic-ring ring-1"></div>
+      <div class="holographic-ring ring-2"></div>
+      <div class="holographic-ring ring-3"></div>
+    </div>
+    <div class="loader-text">PROCESSING IMAGES</div>
+    <div class="progress-container">
+      <div class="progress-bar" id="uploadProgressBar"></div>
+      <div class="percentage" id="uploadPercentage">0%</div>
+    </div>
+    
+    <div class="success-animation" id="successAnimation">
+      <div class="success-checkmark">
+        <div class="check-icon">
+          <span class="icon-line line-tip"></span>
+          <span class="icon-line line-long"></span>
+        </div>
+      </div>
+      <div class="success-text">SUCCESS!</div>
+      <div class="success-subtext">Your images have been uploaded</div>
+    </div>
   </div>
 
-  <!-- JS -->
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
   <script>
+    // Quantum Preloader
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.getElementById('quantumPreloader').style.opacity = '0';
+        setTimeout(function() {
+          document.getElementById('quantumPreloader').style.display = 'none';
+        }, 500);
+      }, 2000);
+    });
+
+    // Drag and drop functionality
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+      dropArea.classList.add('highlight');
+    }
+
+    function unhighlight() {
+      dropArea.classList.remove('highlight');
+    }
+
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      fileInput.files = files;
+      handleFiles({ target: fileInput });
+    }
+
+    // File handling
     function handleFiles(event) {
       const fileList = document.getElementById("fileList");
       fileList.innerHTML = "";
 
       Array.from(event.target.files).forEach(file => {
-        const item = document.createElement("div");
-        item.classList.add("file-item");
-        item.innerHTML = `<span>${file.name}</span><span style="cursor:pointer;" onclick="this.parentElement.remove()">✕</span>`;
-        fileList.appendChild(item);
+        const fileItem = document.createElement("div");
+        fileItem.classList.add("file-item");
+        
+        const fileName = document.createElement("span");
+        fileName.textContent = file.name;
+        
+        const removeButton = document.createElement("span");
+        removeButton.innerHTML = "&times;";
+        removeButton.classList.add("remove-btn");
+        removeButton.onclick = () => {
+          fileItem.remove();
+          // Create new FileList without the removed file
+          const newFiles = Array.from(fileInput.files).filter(f => f.name !== file.name);
+          const dataTransfer = new DataTransfer();
+          newFiles.forEach(f => dataTransfer.items.add(f));
+          fileInput.files = dataTransfer.files;
+        };
+        
+        fileItem.appendChild(fileName);
+        fileItem.appendChild(removeButton);
+        fileList.appendChild(fileItem);
       });
     }
 
-    document.getElementById("uploadForm").addEventListener("submit", function () {
-      document.getElementById("crazyLoaderOverlay").style.display = "flex";
-      document.getElementById("submitBtn").disabled = true;
+    // Form submission with holographic loader
+    document.getElementById("uploadForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const overlay = document.getElementById("holographicLoader");
+      const submitBtn = document.getElementById("submitBtn");
+      const btnText = document.getElementById("btnText");
+      const progressBar = document.getElementById("uploadProgressBar");
+      const percentage = document.getElementById("uploadPercentage");
+      
+      // Show loader
+      overlay.style.display = "flex";
+      submitBtn.disabled = true;
+      btnText.textContent = "Uploading...";
+      
+      // Simulate progress (in a real app, you'd use actual upload progress)
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += Math.random() * 5;
+        if (progress > 95) progress = 95;
+        progressBar.style.width = progress + "%";
+        percentage.textContent = Math.round(progress) + "%";
+      }, 200);
+      
+      // Simulate upload completion after 3-5 seconds
+      const uploadTime = 3000 + Math.random() * 2000;
+      
+      setTimeout(() => {
+        clearInterval(progressInterval);
+        progressBar.style.width = "100%";
+        percentage.textContent = "100%";
+        
+        // Show success animation
+        setTimeout(() => {
+          document.querySelector('.holographic-sphere').style.display = 'none';
+          document.querySelector('.loader-text').style.display = 'none';
+          document.querySelector('.progress-container').style.display = 'none';
+          document.getElementById('successAnimation').style.display = 'flex';
+          
+          // Submit the form after showing success
+          setTimeout(() => {
+            this.submit();
+          }, 2000);
+        }, 500);
+      }, uploadTime);
     });
   </script>
 </body>

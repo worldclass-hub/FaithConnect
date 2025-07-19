@@ -8,27 +8,17 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
-    /* Base Styles */
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
-      overflow-x: hidden;
-      width: 100%;
-      -webkit-text-size-adjust: 100%;
-    }
-
-    /* Gradient Animation */
     .animated-gradient {
       background-size: 300% 300%;
-      animation: gradientMove 8s ease infinite;
-    }
-    @keyframes gradientMove {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+      animation: gradientMove 12s ease-in-out infinite;
     }
 
-    /* Preloader Styles */
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     #preloader {
       position: fixed;
       top: 0;
@@ -43,17 +33,20 @@
       flex-direction: column;
       transition: opacity 0.5s ease-out;
     }
+
     .preloader-logo {
       width: 80px;
       height: 80px;
       margin-bottom: 15px;
       animation: pulse 2s infinite;
     }
+
     .loader {
       width: 60px;
       height: 60px;
       position: relative;
     }
+
     .loader-inner {
       position: absolute;
       border: 3px solid transparent;
@@ -61,11 +54,43 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    .loader-inner:nth-child(1) { width: 50px; height: 50px; top: 5px; left: 5px; }
-    .loader-inner:nth-child(2) { width: 35px; height: 35px; top: 12px; left: 12px; animation-duration: 1.5s; border-top-color: #7c3aed; }
-    .loader-inner:nth-child(3) { width: 20px; height: 20px; top: 20px; left: 20px; animation-duration: 2s; border-top-color: #a78bfa; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes pulse { 0%, 100% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
+
+    .loader-inner:nth-child(1) {
+      width: 50px;
+      height: 50px;
+      top: 5px;
+      left: 5px;
+    }
+
+    .loader-inner:nth-child(2) {
+      width: 35px;
+      height: 35px;
+      top: 12px;
+      left: 12px;
+      animation-duration: 1.5s;
+      border-top-color: #7c3aed;
+    }
+
+    .loader-inner:nth-child(3) {
+      width: 20px;
+      height: 20px;
+      top: 20px;
+      left: 20px;
+      animation-duration: 2s;
+      border-top-color: #a78bfa;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
     .loading-text {
       margin-top: 15px;
       font-size: 16px;
@@ -74,6 +99,7 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
+
     .progress-bar {
       width: 180px;
       height: 3px;
@@ -82,6 +108,7 @@
       margin-top: 12px;
       overflow: hidden;
     }
+
     .progress {
       height: 100%;
       width: 0%;
@@ -89,94 +116,38 @@
       transition: width 0.3s ease;
     }
 
-    /* Animation Stability */
-    [data-aos] {
-      will-change: transform, opacity;
-      backface-visibility: hidden;
-      transform-style: preserve-3d;
-    }
-    [data-aos^="fade"] { opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease; }
-    [data-aos="zoom-in"] { opacity: 0; transform: scale(0.95); transition: transform 0.6s ease, opacity 0.6s ease; }
-    [data-aos^="slide"] { transition: transform 0.6s ease; }
-
-    /* Card Styles */
     .card-hover {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      transform: translateZ(0);
-      min-height: 180px;
-      display: flex;
-      flex-direction: column;
-    }
-    .card-hover:hover {
-      transform: translateY(-5px) translateZ(0);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    .card-content {
-      flex: 1;
     }
 
-    /* Map Container */
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
     .map-container {
       border-radius: 0.75rem;
       overflow: hidden;
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      min-height: 250px;
     }
 
-    /* Mobile-First Responsive Design */
-    @media (max-width: 767px) {
-      /* Layout Adjustments */
-      .grid-cols-1 > div {
-        margin-bottom: 1.5rem;
-      }
-      
-      /* Typography */
-      h1 { font-size: 2rem; }
-      h2 { font-size: 1.75rem; }
-      h3 { font-size: 1.25rem; }
-      
-      /* Spacing */
-      section {
-        padding: 2rem 1rem;
-      }
-      
-      /* Animation Adjustments */
-      [data-aos] {
-        transition-duration: 0.4s !important;
-      }
-      [data-aos="zoom-in"] {
-        transform: scale(0.98);
-      }
-      
-      /* Card Height */
-      .card-hover {
-        min-height: auto;
-      }
-      
-      /* History Section */
-      .history-section img {
-        margin-bottom: 1.5rem;
+    @media (max-width: 768px) {
+      .preloader-logo { width: 70px; height: 70px; }
+      .loader { width: 50px; height: 50px; }
+      .loader-inner:nth-child(1) { width: 40px; height: 40px; }
+      .loader-inner:nth-child(2) { width: 25px; height: 25px; }
+      .loader-inner:nth-child(3) { width: 15px; height: 15px; }
+      .loading-text { font-size: 14px; }
+      .progress-bar { width: 160px; }
+      .map-container iframe {
+        min-height: 250px;
+        max-height: 320px;
       }
     }
 
     @media (max-width: 480px) {
-      /* Even smaller screens */
-      h1 { font-size: 1.8rem; }
-      h2 { font-size: 1.5rem; }
-      
-      /* Preloader */
-      .preloader-logo {
-        width: 60px;
-        height: 60px;
-      }
-      .loading-text {
-        font-size: 14px;
-      }
-      
-      /* Disable some animations if needed */
-      [data-aos^="slide"] {
-        transform: none !important;
-      }
+      .preloader-logo { width: 60px; height: 60px; }
+      .loading-text { font-size: 12px; }
     }
   </style>
 </head>
@@ -198,16 +169,16 @@
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <section class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 animated-gradient text-white py-12 md:py-24">
+  <!-- Hero -->
+  <section class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 animated-gradient text-white py-16 md:py-28 relative">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center" data-aos="fade-down">
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">About GMMI</h1>
-      <p class="text-lg sm:text-xl opacity-90 max-w-2xl mx-auto">Discover who we are, what we believe, and where we're going.</p>
+      <p class="text-base sm:text-xl opacity-90 max-w-2xl mx-auto">Discover who we are, what we believe, and where we're going.</p>
     </div>
   </section>
 
-  <!-- History Section -->
-  <section class="history-section py-12 md:py-20 px-4 sm:px-6 bg-white">
+  <!-- History -->
+  <section class="py-12 md:py-20 px-4 sm:px-6 bg-white">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-center">
       <div data-aos="fade-right">
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-900 mb-4 md:mb-6">{{ about.title }}</h2>
@@ -216,148 +187,138 @@
       </div>
       <div data-aos="fade-left" class="order-first md:order-none">
         {% if about.image1_url %}
-        <img src="{{ about.image1_url }}" alt="About GMMI" 
-             class="rounded-xl shadow-lg object-cover w-full h-auto max-h-[400px] md:max-h-[500px]">
+        <img src="{{ about.image1_url }}" alt="About GMMI" class="rounded-xl shadow-lg object-cover w-full h-auto md:h-[500px]">
         {% endif %}
       </div>
     </div>
   </section>
 
-  <!-- Cards Section -->
+  <!-- Mission, Vision, Mandate -->
   <section class="bg-gray-100 py-12 md:py-20 px-4 sm:px-6">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-      <div class="bg-white shadow-md rounded-lg p-6 card-hover" data-aos="zoom-in">
-        <div class="card-content">
-          <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-3">The Man Behind GMMI</h3>
-          <p class="text-gray-700 text-sm md:text-base">{{ about.the_man|safe }}</p>
-        </div>
+    <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10">
+      <div class="bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade" data-aos-delay="100">
+        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">The Man Behind GMMI</h3>
+        <p class="text-gray-700 text-sm md:text-base">{{ about.the_man|safe }}</p>
       </div>
-      <div class="bg-white shadow-md rounded-lg p-6 card-hover" data-aos="zoom-in">
-        <div class="card-content">
-          <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-3">Mission Statement</h3>
-          <p class="text-gray-700 text-sm md:text-base">{{ about.mission_statement|safe }}</p>
-        </div>
+      <div class="bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade" data-aos-delay="150">
+        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">Mission Statement</h3>
+        <p class="text-gray-700 text-sm md:text-base">{{ about.mission_statement|safe }}</p>
       </div>
-      <div class="bg-white shadow-md rounded-lg p-6 card-hover" data-aos="zoom-in">
-        <div class="card-content">
-          <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-3">Vision</h3>
-          <p class="text-gray-700 text-sm md:text-base">{{ about.vision|safe }}</p>
-        </div>
+      <div class="bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade" data-aos-delay="200">
+        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">Vision</h3>
+        <p class="text-gray-700 text-sm md:text-base">{{ about.vision|safe }}</p>
       </div>
-      <div class="bg-white shadow-md rounded-lg p-6 card-hover" data-aos="zoom-in">
-        <div class="card-content">
-          <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-3">Core Values</h3>
-          <p class="text-gray-700 text-sm md:text-base">{{ about.value|safe }}</p>
-        </div>
+      <div class="bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade" data-aos-delay="250">
+        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">Core Values</h3>
+        <p class="text-gray-700 text-sm md:text-base">{{ about.value|safe }}</p>
       </div>
-      <div class="sm:col-span-2 bg-white shadow-md rounded-lg p-6 card-hover" data-aos="fade-up">
-        <div class="card-content">
-          <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-3">Our Six-Fold Mandate</h3>
-          <p class="text-gray-700 text-sm md:text-base">{{ about.mandate|safe }}</p>
-        </div>
+      <div class="sm:col-span-2 bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade-up" data-aos-delay="300">
+        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">Our Six-Fold Mandate</h3>
+        <p class="text-gray-700 text-sm md:text-base">{{ about.mandate|safe }}</p>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section class="py-12 md:py-20 px-4 sm:px-6 bg-white">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-start">
-      <div class="space-y-4 md:space-y-6" data-aos="fade-right">
-        <h2 class="text-2xl md:text-3xl font-bold text-indigo-800">Visit Us</h2>
-        <div class="space-y-3 md:space-y-4">
-          <div class="flex gap-3 md:gap-4 items-start">
-            <div class="text-indigo-600 text-xl md:text-2xl">📍</div>
-            <div>
-              <h4 class="font-semibold text-base md:text-lg">Address</h4>
-              <p class="text-gray-700 text-sm md:text-base">{{ about.contact_address|safe }}</p>
-            </div>
-          </div>
-          <div class="flex gap-3 md:gap-4 items-start">
-            <div class="text-indigo-600 text-xl md:text-2xl">📞</div>
-            <div>
-              <h4 class="font-semibold text-base md:text-lg">Phone</h4>
-              <p class="text-gray-700 text-sm md:text-base">{{ about.phone }}</p>
-            </div>
-          </div>
-          <div class="flex gap-3 md:gap-4 items-start">
-            <div class="text-indigo-600 text-xl md:text-2xl">📧</div>
-            <div>
-              <h4 class="font-semibold text-base md:text-lg">Email</h4>
-              <p class="text-gray-700 text-sm md:text-base">{{ about.email }}</p>
-            </div>
-          </div>
+  <!-- Visit Us Section with Map -->
+<section class="bg-white py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+
+    <!-- Left: Contact Info -->
+    <div data-aos="fade-right" class="space-y-6">
+      <h2 class="text-3xl font-bold text-indigo-800">Visit Us</h2>
+
+      <!-- Address -->
+      <div class="flex items-start gap-4">
+        <div class="text-indigo-600 text-2xl">📍</div>
+        <div>
+          <h4 class="text-lg font-semibold">Address</h4>
+          <p class="text-gray-700">{{ about.contact_address|safe }}</p>
         </div>
       </div>
-      <div class="map-container h-64 md:h-80 lg:h-[350px]" data-aos="fade-left">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3163.396738060203!2d3.350166615309714!3d6.524379324165755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf4a472291dd3%3A0x5e45ffb8c8fc3606!2sLagos!5e0!3m2!1sen!2sng!4v1679487221234"
-          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
-        </iframe>
+
+      <!-- Phone -->
+      <div class="flex items-start gap-4">
+        <div class="text-indigo-600 text-2xl">📞</div>
+        <div>
+          <h4 class="text-lg font-semibold">Phone</h4>
+          <p class="text-gray-700">{{ about.phone }}</p>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="flex items-start gap-4">
+        <div class="text-indigo-600 text-2xl">📧</div>
+        <div>
+          <h4 class="text-lg font-semibold">Email</h4>
+          <p class="text-gray-700">{{ about.email }}</p>
+        </div>
       </div>
     </div>
-  </section>
+
+    <!-- Right: Map -->
+    <div data-aos="fade-left" class="rounded-xl overflow-hidden shadow-lg w-full h-[300px] md:h-[350px] lg:h-[400px]">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31721.259728640665!2d3.3488898!3d6.5243793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf519b7dbb9d1%3A0x95d4c7f64622f49!2sLagos%2C%20Nigeria!5e0!3m2!1sen!2sng!4v1721300000000!5m2!1sen!2sng"
+        width="100%"
+        height="100%"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    
+  </div>
+</section>
+
 
   <!-- Footer -->
-  <footer class="text-center text-gray-500 text-sm py-6 border-t mt-8 md:mt-10">
+  <footer class="text-center text-gray-500 text-xs sm:text-sm py-4 md:py-6 border-t mt-8 md:mt-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       &copy; {{ now|date:"Y" }} GMMI. All rights reserved.
     </div>
   </footer>
 
-  <!-- JavaScript -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
-    // Mobile-First Initialization
-    document.addEventListener('DOMContentLoaded', function() {
-      // Check device type
-      const isMobile = window.innerWidth < 768;
-      
-      // Initialize AOS with mobile-optimized settings
-      AOS.init({
-        duration: isMobile ? 400 : 600,
-        offset: isMobile ? 40 : 120,
-        once: true,
-        easing: 'ease-out-quad',
-        disable: false, // Always enabled but adjusted for mobile
-        startEvent: 'DOMContentLoaded'
-      });
-
-      // Preloader Simulation
-      let progress = 0;
-      const progressBar = document.getElementById('progress');
-      const progressInterval = setInterval(function() {
-        progress += Math.random() * 10;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(progressInterval);
-          setTimeout(function() {
-            document.getElementById('preloader').style.opacity = '0';
-            setTimeout(function() {
-              document.getElementById('preloader').style.display = 'none';
-              // Refresh AOS after preloader hides
-              AOS.refreshHard();
-            }, 500);
-          }, 300);
-        }
-        progressBar.style.width = progress + '%';
-      }, 100);
-
-      // Mobile-specific optimizations
-      if (isMobile) {
-        // Reduce animation distance for mobile
-        document.querySelectorAll('[data-aos^="fade"]').forEach(el => {
-          el.setAttribute('data-aos-offset', '40');
-        });
-      }
+    AOS.init({
+      duration: 600,
+      easing: 'ease-out',
+      once: true,
+      mirror: false,
+      offset: 50
     });
 
-    // Handle resize events
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(function() {
-        AOS.refresh();
-      }, 100);
+    document.addEventListener('DOMContentLoaded', function () {
+      let progress = 0;
+      const progressBar = document.getElementById('progress');
+      const loadingText = document.querySelector('.loading-text');
+      const interval = setInterval(() => {
+        progress += Math.random() * 8;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+        }
+        progressBar.style.width = progress + '%';
+        loadingText.textContent = progress < 25 ? "Initializing..." :
+                                  progress < 50 ? "Warming up..." :
+                                  progress < 75 ? "Almost There..." : "Welcome to GMMI";
+      }, 180);
+
+      const finishPreloader = () => {
+        const preloader = document.getElementById('preloader');
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+          preloader.style.display = 'none';
+          AOS.init({ duration: 900, easing: 'ease-in-out', once: true, offset: 100 });
+        }, 500);
+      };
+
+      window.addEventListener('load', () => setTimeout(finishPreloader, 1200));
+      setTimeout(() => {
+        if (document.getElementById('preloader').style.display !== 'none') finishPreloader();
+      }, 5000);
     });
   </script>
 </body>
