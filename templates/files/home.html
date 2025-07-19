@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GMMI Ultra Upload</title>
+  <title>GMMI Church Upload</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -13,12 +13,11 @@
       --danger: #ff4757;
       --success: #2ed573;
       --dark: #2d3436;
-      --cyber-blue: #00f5ff;
-      --cyber-pink: #ff00f5;
-      --cyber-purple: #8a2be2;
-      --cyber-green: #00ff87;
       --gold: #ffd700;
       --gold-light: #fffacd;
+      --stained-glass-blue: #1e88e5;
+      --stained-glass-red: #e53935;
+      --stained-glass-purple: #8e24aa;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -38,8 +37,8 @@
 
     @keyframes fadeIn { to { opacity: 1; } }
 
-    /* Cybernetic Preloader */
-    #cyberneticPreloader {
+    /* Sacred Preloader */
+    #sacredPreloader {
       position: fixed; 
       top: 0; left: 0;
       width: 100%; height: 100%;
@@ -52,100 +51,86 @@
       transition: opacity 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
-    .cybernetic-core {
+    .sacred-symbol {
       position: relative;
       width: 200px;
       height: 200px;
     }
 
-    .circuit-board {
+    .stained-glass {
       position: absolute;
       width: 100%;
       height: 100%;
       background: 
-        linear-gradient(90deg, rgba(0, 245, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(rgba(0, 245, 255, 0.1) 1px, transparent 1px);
-      background-size: 20px 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 30px rgba(0, 245, 255, 0.2);
-    }
-
-    .cybernetic-spiral {
-      position: absolute;
-      width: 180px;
-      height: 180px;
-      top: 10px;
-      left: 10px;
-      border: 2px solid transparent;
-      border-top-color: var(--cyber-blue);
+        linear-gradient(45deg, 
+          var(--stained-glass-blue) 0%, 
+          var(--stained-glass-red) 50%, 
+          var(--stained-glass-purple) 100%);
       border-radius: 50%;
-      animation: spiralRotate 3s linear infinite;
+      opacity: 0.8;
+      box-shadow: 0 0 30px rgba(30, 136, 229, 0.3);
     }
 
-    .cybernetic-spiral:nth-child(2) {
-      width: 150px;
-      height: 150px;
-      top: 25px;
-      left: 25px;
-      border-top-color: var(--cyber-pink);
-      animation-delay: 0.2s;
-    }
-
-    .cybernetic-spiral:nth-child(3) {
-      width: 120px;
-      height: 120px;
-      top: 40px;
-      left: 40px;
-      border-top-color: var(--cyber-green);
-      animation-delay: 0.4s;
-    }
-
-    .cybernetic-center {
+    .cross {
       position: absolute;
-      width: 60px;
-      height: 60px;
+      width: 40px;
+      height: 120px;
+      background-color: white;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, var(--cyber-blue), var(--cyber-purple));
-      border-radius: 50%;
-      box-shadow: 
-        0 0 20px var(--cyber-blue),
-        0 0 40px var(--cyber-purple);
-      animation: cyberPulse 2s ease-in-out infinite alternate;
     }
 
-    .circuit-node {
+    .cross:after {
+      content: '';
       position: absolute;
-      width: 8px;
-      height: 8px;
-      background: var(--cyber-blue);
+      width: 120px;
+      height: 40px;
+      background-color: white;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .halo {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      top: -10px;
+      left: -10px;
+      border: 3px solid var(--gold);
       border-radius: 50%;
-      box-shadow: 0 0 10px var(--cyber-blue);
+      animation: haloPulse 3s ease-in-out infinite;
     }
 
-    .node-1 { top: 20%; left: 20%; animation: nodePulse 3s infinite; }
-    .node-2 { top: 20%; right: 20%; animation: nodePulse 3s infinite 0.5s; }
-    .node-3 { bottom: 20%; right: 20%; animation: nodePulse 3s infinite 1s; }
-    .node-4 { bottom: 20%; left: 20%; animation: nodePulse 3s infinite 1.5s; }
-    .node-5 { top: 50%; left: 10%; animation: nodePulse 3s infinite 0.25s; }
-    .node-6 { top: 10%; left: 50%; animation: nodePulse 3s infinite 0.75s; }
-    .node-7 { top: 50%; right: 10%; animation: nodePulse 3s infinite 1.25s; }
-    .node-8 { bottom: 10%; left: 50%; animation: nodePulse 3s infinite 1.75s; }
-
-    @keyframes spiralRotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes haloPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 40px var(--gold); }
     }
 
-    @keyframes cyberPulse {
-      0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-      100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    .light-ray {
+      position: absolute;
+      width: 4px;
+      height: 100px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+      top: 50%;
+      left: 50%;
+      transform-origin: top center;
+      animation: lightRayRotate 8s linear infinite;
     }
 
-    @keyframes nodePulse {
-      0%, 100% { transform: scale(1); opacity: 0.7; }
-      50% { transform: scale(1.5); opacity: 1; }
+    .light-ray:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
+    .light-ray:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg); }
+    .light-ray:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg); }
+    .light-ray:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg); }
+    .light-ray:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg); }
+    .light-ray:nth-child(6) { transform: translate(-50%, -50%) rotate(225deg); }
+    .light-ray:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg); }
+    .light-ray:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg); }
+
+    @keyframes lightRayRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     .preloader-text {
@@ -155,13 +140,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 2px;
-      text-shadow: 0 0 10px var(--cyber-blue);
-      animation: textGlow 2s ease-in-out infinite alternate;
-    }
-
-    @keyframes textGlow {
-      0% { text-shadow: 0 0 10px var(--cyber-blue); }
-      100% { text-shadow: 0 0 20px var(--cyber-blue), 0 0 30px var(--cyber-pink); }
+      text-align: center;
     }
 
     .preloader-progress {
@@ -180,39 +159,13 @@
       top: 0;
       height: 100%;
       width: 0;
-      background: linear-gradient(90deg, var(--cyber-blue), var(--cyber-pink));
-      box-shadow: 0 0 10px var(--cyber-blue);
+      background: linear-gradient(90deg, var(--stained-glass-blue), var(--gold));
       animation: loadingProgress 2s ease-in-out forwards;
     }
 
     @keyframes loadingProgress {
       0% { width: 0; }
       100% { width: 100%; }
-    }
-
-    .binary-stream {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      height: 20px;
-      color: var(--cyber-green);
-      font-family: monospace;
-      font-size: 14px;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .binary-digit {
-      display: inline-block;
-      animation: binaryFall 10s linear infinite;
-      opacity: 0.7;
-    }
-
-    @keyframes binaryFall {
-      0% { transform: translateY(-100px); opacity: 0; }
-      10% { opacity: 0.7; }
-      90% { opacity: 0.7; }
-      100% { transform: translateY(100px); opacity: 0; }
     }
 
     /* Main container */
@@ -338,7 +291,6 @@
       box-shadow: 0 0 0 3px rgba(108,92,231,0.1); 
     }
 
-    /* Changed from grid to regular form-group */
     .datetime-container .form-group {
       margin-bottom: 15px;
     }
@@ -375,8 +327,8 @@
       animation: slideUp 0.5s ease-out 0.4s forwards;
     }
 
-    /* Cybernetic Loader Overlay */
-    #cyberneticLoaderOverlay {
+    /* Sacred Loader Overlay */
+    #sacredLoaderOverlay {
       position: fixed; 
       top: 0; 
       left: 0; 
@@ -390,97 +342,82 @@
       flex-direction: column;
     }
 
-    .cybernetic-loader {
+    .sacred-loader {
       position: relative;
       width: 300px;
       height: 300px;
     }
 
-    .circuit-loader {
+    .divine-light {
       position: absolute;
       width: 100%;
       height: 100%;
-      background: 
-        linear-gradient(90deg, rgba(0, 245, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(rgba(0, 245, 255, 0.1) 1px, transparent 1px);
-      background-size: 30px 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 50px rgba(0, 245, 255, 0.3);
-    }
-
-    .cybernetic-rings {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-
-    .cyber-ring {
-      position: absolute;
-      border: 2px solid;
+      background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
       border-radius: 50%;
-      animation: cyberRingPulse 4s ease-in-out infinite;
+      animation: divinePulse 3s ease-in-out infinite alternate;
     }
 
-    .cyber-ring-1 {
-      width: 80%;
-      height: 80%;
-      top: 10%;
-      left: 10%;
-      border-color: var(--cyber-blue);
+    @keyframes divinePulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.1); opacity: 1; }
     }
 
-    .cyber-ring-2 {
-      width: 60%;
-      height: 60%;
-      top: 20%;
-      left: 20%;
-      border-color: var(--cyber-pink);
-      animation-delay: 0.5s;
-    }
-
-    .cyber-ring-3 {
-      width: 40%;
-      height: 40%;
-      top: 30%;
-      left: 30%;
-      border-color: var(--cyber-green);
-      animation-delay: 1s;
-    }
-
-    @keyframes cyberRingPulse {
-      0%, 100% { transform: scale(1); opacity: 0.7; }
-      50% { transform: scale(1.1); opacity: 1; }
-    }
-
-    .cybernetic-grid {
+    .sacred-cross {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(5, 1fr);
+      width: 60px;
+      height: 180px;
+      background-color: var(--gold);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px var(--gold);
     }
 
-    .grid-node {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .grid-node::before {
+    .sacred-cross:after {
       content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--cyber-blue);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--cyber-blue);
-      animation: gridNodePulse 2s infinite;
+      position: absolute;
+      width: 180px;
+      height: 60px;
+      background-color: var(--gold);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px var(--gold);
     }
 
-    @keyframes gridNodePulse {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.5); opacity: 1; }
+    .sacred-rays {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sacred-ray {
+      position: absolute;
+      width: 4px;
+      height: 150px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      top: 50%;
+      left: 50%;
+      transform-origin: top center;
+      animation: sacredRayRotate 12s linear infinite;
+    }
+
+    .sacred-ray:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); animation-delay: 0s; }
+    .sacred-ray:nth-child(2) { transform: translate(-50%, -50%) rotate(30deg); animation-delay: -1s; }
+    .sacred-ray:nth-child(3) { transform: translate(-50%, -50%) rotate(60deg); animation-delay: -2s; }
+    .sacred-ray:nth-child(4) { transform: translate(-50%, -50%) rotate(90deg); animation-delay: -3s; }
+    .sacred-ray:nth-child(5) { transform: translate(-50%, -50%) rotate(120deg); animation-delay: -4s; }
+    .sacred-ray:nth-child(6) { transform: translate(-50%, -50%) rotate(150deg); animation-delay: -5s; }
+    .sacred-ray:nth-child(7) { transform: translate(-50%, -50%) rotate(180deg); animation-delay: -6s; }
+    .sacred-ray:nth-child(8) { transform: translate(-50%, -50%) rotate(210deg); animation-delay: -7s; }
+    .sacred-ray:nth-child(9) { transform: translate(-50%, -50%) rotate(240deg); animation-delay: -8s; }
+    .sacred-ray:nth-child(10) { transform: translate(-50%, -50%) rotate(270deg); animation-delay: -9s; }
+    .sacred-ray:nth-child(11) { transform: translate(-50%, -50%) rotate(300deg); animation-delay: -10s; }
+    .sacred-ray:nth-child(12) { transform: translate(-50%, -50%) rotate(330deg); animation-delay: -11s; }
+
+    @keyframes sacredRayRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     .loader-text {
@@ -488,16 +425,7 @@
       margin-top: 40px;
       font-size: 1.5rem;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 2px;
       text-align: center;
-      text-shadow: 0 0 15px var(--cyber-blue);
-      animation: textPulse 2s infinite alternate;
-    }
-
-    @keyframes textPulse {
-      0% { opacity: 0.8; text-shadow: 0 0 15px var(--cyber-blue); }
-      100% { opacity: 1; text-shadow: 0 0 25px var(--cyber-blue), 0 0 35px var(--cyber-pink); }
     }
 
     .progress-container {
@@ -514,11 +442,10 @@
     .progress-bar {
       height: 100%;
       width: 0;
-      background: linear-gradient(90deg, var(--cyber-blue), var(--cyber-pink));
+      background: linear-gradient(90deg, var(--stained-glass-blue), var(--gold));
       border-radius: 10px;
       position: relative;
       transition: width 0.3s ease;
-      box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
     }
 
     .progress-bar::after {
@@ -549,7 +476,6 @@
       color: white;
       font-size: 14px;
       font-weight: 500;
-      text-shadow: 0 0 10px var(--cyber-blue);
     }
 
     /* Enhanced Success Animation */
@@ -561,95 +487,75 @@
       text-align: center;
     }
 
-    .success-explosion {
+    .cross-container {
       position: relative;
       width: 200px;
       height: 200px;
       margin-bottom: 30px;
     }
 
-    .explosion-core {
+    .glowing-cross {
       position: absolute;
-      width: 80px;
-      height: 80px;
+      width: 30px;
+      height: 120px;
+      background: var(--gold);
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, var(--gold), var(--gold-light));
-      border-radius: 50%;
-      box-shadow: 0 0 40px var(--gold);
-      z-index: 10;
-      animation: corePulse 1.5s infinite alternate;
+      box-shadow: 0 0 30px var(--gold);
+      animation: crossPulse 2s infinite alternate;
     }
 
-    .explosion-particle {
+    .glowing-cross:after {
+      content: '';
       position: absolute;
-      width: 12px;
-      height: 12px;
+      width: 120px;
+      height: 30px;
       background: var(--gold);
-      border-radius: 50%;
-      box-shadow: 0 0 15px var(--gold);
-    }
-
-    .particle-1 {
-      top: 20%;
-      left: 20%;
-      animation: particleExplode 1.5s infinite;
-    }
-    .particle-2 {
-      top: 20%;
-      right: 20%;
-      animation: particleExplode 1.5s infinite 0.2s;
-    }
-    .particle-3 {
-      bottom: 20%;
-      right: 20%;
-      animation: particleExplode 1.5s infinite 0.4s;
-    }
-    .particle-4 {
-      bottom: 20%;
-      left: 20%;
-      animation: particleExplode 1.5s infinite 0.6s;
-    }
-    .particle-5 {
-      top: 10%;
-      left: 50%;
-      animation: particleExplode 1.5s infinite 0.1s;
-    }
-    .particle-6 {
       top: 50%;
-      right: 10%;
-      animation: particleExplode 1.5s infinite 0.3s;
-    }
-    .particle-7 {
-      bottom: 10%;
       left: 50%;
-      animation: particleExplode 1.5s infinite 0.5s;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 30px var(--gold);
     }
-    .particle-8 {
+
+    @keyframes crossPulse {
+      0% { opacity: 0.8; box-shadow: 0 0 20px var(--gold); }
+      100% { opacity: 1; box-shadow: 0 0 50px var(--gold); }
+    }
+
+    .light-burst {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .light-ray {
+      position: absolute;
+      width: 4px;
+      height: 150px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
       top: 50%;
-      left: 10%;
-      animation: particleExplode 1.5s infinite 0.7s;
+      left: 50%;
+      transform-origin: top center;
+      animation: rayRotate 12s linear infinite;
     }
 
-    @keyframes corePulse {
-      0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 40px var(--gold); }
-      100% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 60px var(--gold); }
-    }
+    .light-ray:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
+    .light-ray:nth-child(2) { transform: translate(-50%, -50%) rotate(30deg); }
+    .light-ray:nth-child(3) { transform: translate(-50%, -50%) rotate(60deg); }
+    .light-ray:nth-child(4) { transform: translate(-50%, -50%) rotate(90deg); }
+    .light-ray:nth-child(5) { transform: translate(-50%, -50%) rotate(120deg); }
+    .light-ray:nth-child(6) { transform: translate(-50%, -50%) rotate(150deg); }
+    .light-ray:nth-child(7) { transform: translate(-50%, -50%) rotate(180deg); }
+    .light-ray:nth-child(8) { transform: translate(-50%, -50%) rotate(210deg); }
+    .light-ray:nth-child(9) { transform: translate(-50%, -50%) rotate(240deg); }
+    .light-ray:nth-child(10) { transform: translate(-50%, -50%) rotate(270deg); }
+    .light-ray:nth-child(11) { transform: translate(-50%, -50%) rotate(300deg); }
+    .light-ray:nth-child(12) { transform: translate(-50%, -50%) rotate(330deg); }
 
-    @keyframes particleExplode {
-      0% { 
-        transform: translate(0, 0) scale(1); 
-        opacity: 1;
-      }
-      50% { 
-        transform: translate(var(--tx), var(--ty)) scale(1.5); 
-        opacity: 0.8;
-      }
-      100% { 
-        transform: translate(calc(var(--tx) * 1.5), calc(var(--ty) * 1.5)) scale(0); 
-        opacity: 0;
-      }
+    @keyframes rayRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     .success-text {
@@ -659,7 +565,6 @@
       margin-top: 20px;
       text-transform: uppercase;
       letter-spacing: 3px;
-      text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
       animation: textGlow 1.5s infinite alternate;
     }
 
@@ -672,7 +577,7 @@
       line-height: 1.5;
     }
 
-    .success-sparkles {
+    .holy-sparkles {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -685,9 +590,9 @@
       position: absolute;
       width: 4px;
       height: 4px;
-      background: white;
+      background: var(--gold);
       border-radius: 50%;
-      box-shadow: 0 0 10px 2px white;
+      box-shadow: 0 0 10px 2px var(--gold);
       animation: sparkleFall linear infinite;
     }
 
@@ -709,28 +614,25 @@
   </style>
 </head>
 <body>
-  <!-- Cybernetic Preloader -->
-  <div id="cyberneticPreloader">
-    <div class="cybernetic-core">
-      <div class="circuit-board"></div>
-      <div class="cybernetic-spiral"></div>
-      <div class="cybernetic-spiral"></div>
-      <div class="cybernetic-spiral"></div>
-      <div class="cybernetic-center"></div>
-      <div class="circuit-node node-1"></div>
-      <div class="circuit-node node-2"></div>
-      <div class="circuit-node node-3"></div>
-      <div class="circuit-node node-4"></div>
-      <div class="circuit-node node-5"></div>
-      <div class="circuit-node node-6"></div>
-      <div class="circuit-node node-7"></div>
-      <div class="circuit-node node-8"></div>
+  <!-- Sacred Preloader -->
+  <div id="sacredPreloader">
+    <div class="sacred-symbol">
+      <div class="stained-glass"></div>
+      <div class="cross"></div>
+      <div class="halo"></div>
+      <div class="light-ray"></div>
+      <div class="light-ray"></div>
+      <div class="light-ray"></div>
+      <div class="light-ray"></div>
+      <div class="light-ray"></div>
+      <div class="light-ray"></div>
+      <div class="light-ray"></div>
+      <div class="light-ray"></div>
     </div>
-    <div class="preloader-text">INITIALIZING CYBERNETIC CORE</div>
+    <div class="preloader-text">PREPARING THE WAY</div>
     <div class="preloader-progress">
       <div class="preloader-progress-bar"></div>
     </div>
-    <div class="binary-stream" id="binaryStream"></div>
   </div>
 
   {% if error %}
@@ -743,7 +645,7 @@
     <form id="uploadForm" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="upload-header">
-        <h3><i class="fas fa-cloud-upload-alt"></i> GMMI Cyber Upload</h3>
+        <h3><i class="fas fa-cloud-upload-alt"></i> GMMI Upload</h3>
       </div>
 
       <div class="upload-content">
@@ -771,7 +673,6 @@
           </div>
         </div>
 
-        <!-- Changed from datetime-grid to regular form-groups -->
         <div class="datetime-container">
           <div class="form-group">
             <label for="date"><i class="far fa-calendar-alt"></i> Date</label>
@@ -789,7 +690,7 @@
         </div>
 
         <button type="submit" class="submit-btn" id="submitBtn">
-          <i class="fas fa-paper-plane"></i> Cyber Upload
+          <i class="fas fa-paper-plane"></i> Submit
         </button>
       </div>
     </form>
@@ -799,86 +700,69 @@
     <i class="fas fa-folder-open"></i> View Uploaded Files
   </a>
 
-  <!-- Cybernetic Loader Overlay -->
-  <div id="cyberneticLoaderOverlay">
-    <div class="cybernetic-loader">
-      <div class="circuit-loader"></div>
-      <div class="cybernetic-rings">
-        <div class="cyber-ring cyber-ring-1"></div>
-        <div class="cyber-ring cyber-ring-2"></div>
-        <div class="cyber-ring cyber-ring-3"></div>
-      </div>
-      <div class="cybernetic-grid">
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
-        <div class="grid-node"></div>
+  <!-- Sacred Loader Overlay -->
+  <div id="sacredLoaderOverlay">
+    <div class="sacred-loader">
+      <div class="divine-light"></div>
+      <div class="sacred-cross"></div>
+      <div class="sacred-rays">
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
+        <div class="sacred-ray"></div>
       </div>
     </div>
-    <div class="loader-text">ENGAGING CYBER UPLOAD</div>
+    <div class="loader-text">BLESSING YOUR UPLOAD</div>
     <div class="progress-container">
-      <div class="progress-bar" id="cyberneticProgressBar"></div>
-      <div class="percentage" id="cyberneticPercentage">0%</div>
+      <div class="progress-bar" id="sacredProgressBar"></div>
+      <div class="percentage" id="sacredPercentage">0%</div>
     </div>
     
-    <div class="success-animation" id="cyberneticSuccess">
-      <div class="success-explosion">
-        <div class="explosion-core"></div>
-        <div class="explosion-particle particle-1" style="--tx: -50px; --ty: -50px;"></div>
-        <div class="explosion-particle particle-2" style="--tx: 50px; --ty: -50px;"></div>
-        <div class="explosion-particle particle-3" style="--tx: 50px; --ty: 50px;"></div>
-        <div class="explosion-particle particle-4" style="--tx: -50px; --ty: 50px;"></div>
-        <div class="explosion-particle particle-5" style="--tx: 0px; --ty: -70px;"></div>
-        <div class="explosion-particle particle-6" style="--tx: 70px; --ty: 0px;"></div>
-        <div class="explosion-particle particle-7" style="--tx: 0px; --ty: 70px;"></div>
-        <div class="explosion-particle particle-8" style="--tx: -70px; --ty: 0px;"></div>
+    <div class="success-animation" id="sacredSuccess">
+      <div class="cross-container">
+        <div class="glowing-cross"></div>
+        <div class="light-burst">
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+          <div class="light-ray"></div>
+        </div>
       </div>
       <div class="success-text">UPLOAD COMPLETE</div>
-      <div class="success-subtext">Files successfully transmitted to secure servers</div>
-      <div class="success-sparkles" id="successSparkles"></div>
+      <div class="success-subtext">Your files have been sanctified</div>
+      <div class="holy-sparkles" id="holySparkles"></div>
     </div>
   </div>
 
   <script>
-    // Generate binary stream for preloader
-    function generateBinaryStream() {
-      const binaryStream = document.getElementById('binaryStream');
-      const digits = 50;
-      let html = '';
-      
-      for (let i = 0; i < digits; i++) {
-        const digit = Math.random() > 0.5 ? '1' : '0';
-        const delay = Math.random() * 5;
-        html += `<span class="binary-digit" style="animation-delay: ${delay}s">${digit}</span>`;
-      }
-      
-      binaryStream.innerHTML = html;
-    }
+    // Sacred Preloader
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const preloader = document.getElementById('sacredPreloader');
+        preloader.style.opacity = '0';
+        setTimeout(() => preloader.style.display = 'none', 800);
+      }, 2000);
+    });
 
     // Create sparkles for success animation
     function createSparkles() {
-      const container = document.getElementById('successSparkles');
+      const container = document.getElementById('holySparkles');
       const sparkleCount = 30;
       
       for (let i = 0; i < sparkleCount; i++) {
@@ -890,18 +774,6 @@
         container.appendChild(sparkle);
       }
     }
-
-    // Cybernetic Preloader
-    window.addEventListener('load', function() {
-      generateBinaryStream();
-      createSparkles();
-      
-      setTimeout(function() {
-        const preloader = document.getElementById('cyberneticPreloader');
-        preloader.style.opacity = '0';
-        setTimeout(() => preloader.style.display = 'none', 800);
-      }, 2500);
-    });
 
     // Tab functionality
     const tabs = document.querySelectorAll('.tab-btn');
@@ -981,16 +853,17 @@
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
-    // Form submission with cybernetic loader
+    // Form submission with sacred loader
     document.getElementById('uploadForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      createSparkles();
       
-      const overlay = document.getElementById('cyberneticLoaderOverlay');
+      const overlay = document.getElementById('sacredLoaderOverlay');
       const submitBtn = document.getElementById('submitBtn');
-      const progressBar = document.getElementById('cyberneticProgressBar');
-      const percentage = document.getElementById('cyberneticPercentage');
+      const progressBar = document.getElementById('sacredProgressBar');
+      const percentage = document.getElementById('sacredPercentage');
       
-      // Show cybernetic loader
+      // Show sacred loader
       overlay.style.display = 'flex';
       submitBtn.disabled = true;
       
@@ -1013,10 +886,10 @@
         
         // Show success animation
         setTimeout(() => {
-          document.querySelector('.cybernetic-loader').style.display = 'none';
+          document.querySelector('.sacred-loader').style.display = 'none';
           document.querySelector('.loader-text').style.display = 'none';
           document.querySelector('.progress-container').style.display = 'none';
-          document.getElementById('cyberneticSuccess').style.display = 'flex';
+          document.getElementById('sacredSuccess').style.display = 'flex';
           
           // Submit the form after showing success
           setTimeout(() => {
