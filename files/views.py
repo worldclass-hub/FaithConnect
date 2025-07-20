@@ -54,7 +54,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("excel_page")  # Redirect to home page after login
+            return redirect("welcome")  # Redirect to home page after login
         else:
             messages.error(request, "Invalid username or password")
     return render(request, "files/login.html")
@@ -119,7 +119,7 @@ def signup_view(request):
         login(request, user)  # ✅ Log the user in
 
         messages.success(request, "Account created and logged in successfully!")
-        return redirect('excel_page')
+        return redirect('welcome')
 
     return render(request, 'files/signup.html')
 
