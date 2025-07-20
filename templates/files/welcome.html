@@ -684,21 +684,23 @@
 
 
 
-
-<!-- PRELOADER: Fast Load + Instant Scripture Typing + Background -->
-<div id="preloader4" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-cover bg-center text-white transition-opacity duration-700"
-     style="background-image: url('static/login-form/images/wall21.jpg');">
-
-  <!-- Logo -->
-  <img src="static/login-form/images/GMMI_LOGO.png" alt="GMMI Logo" class="h-20 w-20 animate-bounce" />
+<!-- PRELOADER: 3D Ring + Typed Scripture -->
+<div id="preloader4" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
+  
+  <!-- Glowing rotating ring -->
+  <div class="relative">
+    <div class="absolute inset-0 rounded-full border-4 border-emerald-400 animate-spin-slow blur-md"></div>
+    <img src="static/login-form/images/GMMI_LOGO.png" alt="GMMI Logo" class="h-24 w-24 relative z-10 animate-pulse" />
+  </div>
 
   <!-- Scripture -->
-  <p id="scripture4" class="mt-6 px-4 text-sm text-center font-mono leading-relaxed max-w-md"></p>
+  <p id="scripture4" class="mt-6 px-6 text-center text-sm font-mono text-gray-200 opacity-0 transition-opacity duration-700"></p>
 
-  <!-- Loading with animated dots -->
-  <p id="loadingText" class="mt-2 text-xs font-mono tracking-wide uppercase text-gray-200">Loading<span id="dots">.</span></p>
+  <!-- Loading text -->
+  <p id="loadingText" class="mt-4 text-xs font-mono tracking-widest text-gray-400">
+    Preparing your experience<span id="dots">.</span>
+  </p>
 </div>
-<!-- 🔥 The End  of  preloader-->
 
 
 
@@ -857,54 +859,51 @@
 
 
             
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Scriptures
+  const scriptures = [
+    '"Those who trust in the Lord will find new strength." – Isaiah 40:31',
+    '"The Lord will fight for you; you need only be still." – Exodus 14:14',
+    '"Your word is a lamp to my feet and a light to my path." – Psalm 119:105',
+    '"With God all things are possible." – Matthew 19:26'
+  ];
+  const el = document.getElementById('scripture4');
+  const selected = scriptures[Math.floor(Math.random() * scriptures.length)];
 
-          <!-- Beginning of preloader script section -->
-          <script>
-            document.addEventListener('DOMContentLoaded', () => {
-              // Scriptures
-              const scriptures = [
-                '"I can do all things through Christ who strengthens me." – Philippians 4:13',
-                '"The Lord is my shepherd; I shall not want." – Psalm 23:1',
-                '"Trust in the Lord with all your heart." – Proverbs 3:5',
-                '"They that wait upon the Lord shall renew their strength." – Isaiah 40:31',
-                '"The name of the Lord is a strong tower." – Proverbs 18:10',
-                '"No weapon formed against you shall prosper." – Isaiah 54:17',
-                '"In Him was life; and the life was the light of men." – John 1:4'
-              ];
-              const selected = scriptures[Math.floor(Math.random() * scriptures.length)];
-              const el = document.getElementById('scripture4');
+  // Typewriter effect with fade-in
+  let idx = 0;
+  function typeScripture() {
+    if (idx < selected.length) {
+      el.textContent += selected[idx];
+      idx++;
+      setTimeout(typeScripture, 40);
+    } else {
+      el.classList.add('opacity-100');
+    }
+  }
+  el.style.opacity = 1;
+  typeScripture();
 
-              // Typewriter logic
-              let idx = 0;
-              function typeScripture() {
-                if (idx < selected.length) {
-                  el.textContent += selected[idx];
-                  idx++;
-                  setTimeout(typeScripture, 40);
-                }
-              }
-              typeScripture(); // Start immediately
+  // Dots animation
+  const dotsEl = document.getElementById('dots');
+  let dotCount = 1;
+  const dotInterval = setInterval(() => {
+    dotsEl.textContent = '.'.repeat(dotCount);
+    dotCount = dotCount < 3 ? dotCount + 1 : 1;
+  }, 400);
 
-              // Animate dots
-              const dotsEl = document.getElementById('dots');
-              let dotCount = 1;
-              const dotInterval = setInterval(() => {
-                dotsEl.textContent = '.'.repeat(dotCount);
-                dotCount = dotCount < 3 ? dotCount + 1 : 1;
-              }, 400);
-
-              // Hide after short time
-              setTimeout(() => {
-                const preloader = document.getElementById('preloader4');
-                preloader.classList.add('opacity-0');
-                setTimeout(() => {
-                  clearInterval(dotInterval);
-                  preloader.style.display = 'none';
-                }, 700);
-              }, 4500); // Show for 4.5s
-            });
-          </script>
-          <!-- The End of preloader script section -->
+  // Hide preloader when page fully loads
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader4');
+    preloader.classList.add('opacity-0', 'transition-opacity', 'duration-700');
+    setTimeout(() => {
+      clearInterval(dotInterval);
+      preloader.style.display = 'none';
+    }, 700);
+  });
+});
+</script>
 
 
 
@@ -1200,85 +1199,85 @@
 
 
 
+<!-- The Beginning of the Countdown Script -->
+<script>
+  let marqueeShown = false;
+  let welcomeShown = false;
 
-        <!-- The Beginning of the Countdown Script -->
-        <script>
-          let marqueeShown = false;
-          let welcomeShown = false;
+  function countdown() {
+    const now = new Date();
 
-          function countdown() {
-            const now = new Date();
+    // Calculate the next Sunday
+    const nextSunday = new Date(now);
+    const dayOffset = (7 - now.getDay()) % 7;
+    nextSunday.setDate(now.getDate() + (now.getDay() === 0 && now.getHours() >= 8 ? 7 : dayOffset || 7));
+    nextSunday.setHours(8, 0, 0, 0); // Service starts at 8 AM
 
-            const nextSunday = new Date(now);
-            const dayOffset = (7 - now.getDay()) % 7;
-            nextSunday.setDate(now.getDate() + (now.getDay() === 0 && now.getHours() >= 8 ? 7 : dayOffset || 7));
-            nextSunday.setHours(8, 0, 0, 0);
+    const heading = document.getElementById("countdown-heading");
+    const messageBox = document.getElementById("countdown-message");
+    const grid = document.getElementById("countdown-grid");
 
-            const heading = document.getElementById("countdown-heading");
-            const messageBox = document.getElementById("countdown-message");
-            const grid = document.getElementById("countdown-grid");
+    const sunday8 = new Date(now);
+    sunday8.setHours(8, 0, 0, 0); // Start time: 8 AM
 
-            const sunday8 = new Date(now);
-            sunday8.setHours(8, 0, 0, 0);
+    const sunday1 = new Date(now);
+    sunday1.setHours(13, 0, 0, 0); // End time: 1 PM
 
-            const sunday2 = new Date(now);
-            sunday2.setHours(14, 0, 0, 0);
+    if (now.getDay() === 0) {
+      if (now >= sunday8 && now < sunday1) {
+        // Service in progress
+        grid.style.display = "none";
+        if (!marqueeShown) {
+          heading.textContent = "";
+          messageBox.innerHTML = `
+            <marquee behavior="scroll" direction="left" scrollamount="5" class="text-yellow-400 font-semibold">
+              ✨ The service is in progress... ⏰ Kindly join on time.
+            </marquee>`;
+          marqueeShown = true;
+          welcomeShown = false;
+        }
+        return;
+      } else if (now < sunday8) {
+        // Before 8 AM on Sunday
+        grid.style.display = "none";
+        if (!welcomeShown) {
+          heading.textContent = "Welcome to Sunday 🙌";
+          messageBox.textContent = "Our powerful service starts shortly by 8:00 AM. Stay expectant!";
+          welcomeShown = true;
+          marqueeShown = false;
+        }
+        return;
+      }
+    }
 
-            if (now.getDay() === 0) {
-              if (now >= sunday8 && now < sunday2) {
-                // Service in progress
-                grid.style.display = "none";
-                if (!marqueeShown) {
-                  heading.textContent = "";
-                  messageBox.innerHTML = `
-                    <marquee behavior="scroll" direction="left" scrollamount="5" class="text-yellow-400 font-semibold">
-                      ✨ The service is in progress... ⏰ Kindly join on time.
-                    </marquee>`;
-                  marqueeShown = true;
-                  welcomeShown = false;
-                }
-                return;
-              } else if (now < sunday8) {
-                // Before 8AM on Sunday
-                grid.style.display = "none";
-                if (!welcomeShown) {
-                  heading.textContent = "Welcome to Sunday 🙌";
-                  messageBox.textContent = "Our powerful service starts shortly by 10:00 AM. Stay expectant!";
-                  welcomeShown = true;
-                  marqueeShown = false;
-                }
-                return;
-              }
-            }
+    // Other days: show countdown
+    const diff = nextSunday - now;
+    updateCountdown(diff);
+    grid.style.display = "grid";
+    heading.textContent = "Next Sunday Service Countdown";
+    messageBox.textContent = "Be part of our transformational Sunday encounter. It’s not just a service — it’s an experience!";
+    marqueeShown = false;
+    welcomeShown = false;
+  }
 
-            // Other days: show countdown
-            const diff = nextSunday - now;
-            updateCountdown(diff);
-            grid.style.display = "grid";
-            heading.textContent = "Next Sunday Service Countdown";
-            messageBox.textContent = "Be part of our transformational Sunday encounter. It’s not just a service — it’s an experience!";
-            marqueeShown = false;
-            welcomeShown = false;
-          }
+  function updateCountdown(diff) {
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / 1000 / 60) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-          function updateCountdown(diff) {
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / 1000 / 60) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
+    document.getElementById("ndays").textContent = String(days).padStart(2, "0");
+    document.getElementById("nhours").textContent = String(hours).padStart(2, "0");
+    document.getElementById("nminutes").textContent = String(minutes).padStart(2, "0");
+    document.getElementById("nseconds").textContent = String(seconds).padStart(2, "0");
+  }
 
-            document.getElementById("ndays").textContent = String(days).padStart(2, "0");
-            document.getElementById("nhours").textContent = String(hours).padStart(2, "0");
-            document.getElementById("nminutes").textContent = String(minutes).padStart(2, "0");
-            document.getElementById("nseconds").textContent = String(seconds).padStart(2, "0");
-          }
-
-          window.addEventListener("DOMContentLoaded", () => {
-            countdown();
-            setInterval(countdown, 1000);
-          });
-        </script>
-      <!-- The End of the Countdown Script -->
+  window.addEventListener("DOMContentLoaded", () => {
+    countdown();
+    setInterval(countdown, 1000);
+  });
+</script>
+<!-- The End of the Countdown Script -->
 
 
 
