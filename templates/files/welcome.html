@@ -175,6 +175,19 @@
       background-color: #6366f1;
       transform: scale(1.2);
     }
+
+
+
+ @keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 5s linear infinite;
+}
+
+
+
   </style>
 
 
@@ -683,14 +696,26 @@
 
 
 
-
-<!-- PRELOADER: 3D Ring + Typed Scripture -->
-<div id="preloader4" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
+<!-- PRELOADER: Glowing Cross + Particles + Typed Scripture -->
+<div id="preloader4" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white overflow-hidden">
   
-  <!-- Glowing rotating ring -->
-  <div class="relative">
-    <div class="absolute inset-0 rounded-full border-4 border-emerald-400 animate-spin-slow blur-md"></div>
-    <img src="static/login-form/images/GMMI_LOGO.png" alt="GMMI Logo" class="h-24 w-24 relative z-10 animate-pulse" />
+  <!-- Animated particles -->
+  <canvas id="particleCanvas" class="absolute inset-0 w-full h-full"></canvas>
+  
+  <!-- Logo with glowing cross -->
+  <div class="relative z-10">
+    <!-- Cross light effect -->
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="w-28 h-0.5 bg-emerald-400 blur-md animate-pulse"></div>
+    </div>
+    <div class="absolute inset-0 flex items-center justify-center rotate-90">
+      <div class="w-28 h-0.5 bg-emerald-400 blur-md animate-pulse"></div>
+    </div>
+    <!-- Rotating ring -->
+    <div class="absolute inset-0 rounded-full border-4 border-emerald-400 animate-spin-slow blur-sm"></div>
+    <!-- Logo -->
+    <img src="https://ncctazjcffmpuniwctkz.supabase.co/storage/v1/object/public/user-uploads//GMMI_LOGO%20copy.png" 
+         alt="GMMI Logo" class="h-24 w-24 relative z-10 animate-pulse" />
   </div>
 
   <!-- Scripture -->
@@ -858,8 +883,7 @@
 
 
 
-            
-<script>
+     <script>
 document.addEventListener('DOMContentLoaded', () => {
   // Scriptures
   const scriptures = [
@@ -871,7 +895,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const el = document.getElementById('scripture4');
   const selected = scriptures[Math.floor(Math.random() * scriptures.length)];
 
-  // Typewriter effect with fade-in
+  // Typewriter effect
   let idx = 0;
   function typeScripture() {
     if (idx < selected.length) {
@@ -893,7 +917,35 @@ document.addEventListener('DOMContentLoaded', () => {
     dotCount = dotCount < 3 ? dotCount + 1 : 1;
   }, 400);
 
-  // Hide preloader when page fully loads
+  // Floating particles
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let particles = Array.from({length: 40}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 1,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5
+  }));
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  // Hide preloader when page is fully loaded
   window.addEventListener('load', () => {
     const preloader = document.getElementById('preloader4');
     preloader.classList.add('opacity-0', 'transition-opacity', 'duration-700');
@@ -904,7 +956,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-
 
 
 
