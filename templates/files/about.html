@@ -7,10 +7,21 @@
   <title>About GMMI</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --secondary: #7c3aed;
+      --accent: #a78bfa;
+      --text-dark: #1e1b4b;
+      --text-light: #64748b;
+    }
+    
     .animated-gradient {
-      background-size: 300% 300%;
-      animation: gradientMove 12s ease-in-out infinite;
+      background: linear-gradient(-45deg, #4f46e5, #7c3aed, #a78bfa, #c4b5fd);
+      background-size: 400% 400%;
+      animation: gradientMove 12s ease infinite;
     }
 
     @keyframes gradientMove {
@@ -19,6 +30,7 @@
       100% { background-position: 0% 50%; }
     }
 
+    /* Preloader Styles */
     #preloader {
       position: fixed;
       top: 0;
@@ -35,49 +47,49 @@
     }
 
     .preloader-logo {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 15px;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
       animation: pulse 2s infinite;
     }
 
     .loader {
-      width: 60px;
-      height: 60px;
+      width: 70px;
+      height: 70px;
       position: relative;
     }
 
     .loader-inner {
       position: absolute;
-      border: 3px solid transparent;
-      border-top-color: #4f46e5;
+      border: 4px solid transparent;
+      border-top-color: var(--primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
 
     .loader-inner:nth-child(1) {
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       top: 5px;
       left: 5px;
     }
 
     .loader-inner:nth-child(2) {
-      width: 35px;
-      height: 35px;
+      width: 45px;
+      height: 45px;
       top: 12px;
       left: 12px;
       animation-duration: 1.5s;
-      border-top-color: #7c3aed;
+      border-top-color: var(--secondary);
     }
 
     .loader-inner:nth-child(3) {
-      width: 20px;
-      height: 20px;
+      width: 30px;
+      height: 30px;
       top: 20px;
       left: 20px;
       animation-duration: 2s;
-      border-top-color: #a78bfa;
+      border-top-color: var(--accent);
     }
 
     @keyframes spin {
@@ -92,66 +104,147 @@
     }
 
     .loading-text {
-      margin-top: 15px;
-      font-size: 16px;
-      color: #4f46e5;
-      font-weight: 500;
+      margin-top: 20px;
+      font-size: 18px;
+      color: var(--primary);
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     .progress-bar {
-      width: 180px;
-      height: 3px;
+      width: 220px;
+      height: 4px;
       background: #e5e7eb;
       border-radius: 2px;
-      margin-top: 12px;
+      margin-top: 15px;
       overflow: hidden;
     }
 
     .progress {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #4f46e5, #a78bfa);
+      background: linear-gradient(90deg, var(--primary), var(--accent));
       transition: width 0.3s ease;
     }
 
+    /* Card Hover Effect */
     .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .card-hover:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.3);
+      border-color: rgba(79, 70, 229, 0.2);
     }
 
+    /* Map Container */
     .map-container {
-      border-radius: 0.75rem;
+      border-radius: 1rem;
       overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .map-container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .map-container:hover {
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
+    /* Section Padding */
+    .section-padding {
+      padding: 4rem 1rem;
+    }
+
+    /* Responsive Typography */
+    .responsive-heading {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+    }
+
+    .responsive-subheading {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+    }
+
+    /* Smooth Scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1024px) {
+      .preloader-logo { width: 90px; height: 90px; }
+      .loader { width: 60px; height: 60px; }
+      .loader-inner:nth-child(1) { width: 50px; height: 50px; }
+      .loader-inner:nth-child(2) { width: 35px; height: 35px; }
+      .loader-inner:nth-child(3) { width: 20px; height: 20px; }
+      .loading-text { font-size: 16px; }
+      .progress-bar { width: 200px; }
+    }
+
     @media (max-width: 768px) {
-      .preloader-logo { width: 70px; height: 70px; }
+      .section-padding {
+        padding: 3rem 1rem;
+      }
+      .preloader-logo { width: 80px; height: 80px; }
       .loader { width: 50px; height: 50px; }
       .loader-inner:nth-child(1) { width: 40px; height: 40px; }
-      .loader-inner:nth-child(2) { width: 25px; height: 25px; }
-      .loader-inner:nth-child(3) { width: 15px; height: 15px; }
+      .loader-inner:nth-child(2) { width: 30px; height: 30px; }
+      .loader-inner:nth-child(3) { width: 20px; height: 20px; }
       .loading-text { font-size: 14px; }
-      .progress-bar { width: 160px; }
-      .map-container iframe {
-        min-height: 250px;
-        max-height: 320px;
-      }
+      .progress-bar { width: 180px; }
     }
 
     @media (max-width: 480px) {
-      .preloader-logo { width: 60px; height: 60px; }
-      .loading-text { font-size: 12px; }
+      .section-padding {
+        padding: 2.5rem 1rem;
+      }
+      .preloader-logo { width: 70px; height: 70px; }
+      .loading-text { font-size: 13px; }
+      .progress-bar { width: 160px; }
     }
   </style>
 </head>
-<body class="font-sans text-gray-800 bg-white">
+<body class="font-sans text-gray-800 bg-white antialiased">
 
   <!-- Preloader -->
   <div id="preloader">
@@ -169,127 +262,227 @@
     </div>
   </div>
 
-  <!-- Hero -->
-  <section class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 animated-gradient text-white py-16 md:py-28 relative">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center" data-aos="fade-down">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">About GMMI</h1>
-      <p class="text-base sm:text-xl opacity-90 max-w-2xl mx-auto">Discover who we are, what we believe, and where we're going.</p>
+  <!-- Back to Top Button -->
+  <div class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 animated-gradient text-white py-20 md:py-28 lg:py-32 relative overflow-hidden">
+    <div class="absolute inset-0 bg-black/10"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10" data-aos="fade-down">
+      <h1 class="responsive-heading font-extrabold mb-6 leading-tight">About <span class="text-indigo-200">GMMI</span></h1>
+      <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto leading-relaxed">
+        Discover who we are, what we believe, and where we're going in our mission to transform lives.
+      </p>
+      <div class="mt-8 flex justify-center space-x-4">
+        <a href="#history" class="px-6 py-3 bg-white text-indigo-600 font-medium rounded-lg shadow-md hover:bg-gray-100 transition duration-300">
+          Our Story
+        </a>
+        <a href="#contact" class="px-6 py-3 bg-transparent border-2 border-white text-white font-medium rounded-lg hover:bg-white/10 transition duration-300">
+          Contact Us
+        </a>
+      </div>
     </div>
+    <div class="absolute bottom-0 left-0 right-0 h-16 bg-white/10 backdrop-blur-sm"></div>
   </section>
 
-  <!-- History -->
-  <section class="py-12 md:py-20 px-4 sm:px-6 bg-white">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-center">
-      <div data-aos="fade-right">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-900 mb-4 md:mb-6">{{ about.title }}</h2>
-        <p class="text-base md:text-lg text-gray-700 leading-relaxed mb-4 md:mb-6">{{ about.history|safe }}</p>
-        <div class="text-gray-600 leading-relaxed text-sm md:text-base">{{ about.more_history|safe }}</div>
-      </div>
-      <div data-aos="fade-left" class="order-first md:order-none">
+  <!-- History Section -->
+  <section id="history" class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div data-aos="fade-right" class="order-first lg:order-none">
         {% if about.image1_url %}
-        <img src="{{ about.image1_url }}" alt="About GMMI" class="rounded-xl shadow-lg object-cover w-full h-auto md:h-[500px]">
+        <div class="relative group">
+          <img src="{{ about.image1_url }}" alt="About GMMI" class="rounded-xl shadow-xl object-cover w-full h-auto lg:h-[500px] transform group-hover:scale-[1.01] transition duration-500">
+          <div class="absolute inset-0 bg-indigo-600/10 rounded-xl pointer-events-none"></div>
+        </div>
         {% endif %}
       </div>
-    </div>
-  </section>
-
-  <!-- Mission, Vision, Mandate -->
-  <section class="bg-gray-100 py-12 md:py-20 px-4 sm:px-6">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10">
-      <div class="bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade" data-aos-delay="100">
-        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">The Man Behind GMMI</h3>
-        <p class="text-gray-700 text-sm md:text-base">{{ about.the_man|safe }}</p>
-      </div>
-      <div class="bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade" data-aos-delay="150">
-        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">Mission Statement</h3>
-        <p class="text-gray-700 text-sm md:text-base">{{ about.mission_statement|safe }}</p>
-      </div>
-      <div class="bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade" data-aos-delay="200">
-        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">Vision</h3>
-        <p class="text-gray-700 text-sm md:text-base">{{ about.vision|safe }}</p>
-      </div>
-      <div class="bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade" data-aos-delay="250">
-        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">Core Values</h3>
-        <p class="text-gray-700 text-sm md:text-base">{{ about.value|safe }}</p>
-      </div>
-      <div class="sm:col-span-2 bg-white shadow-md rounded-lg p-4 md:p-6 card-hover" data-aos="fade-up" data-aos-delay="300">
-        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-2 md:mb-3">Our Six-Fold Mandate</h3>
-        <p class="text-gray-700 text-sm md:text-base">{{ about.mandate|safe }}</p>
+      <div data-aos="fade-left" class="space-y-6">
+        <div class="inline-block px-4 py-2 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium mb-4">
+          Our Heritage
+        </div>
+        <h2 class="responsive-subheading font-bold text-indigo-900 mb-6">{{ about.title }}</h2>
+        <div class="prose prose-indigo max-w-none text-gray-700 space-y-4">
+          {{ about.history|safe }}
+        </div>
+        <div class="prose prose-indigo max-w-none text-gray-600">
+          {{ about.more_history|safe }}
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Visit Us Section with Map -->
-<section class="bg-white py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-
-    <!-- Left: Contact Info -->
-    <div data-aos="fade-right" class="space-y-6">
-      <h2 class="text-3xl font-bold text-indigo-800">Visit Us</h2>
-
-      <!-- Address -->
-      <div class="flex items-start gap-4">
-        <div class="text-indigo-600 text-2xl">📍</div>
-        <div>
-          <h4 class="text-lg font-semibold">Address</h4>
-          <p class="text-gray-700">{{ about.contact_address|safe }}</p>
-        </div>
+  <!-- Mission, Vision, Values Section -->
+  <section class="section-padding bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="responsive-subheading font-bold text-indigo-900 mb-4">Our Core Identity</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+          The foundation of everything we do at GMMI is built on these fundamental principles
+        </p>
       </div>
 
-      <!-- Phone -->
-      <div class="flex items-start gap-4">
-        <div class="text-indigo-600 text-2xl">📞</div>
-        <div>
-          <h4 class="text-lg font-semibold">Phone</h4>
-          <p class="text-gray-700">{{ about.phone }}</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- The Man Behind GMMI -->
+        <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover" data-aos="fade-up" data-aos-delay="100">
+          <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6 text-indigo-600">
+            <i class="fas fa-user-tie text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-indigo-800 mb-4">The Man Behind GMMI</h3>
+          <div class="prose prose-indigo max-w-none text-gray-700">
+            {{ about.the_man|safe }}
+          </div>
         </div>
-      </div>
 
-      <!-- Email -->
-      <div class="flex items-start gap-4">
-        <div class="text-indigo-600 text-2xl">📧</div>
-        <div>
-          <h4 class="text-lg font-semibold">Email</h4>
-          <p class="text-gray-700">{{ about.email }}</p>
+        <!-- Mission -->
+        <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover" data-aos="fade-up" data-aos-delay="150">
+          <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6 text-indigo-600">
+            <i class="fas fa-bullseye text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-indigo-800 mb-4">Our Mission</h3>
+          <div class="prose prose-indigo max-w-none text-gray-700">
+            {{ about.mission_statement|safe }}
+          </div>
+        </div>
+
+        <!-- Vision -->
+        <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover" data-aos="fade-up" data-aos-delay="200">
+          <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6 text-indigo-600">
+            <i class="fas fa-eye text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-indigo-800 mb-4">Our Vision</h3>
+          <div class="prose prose-indigo max-w-none text-gray-700">
+            {{ about.vision|safe }}
+          </div>
+        </div>
+
+        <!-- Values -->
+        <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover" data-aos="fade-up" data-aos-delay="250">
+          <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6 text-indigo-600">
+            <i class="fas fa-heart text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-indigo-800 mb-4">Core Values</h3>
+          <div class="prose prose-indigo max-w-none text-gray-700">
+            {{ about.value|safe }}
+          </div>
+        </div>
+
+        <!-- Mandate -->
+        <div class="md:col-span-2 bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover" data-aos="fade-up" data-aos-delay="300">
+          <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6 text-indigo-600">
+            <i class="fas fa-tasks text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-indigo-800 mb-4">Our Six-Fold Mandate</h3>
+          <div class="prose prose-indigo max-w-none text-gray-700">
+            {{ about.mandate|safe }}
+          </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Right: Map -->
-    <div data-aos="fade-left" class="rounded-xl overflow-hidden shadow-lg w-full h-[300px] md:h-[350px] lg:h-[400px]">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31721.259728640665!2d3.3488898!3d6.5243793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf519b7dbb9d1%3A0x95d4c7f64622f49!2sLagos%2C%20Nigeria!5e0!3m2!1sen!2sng!4v1721300000000!5m2!1sen!2sng"
-        width="100%"
-        height="100%"
-        style="border:0;"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
+  <!-- Visit Us Section -->
+  <section id="contact" class="section-padding bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="responsive-subheading font-bold text-indigo-900 mb-4">Visit Our Ministry</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+          We'd love to connect with you and welcome you to our community
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <!-- Contact Info -->
+        <div data-aos="fade-right" class="space-y-8">
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
+              <i class="fas fa-map-marker-alt text-xl"></i>
+            </div>
+            <div>
+              <h4 class="text-xl font-semibold text-gray-900 mb-2">Our Location</h4>
+              <div class="prose prose-indigo max-w-none">
+                {{ about.contact_address|safe }}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
+              <i class="fas fa-phone-alt text-xl"></i>
+            </div>
+            <div>
+              <h4 class="text-xl font-semibold text-gray-900 mb-2">Phone Number</h4>
+              <p class="text-gray-700">{{ about.phone }}</p>
+              <a href="tel:{{ about.phone }}" class="mt-2 inline-flex items-center text-indigo-600 hover:text-indigo-800 transition duration-200">
+                <i class="fas fa-phone mr-2"></i> Call Now
+              </a>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
+              <i class="fas fa-envelope text-xl"></i>
+            </div>
+            <div>
+              <h4 class="text-xl font-semibold text-gray-900 mb-2">Email Address</h4>
+              <p class="text-gray-700">{{ about.email }}</p>
+              <a href="mailto:{{ about.email }}" class="mt-2 inline-flex items-center text-indigo-600 hover:text-indigo-800 transition duration-200">
+                <i class="fas fa-paper-plane mr-2"></i> Send Message
+              </a>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <h5 class="text-lg font-medium text-gray-900 mb-4">Connect With Us</h5>
+            <div class="flex space-x-4">
+              <a href="#" class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition duration-200">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition duration-200">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition duration-200">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition duration-200">
+                <i class="fab fa-youtube"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div id="mapElement" class="h-full">
+          <div class="map-container h-full w-full">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31721.259728640665!2d3.3488898!3d6.5243793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf519b7dbb9d1%3A0x95d4c7f64622f49!2sLagos%2C%20Nigeria!5e0!3m2!1sen!2sng!4v1721300000000!5m2!1sen!2sng"
+              width="100%"
+              height="100%"
+              style="border:0; min-height: 400px;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
     </div>
-    
-  </div>
-</section>
-
-
-  <!-- Footer -->
-  <footer class="text-center text-gray-500 text-xs sm:text-sm py-4 md:py-6 border-t mt-8 md:mt-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      &copy; {{ now|date:"Y" }} GMMI. All rights reserved.
-    </div>
-  </footer>
+  </section>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
+    // Initialize AOS animation library
     AOS.init({
-      duration: 600,
-      easing: 'ease-out',
+      duration: 800,
+      easing: 'ease-out-quart',
       once: true,
       mirror: false,
-      offset: 50
+      offset: 100
     });
 
+    // Preloader functionality
     document.addEventListener('DOMContentLoaded', function () {
       let progress = 0;
       const progressBar = document.getElementById('progress');
@@ -302,7 +495,7 @@
         }
         progressBar.style.width = progress + '%';
         loadingText.textContent = progress < 25 ? "Initializing..." :
-                                  progress < 50 ? "Warming up..." :
+                                  progress < 50 ? "Loading Resources..." :
                                   progress < 75 ? "Almost There..." : "Welcome to GMMI";
       }, 180);
 
@@ -311,7 +504,6 @@
         preloader.style.opacity = '0';
         setTimeout(() => {
           preloader.style.display = 'none';
-          AOS.init({ duration: 900, easing: 'ease-in-out', once: true, offset: 100 });
         }, 500);
       };
 
@@ -319,6 +511,51 @@
       setTimeout(() => {
         if (document.getElementById('preloader').style.display !== 'none') finishPreloader();
       }, 5000);
+    });
+
+    // Back to Top Button
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.add('visible');
+      } else {
+        backToTopButton.classList.remove('visible');
+      }
+    });
+    
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Map fade-up animation
+    document.addEventListener('DOMContentLoaded', function() {
+      const mapElement = document.querySelector('.map-container');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            mapElement.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      observer.observe(document.getElementById('mapElement'));
     });
   </script>
 </body>
