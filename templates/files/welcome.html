@@ -177,14 +177,14 @@
     }
 
 
-
- @keyframes spin-slow {
+@keyframes spin-slow {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 .animate-spin-slow {
   animation: spin-slow 5s linear infinite;
 }
+
 
 
 
@@ -695,7 +695,6 @@
 
 
 
-
 <!-- PRELOADER: Glowing Cross + Particles + Typed Scripture -->
 <div id="preloader4" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white overflow-hidden">
   
@@ -883,14 +882,24 @@
 
 
 
-     <script>
+    <script>
 document.addEventListener('DOMContentLoaded', () => {
   // Scriptures
   const scriptures = [
     '"Those who trust in the Lord will find new strength." – Isaiah 40:31',
     '"The Lord will fight for you; you need only be still." – Exodus 14:14',
     '"Your word is a lamp to my feet and a light to my path." – Psalm 119:105',
-    '"With God all things are possible." – Matthew 19:26'
+    '"With God all things are possible." – Matthew 19:26',
+    '"The Lord is my shepherd; I shall not want." – Psalm 23:1',
+    '"I can do all things through Christ who strengthens me." – Philippians 4:13',
+    '"Be still, and know that I am God." – Psalm 46:10',
+    '"Cast all your anxiety on Him because He cares for you." – 1 Peter 5:7',
+    '"The steadfast love of the Lord never ceases." – Lamentations 3:22',
+    '"Commit to the Lord whatever you do, and He will establish your plans." – Proverbs 16:3',
+    '"The Lord is my light and my salvation—whom shall I fear?" – Psalm 27:1',
+    '"Call to me and I will answer you and tell you great and unsearchable things." – Jeremiah 33:3',
+    '"Blessed is the one who trusts in the Lord." – Jeremiah 17:7',
+    '"My grace is sufficient for you, for my power is made perfect in weakness." – 2 Corinthians 12:9'
   ];
   const el = document.getElementById('scripture4');
   const selected = scriptures[Math.floor(Math.random() * scriptures.length)];
@@ -945,18 +954,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   animateParticles();
 
-  // Hide preloader when page is fully loaded
-  window.addEventListener('load', () => {
+  // Force fade out after 10 seconds
+  setTimeout(() => {
     const preloader = document.getElementById('preloader4');
     preloader.classList.add('opacity-0', 'transition-opacity', 'duration-700');
     setTimeout(() => {
       clearInterval(dotInterval);
       preloader.style.display = 'none';
     }, 700);
-  });
+  }, 10000); // 10 seconds
 });
 </script>
-
 
 
 
