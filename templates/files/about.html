@@ -146,14 +146,6 @@
       overflow: hidden;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .map-container.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     .map-container:hover {
@@ -290,7 +282,7 @@
   <!-- History Section -->
   <section id="history" class="section-padding bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-      <div data-aos="fade-right" class="order-first lg:order-none">
+      <div data-aos="fade-up" class="order-first lg:order-none">
         {% if about.image1_url %}
         <div class="relative group">
           <img src="{{ about.image1_url }}" alt="About GMMI" class="rounded-xl shadow-xl object-cover w-full h-auto lg:h-[500px] transform group-hover:scale-[1.01] transition duration-500">
@@ -298,7 +290,7 @@
         </div>
         {% endif %}
       </div>
-      <div data-aos="fade-left" class="space-y-6">
+      <div data-aos="fade-down" class="space-y-6">
         <div class="inline-block px-4 py-2 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium mb-4">
           Our Heritage
         </div>
@@ -316,7 +308,7 @@
   <!-- Mission, Vision, Values Section -->
   <section class="section-padding bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16" data-aos="fade-up">
+      <div class="text-center mb-16" data-aos="fade-down">
         <h2 class="responsive-subheading font-bold text-indigo-900 mb-4">Our Core Identity</h2>
         <p class="text-lg text-gray-600 max-w-3xl mx-auto">
           The foundation of everything we do at GMMI is built on these fundamental principles
@@ -385,7 +377,7 @@
   <!-- Visit Us Section -->
   <section id="contact" class="section-padding bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16" data-aos="fade-up">
+      <div class="text-center mb-16" data-aos="fade-down">
         <h2 class="responsive-subheading font-bold text-indigo-900 mb-4">Visit Our Ministry</h2>
         <p class="text-lg text-gray-600 max-w-3xl mx-auto">
           We'd love to connect with you and welcome you to our community
@@ -394,7 +386,7 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <!-- Contact Info -->
-        <div data-aos="fade-right" class="space-y-8">
+        <div data-aos="fade-up" class="space-y-8">
           <div class="flex items-start gap-6">
             <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
               <i class="fas fa-map-marker-alt text-xl"></i>
@@ -453,7 +445,7 @@
         </div>
 
         <!-- Map -->
-        <div id="mapElement" class="h-full">
+        <div data-aos="fade-up" class="h-full">
           <div class="map-container h-full w-full">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31721.259728640665!2d3.3488898!3d6.5243793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf519b7dbb9d1%3A0x95d4c7f64622f49!2sLagos%2C%20Nigeria!5e0!3m2!1sen!2sng!4v1721300000000!5m2!1sen!2sng"
@@ -473,13 +465,16 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
-    // Initialize AOS animation library
+    // Initialize AOS animation library with only fade-up and fade-down animations
     AOS.init({
       duration: 800,
       easing: 'ease-out-quart',
       once: true,
       mirror: false,
-      offset: 100
+      offset: 100,
+      disable: function() {
+        return /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
+      }
     });
 
     // Preloader functionality
@@ -540,22 +535,6 @@
           behavior: 'smooth'
         });
       });
-    });
-
-    // Map fade-up animation
-    document.addEventListener('DOMContentLoaded', function() {
-      const mapElement = document.querySelector('.map-container');
-      
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            mapElement.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-
-      observer.observe(document.getElementById('mapElement'));
     });
   </script>
 </body>
