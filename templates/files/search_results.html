@@ -392,6 +392,10 @@
             /* Restrict the width of the text column to balance with the image */
         }
     }
+        .result-container:has(> :not(:empty)) ~ #searchResults {
+        display: none !important;
+    }
+
 </style>
 
 
@@ -1131,8 +1135,10 @@ function loadCalendar() {
                         resultContainer.innerHTML = fileContent;
                         document.getElementById('divider')?.style.setProperty('display', 'block');
                     } else {
-                        resultContainer.innerHTML = `<p>${data.message}</p>`;
+                        const msg = data.message || "No files saved on this date.";
+                        resultContainer.innerHTML = `<p>${msg}</p>`;
                     }
+
                 })
                 .catch(error => {
                     console.error('Error fetching file:', error);
