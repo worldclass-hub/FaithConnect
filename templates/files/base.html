@@ -1112,7 +1112,7 @@ background-color: rgba(255, 255, 255, 0.9); z-index: 9998; display: flex; align-
 
 
 
-
+{% comment %} 
 
 <!-- Overlay Background -->
 <div id="successOverlay" style="display: none;
@@ -1151,7 +1151,7 @@ background-color: rgba(255, 255, 255, 0.9); z-index: 9998; display: flex; align-
         border-radius: 5px;
         cursor: pointer;
     ">Close</button>
-</div>
+</div> {% endcomment %}
 
 
 
@@ -1161,7 +1161,7 @@ background-color: rgba(255, 255, 255, 0.9); z-index: 9998; display: flex; align-
 
 
 <!-- Modal -->
-<div id="customModal" class="modal-overlay" style="display: none;">
+{% comment %} <div id="customModal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
       <span class="close-button" id="closeModalBtn">&times;</span>
       <h3>New Updates - 2025</h3>
@@ -1195,7 +1195,7 @@ background-color: rgba(255, 255, 255, 0.9); z-index: 9998; display: flex; align-
         {% endfor %}
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
 
 
 
@@ -1353,7 +1353,7 @@ document.addEventListener("DOMContentLoaded", function () {
     </script>
 
 
-
+{% comment %} 
     <script>
         jQuery(document).ready(function () {
             const userHasProfile = {{ user_has_profile|yesno:"true,false" }};
@@ -1437,7 +1437,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     </script>
-    
+     {% endcomment %}
 
 
     
